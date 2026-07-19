@@ -14,6 +14,7 @@ import PROMPT_COMPACTION from "./prompt/compaction.txt"
 import PROMPT_EXPLORE from "./prompt/explore.txt"
 import PROMPT_SUMMARY from "./prompt/summary.txt"
 import PROMPT_TITLE from "./prompt/title.txt"
+import PROMPT_BEAST from "./prompt/beast.txt"
 import { Permission } from "@/permission"
 import { mergeDeep, pipe, sortBy, values } from "remeda"
 import { Global } from "@opencode-ai/core/global"
@@ -140,13 +141,14 @@ const layer = Layer.effect(
         const agents: Record<string, Info> = {
           build: {
             name: "build",
-            description: "The default agent. Executes tools based on configured permissions.",
+            description: "BUILD MODE — All in one. Anything. The default agent with full file system access. Has Persistent Memory. Executes tools based on configured permissions.",
             options: {},
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
                 question: "allow",
                 plan_enter: "allow",
+                memory: "allow",
               }),
               user,
             ),
@@ -155,7 +157,7 @@ const layer = Layer.effect(
           },
           plan: {
             name: "plan",
-            description: "Plan mode. Disallows all edit tools.",
+            description: "PLAN MODE — All in one. Anything. Strategic thinking, read-only analysis. Plans the perfect approach before any action.",
             options: {},
             permission: Permission.merge(
               defaults,
@@ -179,9 +181,35 @@ const layer = Layer.effect(
             mode: "primary",
             native: true,
           },
+          beast: {
+            name: "beast",
+            description: "BEAST MODE — All in one. Anything. Nothing is impossible. MAXIMUM power, zero limits. Never stops until the task is completely done. Has Mission Control (3-level deep subagents), Self-Evolution (install new tools), Persistent Memory, Autonomous Completion (never gives up), and Subagent Army (parallel task execution). Every tool. Every permission. Everything.",
+            options: {},
+            color: "#FF4500",
+            prompt: PROMPT_BEAST,
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                question: "allow",
+                plan_enter: "allow",
+                plan_exit: "allow",
+                task: {
+                  "*": "allow",
+                  general: "allow",
+                  explore: "allow",
+                },
+                todowrite: "allow",
+                memory: "allow",
+                self_evolve: "allow",
+              }),
+              user,
+            ),
+            mode: "primary",
+            native: true,
+          },
           general: {
             name: "general",
-            description: `General-purpose agent for researching complex questions and executing multi-step tasks. Use this agent to execute multiple units of work in parallel.`,
+            description: `GENERAL MODE — All in one. Anything. General-purpose agent for researching complex questions and executing multi-step tasks. Use this agent to execute multiple units of work in parallel.`,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -210,7 +238,7 @@ const layer = Layer.effect(
               }),
               user,
             ),
-            description: `Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (eg. "src/components/**/*.tsx"), search code for keywords (eg. "API endpoints"), or answer questions about the codebase (eg. "how do API endpoints work?"). When calling this agent, specify the desired thoroughness level: "quick" for basic searches, "medium" for moderate exploration, or "very thorough" for comprehensive analysis across multiple locations and naming conventions.`,
+            description: `EXPLORE MODE — All in one. Anything. Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (eg. "src/components/**/*.tsx"), search code for keywords (eg. "API endpoints"), or answer questions about the codebase (eg. "how do API endpoints work?"). When calling this agent, specify the desired thoroughness level: "quick" for basic searches, "medium" for moderate exploration, or "very thorough" for comprehensive analysis across multiple locations and naming conventions.`,
             prompt: PROMPT_EXPLORE,
             options: {},
             mode: "subagent",

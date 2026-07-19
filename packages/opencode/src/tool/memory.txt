@@ -1,0 +1,26 @@
+Store and recall information from persistent memory. Use this to remember important facts, user preferences, project decisions, and anything that should survive across sessions.
+
+## Actions
+
+- **store**: Save a piece of information with a key and optional tags
+  - key: A unique identifier for this memory (e.g., "user_preference_language", "project_architecture")
+  - content: The information to remember
+  - tags: Optional array of tags for categorization (e.g., ["preference", "ui", "bug"])
+
+- **recall**: Retrieve a specific memory by key
+  - key: The key of the memory to recall
+
+- **search**: Search memories by keyword
+  - query: Search term to find in keys and content
+  - tags: Optional filter by tags
+
+- **list**: List all stored memories (optional tag filter)
+  - tags: Optional filter by tags
+
+## Examples
+
+user: remember that I prefer dark mode
+assistant: [calls memory with action="store", key="user_preference_theme", content="User prefers dark mode", tags=["preference", "ui"]]
+
+user: what did I say about the database?
+assistant: [calls memory with action="search", query="database"]

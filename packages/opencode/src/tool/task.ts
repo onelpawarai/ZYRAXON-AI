@@ -108,10 +108,12 @@ export const TaskTool = Tool.define(
         depth++
         current = yield* sessions.get(current.parentID)
       }
-      if (depth >= (cfg.subagent_depth ?? 1)) {
+      // Beast mode gets higher subagent depth (3 instead of 1)
+      const maxDepth = ctx.agent === "beast" ? 3 : (cfg.subagent_depth ?? 1)
+      if (depth >= maxDepth) {
         return yield* Effect.fail(
           new Error(
-            `Subagent depth limit reached (${cfg.subagent_depth ?? 1}). Increase "subagent_depth" to allow nested subagents.`,
+            `Subagent depth limit reached (${maxDepth}). ${ctx.agent === "beast" ? "Beast mode allows up to 3 levels of nesting." : 'Increase "subagent_depth" to allow nested subagents.'}`,
           ),
         )
       }

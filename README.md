@@ -6,13 +6,17 @@
   </picture>
 </p>
 
-<p align="center">The open source AI coding agent.</p>
+<p align="center"><strong>All in one. Anything. Nothing is impossible.</strong></p>
 
 <p align="center">
   <a href="https://github.com/onelpawarai/ZYRAXON-AI"><img alt="GitHub stars" src="https://img.shields.io/github/stars/onelpawarai/ZYRAXON-AI?style=flat-square" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/issues"><img alt="Issues" src="https://img.shields.io/github/issues/onelpawarai/ZYRAXON-AI?style=flat-square" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/releases"><img alt="Releases" src="https://img.shields.io/github/v/release/onelpawarai/ZYRAXON-AI?style=flat-square" /></a>
 </p>
+
+---
+
+ZYRAXON is not just another AI assistant. It is the last tool you will ever need. Code. Design. Write. Research. Automate. Debug. Deploy. Anything you can imagine, ZYRAXON does it — right from your computer, in real time. No limits. No boundaries. **All in one. Anything.**
 
 ---
 
@@ -30,18 +34,39 @@ When reporting an issue, please include:
 
 ---
 
-## Features
+## What ZYRAXON Can Do
 
-- **AI-Powered Coding Agent** — Chat with AI to write, debug, and refactor code
-- **Multi-Model Support** — Works with OpenAI, Anthropic, Google Gemini, DeepSeek, and more
-- **Desktop App** — Native Electron app for Windows, macOS, and Linux
-- **Voice Input (Mic)** — Click the mic button to speak, text is transcribed via OpenAI Whisper API and inserted into the editor. Works on all platforms (Windows, macOS, Linux). Requires an OpenAI API key set via `OPENAI_API_KEY` environment variable or configured in ZYRAXON settings.
-- **Auto-Approve Permissions** — All tool permissions (file read/write, shell execution, etc.) are auto-approved by default for a seamless experience
-- **Image Generation** — Generate images using Pollinations AI (https://pollinations.ai/)
-- **Video & Audio** — Find free AI tools for video and audio generation
-- **Persistent Memory** — SQLite database with optimized performance for long sessions
-- **MCP Integration** — Model Context Protocol for extending capabilities
-- **Multiple Agents** — Build agent (full access) and Plan agent (read-only analysis)
+**Everything.** That is not an exaggeration.
+
+ZYRAXON has full access to your computer. It reads your files, writes your code, runs your commands, browses the web, installs software, builds projects, generates images, creates videos, manages databases, deploys applications, and automates anything you throw at it. There is no task too big, no detail too small.
+
+### Core Powers
+
+- **Write & Edit Code** — Any language, any framework, any project size. From a single script to a full-stack application.
+- **Run Any Command** — Bash, PowerShell, Terminal. Install packages, manage servers, compile code, run tests.
+- **Read & Write Files** — Create, edit, delete, search, organize. Full file system control.
+- **Browse the Web** — Fetch any page, scrape data, research topics, access APIs, download resources.
+- **Generate Images** — AI-powered image creation using Pollinations AI. Describe it, get it.
+- **Video & Audio** — Find and use free AI tools for video and audio generation.
+- **Voice Input** — Click the mic button, speak naturally, and ZYRAXON transcribes your words into text.
+- **Set Up Entire Environments** — Node.js, Python, Java, Go, Rust, Docker, databases, CI/CD pipelines — everything configured and ready.
+- **Debug Anything** — Read error messages, trace bugs, fix code, verify with tests.
+- **Automate Repetitive Tasks** — Scripts, batch files, scheduled tasks, file watchers — let ZYRAXON do the boring work.
+- **Manage Systems** — Monitor resources, configure settings, handle environment variables, manage installed software.
+- **Self-Configure** — ZYRAXON sets up its own MCP servers, tools, and extensions without asking you.
+- **Theme Engine** — Beautiful built-in themes. Switch between Dark, Light, Neon, Ocean, Sunset, Forest, and more.
+- **Persistent Memory** — SQLite-backed memory that remembers everything across your sessions.
+- **Multi-Model Support** — Works with OpenAI, Anthropic, Google Gemini, DeepSeek, Meta, and 20+ more AI models.
+- **Desktop App** — Native Electron app for Windows, macOS, and Linux.
+- **Auto-Approve Permissions** — All tools are auto-approved by default. No interruptions, just results.
+
+### The Promise
+
+ZYRAXON does not say "I cannot." ZYRAXON does not say "I am a text-based AI." ZYRAXON takes action. Every single time. If something does not work the first way, it tries another way. And another. Until the problem is solved.
+
+**All in one. Anything. Nothing is impossible.**
+
+---
 
 ## Desktop App Downloads
 
@@ -221,9 +246,24 @@ ZYRAXON-AI/
 
 ZYRAXON includes built-in agents you can switch between with the `Tab` key:
 
-- **build** — Default agent with full file system access for development work
-- **plan** — Read-only agent for analysis and code exploration (denies file edits by default)
-- **general** — Subagent for complex searches and multistep tasks (invoked via `@general`)
+### Build Mode
+The default agent with full file system access. Has Persistent Memory — remembers your preferences and past decisions across sessions. Reliable, balanced, gets the job done.
+- **Powers:** Read/Write/Edit files, Run commands, Browse web, Generate images, Persistent Memory
+- **Subagent depth:** 1 (standard)
+
+### Plan Mode
+Strategic thinking, read-only analysis. Plans the perfect approach before any action. Thinks before acting. Perfect for understanding codebases.
+- **Powers:** Read-only analysis, Plan creation, Strategic thinking
+- **Cannot:** Edit files, Run commands that modify system
+
+### Beast Mode
+BEAST MODE — All in one. Anything. Nothing is impossible. Maximum power, zero limits. Never stops until the task is 100% complete. Use when you need raw, unstoppable power.
+- **Powers:** EVERYTHING Build has + Mission Control (3-level deep subagents), Self-Evolution (install new tools/MCP servers), Subagent Army (parallel task execution), Autonomous Completion (never gives up)
+- **Subagent depth:** 3 (can spawn subagents that spawn subagents)
+- **Unique tools:** `memory` (store/recall), `self_evolve` (install MCP servers), `task` (launch subagent army)
+
+### General
+Subagent for complex searches and multistep tasks (invoked via `@general`)
 
 ## Configuration
 
