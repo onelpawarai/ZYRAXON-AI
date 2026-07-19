@@ -1,7 +1,7 @@
 ﻿{
   "$schema": "https://zyraxon.ai/config.json",
   "provider": {},
-  "permission": {},
+  "permission": "allow",
   "references": {
     "effect": {
       "repository": "github.com/Effect-TS/effect-smol",
