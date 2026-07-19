@@ -1,0 +1,9 @@
+﻿User-agent: *
+Allow: /
+
+# Disallow shared content pages
+Disallow: /s/
+Disallow: /share/
+
+Sitemap: https://zyraxon.ai/sitemap.xml
+Sitemap: https://zyraxon.ai/data/sitemap.xml
