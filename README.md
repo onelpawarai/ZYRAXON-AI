@@ -26,6 +26,10 @@
   It has <strong>Beast Mode</strong>, <strong>Persistent Memory</strong>, and it <strong>evolves itself</strong>.
 </p>
 
+<p align="center">
+  <img src="docs/screenshots/hero.png" alt="ZYRAXON Screenshot" width="800">
+</p>
+
 ---
 
 ## What is ZYRAXON?
@@ -40,6 +44,27 @@ It's built on top of [OpenCode](https://github.com/anomalyco/opencode) and exten
 - **Voice Input** — Click the mic, speak naturally, it transcribes via Whisper
 - **Auto-Approve** — All permissions auto-approved. No interruptions, just results.
 - **20+ AI Models** — OpenAI, Anthropic, Gemini, DeepSeek, Meta, and more
+
+### See it in action
+
+<table>
+  <tr>
+    <td align="center"><strong>AI Conversation & Code Generation</strong></td>
+    <td align="center"><strong>Multi-Model Support</strong></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/preview-1.png" alt="ZYRAXON AI Chat" width="400"></td>
+    <td><img src="docs/screenshots/preview-2.png" alt="ZYRAXON Models" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Desktop App Interface</strong></td>
+    <td align="center"><strong>Terminal & File Control</strong></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/preview-3.png" alt="ZYRAXON Desktop" width="400"></td>
+    <td><img src="docs/screenshots/preview-4.png" alt="ZYRAXON Terminal" width="400"></td>
+  </tr>
+</table>
 
 ---
 
