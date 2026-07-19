@@ -49,20 +49,20 @@ It's built on top of [OpenCode](https://github.com/anomalyco/opencode) and exten
 
 <table>
   <tr>
-    <td align="center"><strong>AI Conversation & Code Generation</strong></td>
-    <td align="center"><strong>Multi-Model Support</strong></td>
+    <td align="center"><strong>Output 1</strong></td>
+    <td align="center"><strong>Output 2</strong></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/preview-1.png" alt="ZYRAXON AI Chat" width="400"></td>
-    <td><img src="docs/screenshots/preview-2.png" alt="ZYRAXON Models" width="400"></td>
+    <td><img src="docs/screenshots/output 1.png" alt="ZYRAXON Output 1" width="400"></td>
+    <td><img src="docs/screenshots/output 2.png" alt="ZYRAXON Output 2" width="400"></td>
   </tr>
   <tr>
-    <td align="center"><strong>Desktop App Interface</strong></td>
-    <td align="center"><strong>Terminal & File Control</strong></td>
+    <td align="center"><strong>Output 3</strong></td>
+    <td align="center"><strong>Output 4</strong></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/preview-3.png" alt="ZYRAXON Desktop" width="400"></td>
-    <td><img src="docs/screenshots/preview-4.png" alt="ZYRAXON Terminal" width="400"></td>
+    <td><img src="docs/screenshots/output 3.png" alt="ZYRAXON Output 3" width="400"></td>
+    <td><img src="docs/screenshots/output 4.png" alt="ZYRAXON Output 4" width="400"></td>
   </tr>
 </table>
 
