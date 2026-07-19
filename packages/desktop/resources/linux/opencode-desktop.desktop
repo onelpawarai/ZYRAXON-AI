@@ -1,0 +1,10 @@
+﻿[Desktop Entry]
+Name=ZYRAXON
+Exec=/opt/ZYRAXON/ai.zyraxon.desktop %U
+Terminal=false
+Type=Application
+Icon=ai.zyraxon.desktop
+StartupWMClass=ai.zyraxon.desktop
+NoDisplay=true
+Comment=Open source AI coding agent
+Categories=Development;
