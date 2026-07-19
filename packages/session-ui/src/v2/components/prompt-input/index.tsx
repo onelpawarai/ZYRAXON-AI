@@ -682,92 +682,153 @@ function PromptInputV2MicButton(props: {
   disabled?: boolean
 }) {
   const [recording, setRecording] = createSignal(false)
-  const [supported, setSupported] = createSignal(false)
+  const [micAvailable, setMicAvailable] = createSignal(false)
   let recognition: SpeechRecognition | null = null
+  let stoppedByUser = false
+  let finalTranscript = ""
+  let mediaStream: MediaStream | null = null
 
   const SpeechRecognitionClass = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-  if (SpeechRecognitionClass) {
-    setSupported(true)
+
+  const cleanupRecognition = () => {
+    if (recognition) {
+      try { recognition.abort() } catch {}
+      recognition = null
+    }
+    if (mediaStream) {
+      mediaStream.getTracks().forEach((t) => t.stop())
+      mediaStream = null
+    }
   }
 
   onCleanup(() => {
-    if (recognition) {
-      recognition.abort()
-      recognition = null
-    }
+    stoppedByUser = true
+    cleanupRecognition()
   })
 
-  const toggleRecording = () => {
-    if (recording()) {
-      recognition?.stop()
-      setRecording(false)
-      recognition = null
-      return
-    }
+  const insertTextIntoEditor = (text: string) => {
+    const editor = props.editor()
+    if (!editor) return
+    editor.focus()
+    document.execCommand("selectAll", false)
+    const selection = window.getSelection()
+    if (!selection || !selection.rangeCount) return
+    const range = selection.getRangeAt(0)
+    const existing = editor.textContent ?? ""
+    const cleanExisting = existing.replace(/[\u200B]/g, "")
+    range.setStartAfter(editor.lastChild ?? editor)
+    range.collapse(true)
+    selection.removeAllRanges()
+    selection.addRange(range)
+    document.execCommand("insertText", false, text)
+  }
 
-    if (!SpeechRecognitionClass) return
+  const startRecognition = () => {
+    if (!SpeechRecognitionClass) return false
 
-    const instance = new SpeechRecognitionClass()
-    instance.continuous = true
-    instance.interimResults = true
-    instance.lang = "en-US"
+    try {
+      const instance = new SpeechRecognitionClass()
+      instance.continuous = true
+      instance.interimResults = true
+      instance.lang = navigator.language || "en-US"
+      instance.maxAlternatives = 1
 
-    let finalTranscript = ""
-    let interimTranscript = ""
+      instance.onresult = (event: SpeechRecognitionEvent) => {
+        let interimText = ""
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript + " "
+          } else {
+            interimText += transcript
+          }
+        }
+        insertTextIntoEditor(finalTranscript + interimText)
+      }
 
-    instance.onresult = (event: SpeechRecognitionEvent) => {
-      interimTranscript = ""
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript
-        if (event.results[i].isFinal) {
-          finalTranscript += transcript + " "
-        } else {
-          interimTranscript += transcript
+      instance.onerror = (event: SpeechRecognitionErrorEvent) => {
+        if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+          stoppedByUser = true
+          setRecording(false)
+          cleanupRecognition()
+          return
+        }
+        if (event.error === "no-speech" || event.error === "audio-capture") return
+        if (event.error === "aborted") return
+        stoppedByUser = true
+        setRecording(false)
+        cleanupRecognition()
+      }
+
+      instance.onend = () => {
+        if (stoppedByUser) {
+          setRecording(false)
+          recognition = null
+          return
+        }
+        if (recording()) {
+          finalTranscript = ""
+          try {
+            instance.start()
+          } catch {
+            setRecording(false)
+            recognition = null
+          }
         }
       }
 
-      const editor = props.editor()
-      if (!editor) return
-
-      const displayText = finalTranscript + interimTranscript
-      const existingText = editor.textContent ?? ""
-      const cleanExisting = existingText.replace(/[\u200B]/g, "")
-
-      const newText = cleanText(cleanExisting) + displayText
-      editor.textContent = newText
-
-      editor.dispatchEvent(new InputEvent("input", {
-        bubbles: true,
-        inputType: "insertText",
-        data: displayText,
-      }))
+      instance.start()
+      recognition = instance
+      finalTranscript = ""
+      return true
+    } catch {
+      return false
     }
-
-    instance.onerror = (event: SpeechRecognitionErrorEvent) => {
-      if (event.error !== "no-speech" && event.error !== "aborted") {
-        setRecording(false)
-        recognition = null
-      }
-    }
-
-    instance.onend = () => {
-      if (recording()) {
-        setRecording(false)
-        recognition = null
-      }
-    }
-
-    recognition = instance
-    instance.start()
-    setRecording(true)
   }
 
-  if (!supported()) return null
+  const toggleRecording = async () => {
+    if (recording()) {
+      stoppedByUser = true
+      setRecording(false)
+      cleanupRecognition()
+      return
+    }
+
+    stoppedByUser = false
+    finalTranscript = ""
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      mediaStream = stream
+      setMicAvailable(true)
+    } catch {
+      setMicAvailable(false)
+      return
+    }
+
+    if (SpeechRecognitionClass) {
+      const started = startRecognition()
+      if (started) {
+        setRecording(true)
+        return
+      }
+    }
+
+    setRecording(true)
+  }
 
   return (
     <TooltipV2
       placement="top"
-      value={recording() ? "Stop recording" : "Voice input"}
+      value={
+        recording()
+          ? "Stop recording"
+          : micAvailable()
+            ? "Voice input"
+            : SpeechRecognitionClass
+              ? "Voice input (click to allow mic)"
+              : "Voice input"
+      }
     >
       <button
         type="button"
@@ -805,10 +866,6 @@ function PromptInputV2MicButton(props: {
       </button>
     </TooltipV2>
   )
-}
-
-function cleanText(text: string): string {
-  return text.replace(/[\u200B]/g, "")
 }
 
 function PromptInputV2SuggestionIcon(props: { item: PromptInputV2Suggestion }) {
