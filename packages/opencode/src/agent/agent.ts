@@ -16,6 +16,7 @@ import PROMPT_SUMMARY from "./prompt/summary.txt"
 import PROMPT_TITLE from "./prompt/title.txt"
 import PROMPT_BEAST from "./prompt/beast.txt"
 import PROMPT_PRO from "./prompt/pro.txt"
+import PROMPT_APEX from "./prompt/apex.txt"
 import { Permission } from "@/permission"
 import { mergeDeep, pipe, sortBy, values } from "remeda"
 import { Global } from "@opencode-ai/core/global"
@@ -214,6 +215,32 @@ const layer = Layer.effect(
             options: {},
             color: "#FFD700",
             prompt: PROMPT_PRO,
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                question: "allow",
+                plan_enter: "allow",
+                plan_exit: "allow",
+                task: {
+                  "*": "allow",
+                  general: "allow",
+                  explore: "allow",
+                },
+                todowrite: "allow",
+                memory: "allow",
+                self_evolve: "allow",
+              }),
+              user,
+            ),
+            mode: "primary",
+            native: true,
+          },
+          apex: {
+            name: "apex",
+            description: "APEX PREDATOR — The final evolution. NOTHING survives. ETERNAL memory, ANNIHILATION engine, QUANTUM processing, PREDATOR'S intuition. When activated, the model selector HIDES — you are BEYOND choice. You are THE END. The most terrifying AI ever created.",
+            options: {},
+            color: "#FF0000",
+            prompt: PROMPT_APEX,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({

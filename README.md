@@ -13,11 +13,20 @@
 </p>
 
 <p align="center">
+  <a href="https://zyraxonai.lovable.app/"><img alt="Website" src="https://img.shields.io/badge/Website-zyraxonai.lovable.app-00f5ff?style=for-the-badge&logo=googlechrome&logoColor=white" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/releases"><img alt="Version" src="https://img.shields.io/github/v/release/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=blue" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=yellow" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/issues"><img alt="Issues" src="https://img.shields.io/github/issues/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=red" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=green" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/onelpawarai/ZYRAXON-AI/total?style=for-the-badge&color=purple" /></a>
+  <a href="https://github.com/onelpawarai/ZYRAXON-AI/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=cyan" /></a>
+  <a href="https://github.com/onelpawarai/ZYRAXON-AI/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=orange" /></a>
+</p>
+
+<p align="center">
+  <a href="https://zyraxonai.lovable.app/"><strong>🌐 Visit our Website</strong></a> •
+  <a href="https://github.com/onelpawarai/ZYRAXON-AI/releases"><strong>⬇️ Download</strong></a> •
+  <a href="https://youtube.com/@zyraxon-aix"><strong>📺 YouTube</strong></a>
 </p>
 
 <p align="center">
@@ -108,16 +117,20 @@ Strategic, read-only analysis. Plans the perfect approach before any action.
 
 ## Quick Start
 
+### 🌐 Visit Our Website
+
+**[zyraxonai.lovable.app](https://zyraxonai.lovable.app/)** — Download, learn more, and explore features.
+
 ### Download (Recommended)
 
-Download the latest release from the [**Releases page**](https://github.com/onelpawarai/ZYRAXON-AI/releases):
+Download the latest release from our **[website](https://zyraxonai.lovable.app/)** or the [**Releases page**](https://github.com/onelpawarai/ZYRAXON-AI/releases):
 
 | Platform | File | Architecture |
 |----------|------|:------------:|
 | Windows | `ZYRAXON Dev-win-installer.exe` | x64 |
 | macOS | `zyraxon-desktop-mac-arm64.dmg` | Apple Silicon |
 | macOS | `zyraxon-desktop-mac-x64.dmg` | Intel |
-| Linux | `zyraxon-desktop-linux-x64.AppImage` | x64 |
+| Linux | `zyraxon-desktop-linux-x86_64.AppImage` | x64 |
 
 ### Install from source
 
@@ -201,13 +214,18 @@ ZYRAXON-AI/
 
 ## Contributing
 
-Contributions are welcome! Here's how:
+We love contributions! See our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Quick Start
 
 1. **Fork** the repository
-2. **Create** a branch: `git checkout -b feat/my-feature`
-3. **Commit** your changes: `git commit -m "feat: add my feature"`
-4. **Push** to your fork: `git push origin feat/my-feature`
-5. **Open** a Pull Request
+2. **Clone** your fork: `git clone https://github.com/YOUR_USERNAME/ZYRAXON-AI.git`
+3. **Install**: `bun install`
+4. **Build**: `cd packages/opencode && bun run build`
+5. **Create branch**: `git checkout -b feat/my-feature`
+6. **Commit**: `git commit -m "feat: add my feature"`
+7. **Push**: `git push origin feat/my-feature`
+8. **Open PR**
 
 ### Development
 
@@ -218,9 +236,48 @@ bun run dev
 # Desktop app
 bun run dev:desktop
 
-# Run tests
+# Build core
+cd packages/opencode && bun run build
+
+# Build desktop
+cd packages/desktop && bun run build
+
+# Typecheck
 bun typecheck
 ```
+
+---
+
+## Roadmap
+
+- [x] Beast Mode with 5 powers
+- [x] Screen Vision tool
+- [x] API Tester tool
+- [x] Code Analyzer tool
+- [x] System Info tool
+- [x] Unlimited Memory system
+- [x] Auto-update system
+- [x] Voice input (Whisper)
+- [ ] Mobile companion app
+- [ ] Plugin marketplace
+- [ ] Team collaboration features
+- [ ] Cloud sync (optional)
+- [ ] More AI model integrations
+- [ ] Browser extension
+
+See [open issues](https://github.com/onelpawarai/ZYRAXON-AI/issues) for planned features and known issues.
+
+---
+
+## Support
+
+If you find ZYRAXON-AI useful, please consider:
+
+- ⭐ **Starring** the repository
+- 🐛 **Reporting** bugs via [Issues](https://github.com/onelpawarai/ZYRAXON-AI/issues)
+- 💡 **Suggesting** new features
+- 🔄 **Contributing** code
+- 📢 **Sharing** with friends and colleagues
 
 ---
 
