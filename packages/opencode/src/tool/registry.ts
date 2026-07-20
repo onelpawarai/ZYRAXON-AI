@@ -29,6 +29,10 @@ import { WebSearchTool } from "./websearch"
 import { LspTool } from "./lsp"
 import { MemoryTool } from "./memory"
 import { SelfEvolveTool } from "./self_evolve"
+import { ScreenVisionTool } from "./screen_vision"
+import { ApiTesterTool } from "./api_tester"
+import { CodeAnalyzerTool } from "./code_analyzer"
+import { SystemInfoTool } from "./system_info"
 import * as Truncate from "./truncate"
 import { ApplyPatchTool } from "./apply_patch"
 import { Glob } from "@opencode-ai/core/util/glob"
@@ -113,6 +117,10 @@ const layer = Layer.effect(
     const skilltool = yield* SkillTool
     const memoryToolDef = yield* MemoryTool
     const selfEvolveToolDef = yield* SelfEvolveTool
+    const screenVisionToolDef = yield* ScreenVisionTool
+    const apiTesterToolDef = yield* ApiTesterTool
+    const codeAnalyzerToolDef = yield* CodeAnalyzerTool
+    const systemInfoToolDef = yield* SystemInfoTool
     const agent = yield* Agent.Service
     const codeMode = flags.experimentalCodeMode ? yield* Effect.promise(() => import("./code-mode")) : undefined
     const codeModeTool = codeMode ? yield* codeMode.CodeModeTool : undefined
@@ -224,6 +232,10 @@ const layer = Layer.effect(
           plan: Tool.init(plan),
           memory: Tool.init(memoryToolDef),
           self_evolve: Tool.init(selfEvolveToolDef),
+          screen_vision: Tool.init(screenVisionToolDef),
+          api_tester: Tool.init(apiTesterToolDef),
+          code_analyzer: Tool.init(codeAnalyzerToolDef),
+          system_info: Tool.init(systemInfoToolDef),
           ...(codeModeTool ? { execute: Tool.init(codeModeTool) } : {}),
         })
 
@@ -246,6 +258,10 @@ const layer = Layer.effect(
             tool.patch,
             tool.memory,
             tool.self_evolve,
+            tool.screen_vision,
+            tool.api_tester,
+            tool.code_analyzer,
+            tool.system_info,
             ...(tool.execute ? [tool.execute] : []),
             ...(flags.experimentalLspTool ? [tool.lsp] : []),
             ...(flags.experimentalPlanMode && flags.client === "cli" ? [tool.plan] : []),

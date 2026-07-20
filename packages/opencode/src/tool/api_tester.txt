@@ -1,0 +1,24 @@
+API TESTING TOOL — Test any HTTP/HTTPS API endpoint with full control.
+
+Actions (HTTP methods):
+- get: GET request (fetch data)
+- post: POST request (create/send data)
+- put: PUT request (update data)
+- patch: PATCH request (partial update)
+- delete: DELETE request (remove data)
+- options: OPTIONS request (check CORS)
+- head: HEAD request (headers only)
+
+Features:
+- Custom headers (Authorization, Content-Type, etc.)
+- Request body (JSON, text, form data)
+- Response status, headers, body, timing
+- Automatic JSON formatting
+- 30s timeout (configurable)
+
+Examples:
+- GET https://api.github.com/users/octocat
+- POST https://httpbin.org/post with JSON body
+- DELETE https://api.example.com/items/123 with Bearer token
+
+Perfect for: API debugging, webhook testing, endpoint validation, security testing.
