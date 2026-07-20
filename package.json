@@ -95,18 +95,18 @@
     }
   },
   "devDependencies": {
-    "@actions/artifact": "5.0.1",
+    "@actions/artifact": "6.2.1",
     "@tsconfig/bun": "catalog:",
     "@types/mime-types": "3.0.1",
     "@typescript/native-preview": "catalog:",
     "glob": "13.0.5",
     "husky": "9.1.7",
-    "oxlint": "1.60.0",
-    "oxlint-tsgolint": "0.21.0",
+    "oxlint": "1.74.0",
+    "oxlint-tsgolint": "0.25.0",
     "prettier": "3.6.2",
     "semver": "^7.6.0",
     "sst": "catalog:",
-    "turbo": "2.10.2"
+    "turbo": "2.10.5"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.933.0",

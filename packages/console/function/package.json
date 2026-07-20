@@ -10,9 +10,9 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "catalog:",
-    "@tsconfig/node22": "22.0.2",
+    "@tsconfig/node22": "22.0.5",
     "@types/node": "catalog:",
-    "openai": "5.11.0",
+    "openai": "6.48.0",
     "typescript": "catalog:",
     "@typescript/native-preview": "catalog:"
   },
