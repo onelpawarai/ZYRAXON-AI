@@ -2,6 +2,7 @@
 import { defineConfig } from "electron-vite"
 import appPlugin from "@opencode-ai/app/vite"
 import * as fs from "node:fs/promises"
+import * as path from "node:path"
 
 if (!process.env.NODE_OPTIONS?.includes("max-old-space-size")) {
   const current = process.env.NODE_OPTIONS ?? ""
@@ -43,6 +44,7 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
+        external: ["node-fetch", "opencode-web-ui.gen.ts"],
         input: { index: "src/main/index.ts", sidecar: "src/main/sidecar.ts" },
         // Keep this identical to electron-vite's Node 20.11+ shim. Its regex insertion can
         // corrupt bundled TypeScript, while a Rollup banner places the shim safely.
@@ -80,6 +82,11 @@ const require = __cjs_mod__.createRequire(import.meta.url);
             if (!l.endsWith(".wasm")) continue
             await fs.writeFile(`./out/main/chunks/${l}`, await fs.readFile(`${ZYRAXON_SERVER_DIST}/${l}`))
           }
+          // Copy the embedded web UI file
+          await fs.copyFile(
+            path.join(ZYRAXON_SERVER_DIST, "opencode-web-ui.gen.ts"),
+            "./out/main/opencode-web-ui.gen.ts"
+          )
         },
       },
     ],
