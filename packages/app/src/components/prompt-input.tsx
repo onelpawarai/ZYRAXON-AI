@@ -1674,7 +1674,7 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
                   </div>
                 </Show>
                 <Show when={!providersLoading()}>
-                  <Show when={store.mode !== "shell"}>
+                  <Show when={store.mode !== "shell" && props.controls.agents.current !== "apex"}>
                     <div
                       data-component="prompt-model-control"
                       classList={{ "animate-in fade-in duration-300": providersShouldFadeIn() }}
@@ -1749,7 +1749,7 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
                         </TooltipKeybind>
                       </Show>
                     </div>
-                    <Show when={showVariantControl()}>
+                    <Show when={showVariantControl() && props.controls.agents.current !== "apex"}>
                       <div
                         data-component="prompt-variant-control"
                         classList={{ "animate-in fade-in duration-300": providersShouldFadeIn() }}
