@@ -222,7 +222,8 @@ bun run dev:desktop
 bun typecheck
 ```
 
----
+---https://youtube.com/@zyraxon-aix?si=Yp2JBuEZTv27nK2m
+---https://www.facebook.com/profile.php?id=100093074890067
 
 ## License
 
