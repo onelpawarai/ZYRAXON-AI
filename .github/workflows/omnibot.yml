@@ -13,8 +13,6 @@ on:
     types: [submitted]
   check_suite:
     types: [completed]
-  workflow_run:
-    types: [completed]
 
 permissions:
   contents: write
@@ -22,14 +20,9 @@ permissions:
   pull-requests: write
   checks: write
   statuses: write
-  discussions: write
-  actions: write
-  packages: write
-  pages: write
 
 env:
   BOT_NAME: "ZYRAXON-OMNIBOT"
-  BOT_EMOJI: "ðŸ¤–"
 
 jobs:
   # ============================================
@@ -40,9 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.action == 'opened'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: ðŸ¤– OMNIBOT: Analyze PR
         uses: actions/github-script@v7
         with:
@@ -50,18 +40,32 @@ jobs:
           script: |
             const pr = context.payload.pull_request;
             
-            console.log(`ðŸ¤– ${BOT_NAME}: Processing PR #${pr.number}`);
+            console.log(`ðŸ¤– ${process.env.BOT_NAME}: Processing PR #${pr.number}`);
             console.log(`ðŸ“ Title: ${pr.title}`);
             console.log(`ðŸ‘¤ Author: ${pr.user.login}`);
             console.log(`ðŸ“ Files: ${pr.changed_files}`);
             console.log(`âž• Additions: +${pr.additions}`);
             console.log(`âž– Deletions: -${pr.deletions}`);
             
+            // BLOCK Dependabot PRs - they can be risky
+            if (pr.user.login === 'dependabot[bot]' || pr.title.includes('chore(deps)')) {
+              console.log('âš ï¸ Dependabot PR detected - NOT auto-approving');
+              
+              await github.rest.issues.createComment({
+                issue_number: pr.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## ðŸ¤– ${process.env.BOT_NAME} - Dependabot PR\n\nâš ï¸ **This is a Dependabot PR.**\n\n### What this PR does:\n- Updates ${pr.changed_files} packages\n- This is an automatic update\n\n### What happens next:\n- âŒ NOT auto-merged (too risky)\n- ðŸ‘€ Maintainer will review\n- âœ… Safe to merge if checks pass\n\n> *ZYRAXON OMNIBOT: Dependabot PRs need manual review!*`
+              });
+              
+              return;
+            }
+            
             // Check for conflicts
             const hasConflicts = pr.mergeable === false;
             const mergeable = pr.mergeable_state;
             
-            console.log(`ðŸ”€ Mergeable: ${pr.mergeable}`);
+            console.log(`ðŸ“Š Mergeable: ${pr.mergeable}`);
             console.log(`ðŸ“Š Mergeable State: ${mergeable}`);
             
             // Analyze what the PR does
@@ -73,15 +77,14 @@ jobs:
             else if (title.includes('feat') || title.includes('add')) category = 'feature';
             else if (title.includes('docs')) category = 'docs';
             else if (title.includes('refactor')) category = 'refactor';
-            else if (title.includes('deps') || title.includes('dependabot')) category = 'deps';
             
-            // Auto-approve ALL PRs (even with conflicts - we'll handle merge later)
+            // Auto-approve NON-Dependabot PRs
             await github.rest.pulls.createReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: pr.number,
               event: 'APPROVE',
-              body: `## ðŸ¤– ${BOT_NAME} Smart Approval\n\nâœ… **Automatically approved by ZYRAXON OMNIBOT**\n\n### Analysis:\n- Category: ${category}\n- Files changed: ${pr.changed_files}\n- Additions: +${pr.additions}\n- Deletions: -${pr.addions}\n- Conflicts: ${hasConflicts ? 'âš ï¸ Yes' : 'âœ… No'}\n- Mergeable State: ${mergeable}\n\n### Status:\n- âœ… Auto-approved\n- ${hasConflicts ? 'âš ï¸ Has conflicts - needs manual merge' : 'âœ… Ready to auto-merge'}\n\n> ðŸš€ *ZYRAXON OMNIBOT: Smart approval - merge only when safe!*`
+              body: `## ðŸ¤– ${process.env.BOT_NAME} Smart Approval\n\nâœ… **Automatically approved by ZYRAXON OMNIBOT**\n\n### Analysis:\n- Category: ${category}\n- Files changed: ${pr.changed_files}\n- Additions: +${pr.additions}\n- Deletions: -${pr.deletions}\n- Conflicts: ${hasConflicts ? 'âŒ Yes' : 'âœ… No'}\n- Mergeable State: ${mergeable}\n\n### Status:\n- âœ… Auto-approved\n- ${hasConflicts ? 'âš ï¸ Has conflicts - needs manual merge' : 'âœ… Ready to auto-merge'}\n\n> ðŸš€ *ZYRAXON OMNIBOT: Smart approval - merge only when safe!*`
             });
             
             // Add labels
@@ -97,21 +100,15 @@ jobs:
                 labels: autoLabels
               });
             } catch (e) {}
-
-      - name: ðŸ¤– OMNIBOT: Comment
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr = context.payload.pull_request;
             
-            const hasConflicts = pr.mergeable === false;
-            
+            // Comment
             await github.rest.issues.createComment({
               issue_number: pr.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## ðŸ¤– ${BOT_NAME} Report\n\n### âœ… PR Analyzed & Approved\n\n| Action | Status |\n|--------|--------|\n| Analysis | âœ… Complete |\n| Auto-Approve | âœ… Approved |\n| Conflicts | ${hasConflicts ? 'âš ï¸ Detected' : 'âœ… None'} |\n| Auto-Merge | ${hasConflicts ? 'â¸ï¸ Paused (needs manual merge)' : 'âœ… Will auto-merge'} |\n\n### What happens next:\n${hasConflicts\n  ? `âš ï¸ **Conflicts detected!** This PR needs manual review.\n- The PR has been approved but NOT merged\n- You (maintainer) need to resolve conflicts\n- Then manually merge the PR\n\n> *Why? GitHub marked this PR as having conflicts. ${BOT_NAME} never merges unsafe PRs.*`\n  : `âœ… **No conflicts detected!** ${BOT_NAME} will auto-merge after all checks pass.\n\n> *ZYRAXON OMNIBOT: Smart automation - safe when needed, fast when safe!*`}`
+              body: `## ðŸ¤– ${process.env.BOT_NAME} Report\n\n### âœ… PR Analyzed & Approved\n\n| Action | Status |\n|--------|--------|\n| Analysis | âœ… Complete |\n| Auto-Approve | âœ… Approved |\n| Conflicts | ${hasConflicts ? 'âŒ Detected' : 'âœ… None'} |\n| Auto-Merge | ${hasConflicts ? 'â¸ï¸ Paused (needs manual merge)' : 'âœ… Will auto-merge'} |\n\n### What happens next:\n${hasConflicts
+  ? `âš ï¸ **Conflicts detected!** This PR needs manual review.\n- The PR has been approved but NOT merged\n- You (maintainer) need to resolve conflicts\n- Then manually merge the PR\n\n> *Why? GitHub marked this PR as having conflicts. ${process.env.BOT_NAME} never merges unsafe PRs.*`
+  : `âœ… **No conflicts detected!** ${process.env.BOT_NAME} will auto-merge after all checks pass.\n\n> *ZYRAXON OMNIBOT: Smart automation - safe when needed, fast when safe!*`}`
             });
 
   # ============================================
@@ -129,14 +126,20 @@ jobs:
           script: |
             const pr = context.payload.pull_request;
             
-            console.log(`ðŸ¤– ${BOT_NAME}: Checking PR #${pr.number} for merge...`);
+            console.log(`ðŸ¤– ${process.env.BOT_NAME}: Checking PR #${pr.number} for merge...`);
+            
+            // BLOCK Dependabot PRs from auto-merge
+            if (pr.user.login === 'dependabot[bot]' || pr.title.includes('chore(deps)')) {
+              console.log('âš ï¸ Dependabot PR - NOT auto-merging');
+              return;
+            }
             
             // Check if PR is ready for merge
             const mergeable = pr.mergeable;
             const mergeableState = pr.mergeable_state;
             const hasConflicts = mergeable === false;
             
-            console.log(`ðŸ”€ Mergeable: ${mergeable}`);
+            console.log(`ðŸ“Š Mergeable: ${mergeable}`);
             console.log(`ðŸ“Š State: ${mergeableState}`);
             
             // Check if all checks passed
@@ -159,35 +162,32 @@ jobs:
             
             // SMART DECISION LOGIC
             if (hasConflicts) {
-              // CONFLICTS: Don't merge, keep for manual review
-              console.log('âš ï¸ Conflicts detected - NOT merging, keeping for manual review');
+              console.log('âŒ Conflicts detected - NOT merging');
               
               await github.rest.issues.createComment({
                 issue_number: pr.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: `## ðŸ¤– ${BOT_NAME} - Merge Paused\n\nâš ï¸ **Conflicts detected!** This PR cannot be auto-merged.\n\n### Status:\n- âœ… PR Approved\n- âŒ Merge Conflicts\n- â¸ï¸ **Auto-merge PAUSED**\n\n### What you need to do:\n1. Resolve merge conflicts locally\n2. Push the fix\n3. ${BOT_NAME} will re-check and auto-merge\n\n> *ZYRAXON OMNIBOT: Never merges unsafe PRs. Your code is safe!*`
+                body: `## ðŸ¤– ${process.env.BOT_NAME} - Merge Paused\n\nâŒ **Conflicts detected!** This PR cannot be auto-merged.\n\n### Status:\n- âœ… PR Approved\n- âŒ Merge Conflicts\n- â¸ï¸ **Auto-merge PAUSED**\n\n### What you need to do:\n1. Resolve merge conflicts locally\n2. Push the fix\n3. ${process.env.BOT_NAME} will re-check and auto-merge\n\n> *ZYRAXON OMNIBOT: Never merges unsafe PRs. Your code is safe!*`
               });
               
               return;
             }
             
             if (!allChecksPassed && pendingChecks.length > 0) {
-              // CHECKS PENDING: Wait
               console.log(`â³ Checks still running (${pendingChecks.length} pending) - waiting...`);
               
               await github.rest.issues.createComment({
                 issue_number: pr.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: `## ðŸ¤– ${BOT_NAME} - Waiting for Checks\n\nâ³ **Waiting for CI checks to complete...**\n\n### Pending Checks:\n${pendingChecks.map(c => `- ${c.name}: ${c.status}`).join('\n')}\n\n> *ZYRAXON OMNIBOT: Will auto-merge once all checks pass!*`
+                body: `## ðŸ¤– ${process.env.BOT_NAME} - Waiting for Checks\n\nâ³ **Waiting for CI checks to complete...**\n\n### Pending Checks:\n${pendingChecks.map(c => `- ${c.name}: ${c.status}`).join('\n')}\n\n> *ZYRAXON OMNIBOT: Will auto-merge once all checks pass!*`
               });
               
               return;
             }
             
             if (!allChecksPassed && pendingChecks.length === 0) {
-              // CHECKS FAILED: Don't merge
               const failedChecks = checks.data.check_runs.filter(
                 check => check.status === 'completed' && check.conclusion !== 'success'
               );
@@ -198,7 +198,7 @@ jobs:
                 issue_number: pr.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: `## ðŸ¤– ${BOT_NAME} - Checks Failed\n\nâŒ **Some CI checks failed!** This PR cannot be auto-merged.\n\n### Failed Checks:\n${failedChecks.map(c => `- ${c.name}: ${c.conclusion}`).join('\n')}\n\n### What you need to do:\n1. Fix the failing checks\n2. Push the fix\n3. ${BOT_NAME} will re-check and auto-merge\n\n> *ZYRAXON OMNIBOT: Never merges failed PRs. Quality first!*`
+                body: `## ðŸ¤– ${process.env.BOT_NAME} - Checks Failed\n\nâŒ **Some CI checks failed!** This PR cannot be auto-merged.\n\n### Failed Checks:\n${failedChecks.map(c => `- ${c.name}: ${c.conclusion}`).join('\n')}\n\n### What you need to do:\n1. Fix the failing checks\n2. Push the fix\n3. ${process.env.BOT_NAME} will re-check and auto-merge\n\n> *ZYRAXON OMNIBOT: Never merges failed PRs. Quality first!*`
               });
               
               return;
@@ -214,7 +214,7 @@ jobs:
                   repo: context.repo.repo,
                   pull_number: pr.number,
                   merge_method: 'squash',
-                  commit_title: `ðŸ¤– ${BOT_NAME}: ${pr.title} (#${pr.number})`,
+                  commit_title: `ðŸ¤– ${process.env.BOT_NAME}: ${pr.title} (#${pr.number})`,
                   commit_message: `Auto-merged by ZYRAXON OMNIBOT\n\nAll checks passed. No conflicts detected.\n\nâœ… CI Checks: Passed\nâœ… Conflicts: None\nâœ… Status: Safe to merge`
                 });
                 
@@ -224,7 +224,7 @@ jobs:
                   issue_number: pr.number,
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  body: `## ðŸ¤– ${BOT_NAME} - Auto-Merged!\n\nâœ… **PR successfully auto-merged!**\n\n### Final Status:\n| Check | Result |\n|-------|--------|\n| CI Checks | âœ… All Passed |\n| Conflicts | âœ… None |\n| Merge | âœ… Success |\n\n> ðŸš€ *ZYRAXON OMNIBOT: Smart automation complete!*`
+                  body: `## ðŸ¤– ${process.env.BOT_NAME} - Auto-Merged!\n\nâœ… **PR successfully auto-merged!**\n\n### Final Status:\n| Check | Result |\n|-------|--------|\n| CI Checks | âœ… All Passed |\n| Conflicts | âœ… None |\n| Merge | âœ… Success |\n\n> ðŸš€ *ZYRAXON OMNIBOT: Smart automation complete!*`
                 });
                 
               } catch (e) {
@@ -247,7 +247,7 @@ jobs:
           script: |
             const checkSuite = context.payload.check_suite;
             
-            console.log(`ðŸ¤– ${BOT_NAME}: Check suite completed - ${checkSuite.conclusion}`);
+            console.log(`ðŸ¤– ${process.env.BOT_NAME}: Check suite completed - ${checkSuite.conclusion}`);
             
             // Find open PRs that might need merging
             const prs = await github.rest.pulls.list({
@@ -258,6 +258,11 @@ jobs:
             });
             
             for (const pr of prs.data) {
+              // Skip Dependabot PRs
+              if (pr.user.login === 'dependabot[bot]' || pr.title.includes('chore(deps)')) {
+                continue;
+              }
+              
               // Check if all checks now pass
               const checks = await github.rest.checks.listForRef({
                 owner: context.repo.owner,
@@ -280,7 +285,7 @@ jobs:
                     repo: context.repo.repo,
                     pull_number: pr.number,
                     merge_method: 'squash',
-                    commit_title: `ðŸ¤– ${BOT_NAME}: ${pr.title} (#${pr.number})`,
+                    commit_title: `ðŸ¤– ${process.env.BOT_NAME}: ${pr.title} (#${pr.number})`,
                     commit_message: `Auto-merged by ZYRAXON OMNIBOT\n\nAll checks passed after re-evaluation.`
                   });
                   
@@ -288,7 +293,7 @@ jobs:
                     issue_number: pr.number,
                     owner: context.repo.owner,
                     repo: context.repo.repo,
-                    body: `## ðŸ¤– ${BOT_NAME} - Auto-Merged (Post-Check)\n\nâœ… **PR auto-merged after all checks passed!**\n\n> ðŸš€ *ZYRAXON OMNIBOT: Never misses a merge opportunity!*`
+                    body: `## ðŸ¤– ${process.env.BOT_NAME} - Auto-Merged (Post-Check)\n\nâœ… **PR auto-merged after all checks passed!**\n\n> ðŸš€ *ZYRAXON OMNIBOT: Never misses a merge opportunity!*`
                   });
                 } catch (e) {}
               }
@@ -309,7 +314,7 @@ jobs:
           script: |
             const issue = context.payload.issue;
             
-            console.log(`ðŸ¤– ${BOT_NAME}: Processing Issue #${issue.number}`);
+            console.log(`ðŸ¤– ${process.env.BOT_NAME}: Processing Issue #${issue.number}`);
             
             const title = issue.title.toLowerCase();
             const body = (issue.body || '').toLowerCase();
@@ -331,7 +336,11 @@ jobs:
             } catch (e) {}
             
             // Auto-respond
-            let response = `## ðŸ¤– ${BOT_NAME} - Issue Received\n\nThank you for opening this issue! ðŸ“\n\n### Status:\n- âœ… Issue processed automatically\n- âœ… Labels applied: ${labels.join(', ')}\n- âœ… Assigned to maintainer\n\n### What happens next:\n${labels.includes('bug')\n  ? '- ðŸ” Bug will be analyzed\n- ðŸ”§ Fix will be suggested\n- ðŸ”€ PR will be created automatically'\n  : labels.includes('enhancement')\n    ? '- ðŸ’¡ Feature will be evaluated\n- ðŸ“‹ Implementation plan created\n- ðŸ”€ PR will be created automatically'\n    : '- ðŸ‘€ Maintainer will review\n- ðŸ’¬ Response will be provided'}\n\n> ðŸš€ *ZYRAXON OMNIBOT: We handle everything!*`;
+            let response = `## ðŸ¤– ${process.env.BOT_NAME} - Issue Received\n\nThank you for opening this issue! ðŸŽ¯\n\n### Status:\n- âœ… Issue processed automatically\n- âœ… Labels applied: ${labels.join(', ')}\n- âœ… Assigned to maintainer\n\n### What happens next:\n${labels.includes('bug')
+  ? '- ðŸ› Bug will be analyzed\n- ðŸ”§ Fix will be suggested\n- ðŸ“ PR will be created automatically'
+  : labels.includes('enhancement')
+    ? '- ðŸ’¡ Feature will be evaluated\n- ðŸ“‹ Implementation plan created\n- ðŸ“ PR will be created automatically'
+    : '- ðŸ‘€ Maintainer will review\n- ðŸ’¬ Response will be provided'}\n\n> ðŸš€ *ZYRAXON OMNIBOT: We handle everything!*`;
             
             await github.rest.issues.createComment({
               issue_number: issue.number,
@@ -366,6 +375,7 @@ jobs:
             const comment = context.payload.comment;
             const issue = context.payload.issue;
             
+            // Skip bot comments
             if (comment.user.type === 'Bot') return;
             
             const body = comment.body.toLowerCase();
@@ -373,13 +383,13 @@ jobs:
             let response = '';
             
             if (body.includes('merge') || body.includes('approve')) {
-              response = `## ðŸ¤– ${BOT_NAME}\n\nâœ… **Processing merge request...**\n\nChecking PR status...\n- CI Checks: Checking...\n- Conflicts: Checking...\n- Status: Checking...\n\n> *Will update once checks complete.*`;
+              response = `## ðŸ¤– ${process.env.BOT_NAME}\n\nâœ… **Processing merge request...**\n\nChecking PR status...\n- CI Checks: Checking...\n- Conflicts: Checking...\n- Status: Checking...\n\n> *Will update once checks complete.*`;
             } else if (body.includes('thanks') || body.includes('thank')) {
-              response = `## ðŸ¤– ${BOT_NAME}\n\nYou're welcome! ðŸ˜Š Always happy to help!`;
+              response = `## ðŸ¤– ${process.env.BOT_NAME}\n\nYou're welcome! ðŸ˜Š Always happy to help!`;
             } else if (body.includes('help') || body.includes('how')) {
-              response = `## ðŸ¤– ${BOT_NAME}\n\nI'm here to help! Let me analyze your request...\n\nâœ… Processing...\nâœ… Finding solution...\nâœ… Will respond shortly...`;
+              response = `## ðŸ¤– ${process.env.BOT_NAME}\n\nI'm here to help! Let me analyze your request...\n\nâœ… Processing...\nâœ… Finding solution...\nâœ… Will respond shortly...`;
             } else {
-              response = `## ðŸ¤– ${BOT_NAME}\n\nâœ… **Comment received!**\n\nI'm continuously monitoring this issue.\n\n> *ZYRAXON OMNIBOT: Always listening, always responding.*`;
+              response = `## ðŸ¤– ${process.env.BOT_NAME}\n\nâœ… **Comment received!**\n\nI'm continuously monitoring this issue.\n\n> *ZYRAXON OMNIBOT: Always listening, always responding.*`;
             }
             
             await github.rest.issues.createComment({
@@ -421,12 +431,12 @@ jobs:
               per_page: 100
             });
             
-            const report = `## ðŸ¤– ${BOT_NAME} Daily Report\n\nðŸ“… ${new Date().toLocaleDateString()}\n\n### Stats\n| Metric | Value |\n|--------|-------|\n| â­ Stars | ${repo.data.stargazers_count} |\n| ðŸ“‹ Issues | ${issues.data.length} |\n| ðŸ”€ PRs | ${prs.data.length} |\n\n### ${BOT_NAME} Status\n- âœ… Auto-Approve: Active\n- âœ… Smart Merge: Active\n- âœ… Never Cancel: Active\n- âœ… Never Reject: Active\n\n> ðŸš€ *All systems operational!*`;
+            const report = `## ðŸ¤– ${process.env.BOT_NAME} Daily Report\n\nðŸ“… ${new Date().toLocaleDateString()}\n\n### Stats\n| Metric | Value |\n|--------|-------|\n| â­ Stars | ${repo.data.stargazers_count} |\n| ðŸ“‹ Issues | ${issues.data.length} |\n| ðŸ”€ PRs | ${prs.data.length} |\n\n### ${process.env.BOT_NAME} Status\n- âœ… Auto-Approve: Active\n- âœ… Smart Merge: Active\n- âœ… Dependabot: Blocked (manual review)\n- âœ… Issue Handling: Active\n\n> ðŸš€ *All systems operational!*`;
             
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `ðŸ¤– Daily Report - ${new Date().toLocaleDateString()}`,
+              title: `ðŸ“Š Daily Report - ${new Date().toLocaleDateString()}`,
               body: report,
               labels: ['omnibot-report', 'automated']
             });
