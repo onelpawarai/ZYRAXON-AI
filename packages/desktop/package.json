@@ -24,14 +24,14 @@
   },
   "main": "./out/main/index.js",
   "dependencies": {
-    "@zip.js/zip.js": "2.7.62",
+    "@zip.js/zip.js": "2.8.31",
     "effect": "catalog:",
     "electron-context-menu": "4.1.2",
     "electron-log": "^5",
     "electron-store": "11.0.2",
     "electron-updater": "6.8.9",
     "electron-window-state": "^5.0.3",
-    "marked": "^15"
+    "marked": "^18"
   },
   "devDependencies": {
     "@actions/artifact": "4.0.0",
@@ -58,19 +58,19 @@
     "zod-openapi": "5.4.6"
   },
   "optionalDependencies": {
-    "@lydell/node-pty-darwin-arm64": "1.2.0-beta.12",
-    "@lydell/node-pty-darwin-x64": "1.2.0-beta.12",
-    "@lydell/node-pty-linux-arm64": "1.2.0-beta.12",
-    "@lydell/node-pty-linux-x64": "1.2.0-beta.12",
-    "@lydell/node-pty-win32-arm64": "1.2.0-beta.12",
-    "@lydell/node-pty-win32-x64": "1.2.0-beta.12",
-    "@parcel/watcher-darwin-arm64": "2.5.1",
-    "@parcel/watcher-darwin-x64": "2.5.1",
-    "@parcel/watcher-linux-arm64-glibc": "2.5.1",
-    "@parcel/watcher-linux-arm64-musl": "2.5.1",
-    "@parcel/watcher-linux-x64-glibc": "2.5.1",
-    "@parcel/watcher-linux-x64-musl": "2.5.1",
-    "@parcel/watcher-win32-arm64": "2.5.1",
-    "@parcel/watcher-win32-x64": "2.5.1"
+    "@lydell/node-pty-darwin-arm64": "1.2.0-beta.14",
+    "@lydell/node-pty-darwin-x64": "1.2.0-beta.14",
+    "@lydell/node-pty-linux-arm64": "1.2.0-beta.14",
+    "@lydell/node-pty-linux-x64": "1.2.0-beta.14",
+    "@lydell/node-pty-win32-arm64": "1.2.0-beta.14",
+    "@lydell/node-pty-win32-x64": "1.2.0-beta.14",
+    "@parcel/watcher-darwin-arm64": "2.6.0",
+    "@parcel/watcher-darwin-x64": "2.6.0",
+    "@parcel/watcher-linux-arm64-glibc": "2.6.0",
+    "@parcel/watcher-linux-arm64-musl": "2.6.0",
+    "@parcel/watcher-linux-x64-glibc": "2.6.0",
+    "@parcel/watcher-linux-x64-musl": "2.6.0",
+    "@parcel/watcher-win32-arm64": "2.6.0",
+    "@parcel/watcher-win32-x64": "2.6.0"
   }
 }

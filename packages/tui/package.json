@@ -55,14 +55,14 @@
     "@opentui/core": "catalog:",
     "@opentui/keymap": "catalog:",
     "@opentui/solid": "catalog:",
-    "clipboardy": "4.0.0",
+    "clipboardy": "5.3.1",
     "diff": "catalog:",
     "effect": "catalog:",
     "fuzzysort": "catalog:",
-    "open": "10.1.2",
+    "open": "11.0.0",
     "opentui-spinner": "catalog:",
     "remeda": "catalog:",
-    "strip-ansi": "7.1.2",
+    "strip-ansi": "7.2.0",
     "solid-js": "catalog:"
   },
   "devDependencies": {

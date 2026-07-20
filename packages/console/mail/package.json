@@ -2,11 +2,11 @@
   "name": "@opencode-ai/console-mail",
   "version": "1.18.3",
   "dependencies": {
-    "@jsx-email/all": "2.2.3",
-    "@jsx-email/cli": "1.4.3",
-    "@tsconfig/bun": "1.0.9",
-    "@types/react": "18.0.25",
-    "react": "18.2.0",
+    "@jsx-email/all": "3.0.1",
+    "@jsx-email/cli": "3.0.1",
+    "@tsconfig/bun": "1.0.10",
+    "@types/react": "19.2.17",
+    "react": "19.2.7",
     "solid-js": "catalog:"
   },
   "exports": {
