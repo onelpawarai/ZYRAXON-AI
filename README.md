@@ -13,6 +13,7 @@
 </p>
 
 <p align="center">
+  <a href="https://zyraxonai.lovable.app/"><img alt="Website" src="https://img.shields.io/badge/Website-zyraxonai.lovable.app-00f5ff?style=for-the-badge&logo=googlechrome&logoColor=white" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/releases"><img alt="Version" src="https://img.shields.io/github/v/release/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=blue" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=yellow" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/issues"><img alt="Issues" src="https://img.shields.io/github/issues/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=red" /></a>
@@ -20,6 +21,12 @@
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/onelpawarai/ZYRAXON-AI/total?style=for-the-badge&color=purple" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=cyan" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=orange" /></a>
+</p>
+
+<p align="center">
+  <a href="https://zyraxonai.lovable.app/"><strong>ðŸŒ Visit our Website</strong></a> â€¢
+  <a href="https://github.com/onelpawarai/ZYRAXON-AI/releases"><strong>â¬‡ï¸ Download</strong></a> â€¢
+  <a href="https://youtube.com/@zyraxon-aix"><strong>ðŸ“º YouTube</strong></a>
 </p>
 
 <p align="center">
@@ -110,9 +117,13 @@ Strategic, read-only analysis. Plans the perfect approach before any action.
 
 ## Quick Start
 
+### ðŸŒ Visit Our Website
+
+**[zyraxonai.lovable.app](https://zyraxonai.lovable.app/)** â€” Download, learn more, and explore features.
+
 ### Download (Recommended)
 
-Download the latest release from the [**Releases page**](https://github.com/onelpawarai/ZYRAXON-AI/releases):
+Download the latest release from our **[website](https://zyraxonai.lovable.app/)** or the [**Releases page**](https://github.com/onelpawarai/ZYRAXON-AI/releases):
 
 | Platform | File | Architecture |
 |----------|------|:------------:|
