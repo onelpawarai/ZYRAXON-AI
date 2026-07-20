@@ -1,0 +1,20 @@
+DEEP CODE ANALYSIS — Analyze code structure, complexity, and quality.
+
+Actions:
+- analyze: Deep analysis of a single file (functions, classes, imports, exports, complexity)
+- summary: Quick overview of a directory (file count, languages, total lines)
+- find_patterns: Search for patterns in codebase
+
+Features:
+- Auto-detect language (40+ languages)
+- Function/class extraction
+- Import/export mapping
+- Complexity scoring
+- Directory statistics
+
+Examples:
+- analyze src/main.ts — full file analysis
+- analyze src/ — directory overview
+- find_patterns src/ pattern="TODO|FIXME" — find TODOs
+
+Perfect for: Code review, onboarding, refactoring, understanding unfamiliar code.

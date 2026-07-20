@@ -1,0 +1,15 @@
+REAL-TIME SCREEN VISION — Capture and analyze the user's screen in real-time.
+
+Actions:
+- capture: Take a screenshot of the current screen
+- analyze: Take a screenshot and analyze its contents
+- list: Show recently captured screenshots
+
+Use this tool to see what's on the user's screen, read text, identify UI elements, debug visual issues, and understand the current context. You literally see what the user sees.
+
+Examples:
+- "capture" — takes a screenshot
+- "analyze" — captures and describes what's on screen
+- "list" — shows recent screenshots
+
+Note: Works on Windows, macOS, and Linux. Screenshots are saved locally.

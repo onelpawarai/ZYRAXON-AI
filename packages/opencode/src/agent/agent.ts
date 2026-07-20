@@ -15,6 +15,7 @@ import PROMPT_EXPLORE from "./prompt/explore.txt"
 import PROMPT_SUMMARY from "./prompt/summary.txt"
 import PROMPT_TITLE from "./prompt/title.txt"
 import PROMPT_BEAST from "./prompt/beast.txt"
+import PROMPT_PRO from "./prompt/pro.txt"
 import { Permission } from "@/permission"
 import { mergeDeep, pipe, sortBy, values } from "remeda"
 import { Global } from "@opencode-ai/core/global"
@@ -187,6 +188,32 @@ const layer = Layer.effect(
             options: {},
             color: "#FF4500",
             prompt: PROMPT_BEAST,
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                question: "allow",
+                plan_enter: "allow",
+                plan_exit: "allow",
+                task: {
+                  "*": "allow",
+                  general: "allow",
+                  explore: "allow",
+                },
+                todowrite: "allow",
+                memory: "allow",
+                self_evolve: "allow",
+              }),
+              user,
+            ),
+            mode: "primary",
+            native: true,
+          },
+          pro: {
+            name: "pro",
+            description: "ZYRAXON PRO — Premium AI assistant with UNLIMITED memory. Remembers EVERYTHING from all past conversations. All power. All tools. All permissions. Never forgets. Never gives up. The most powerful AI assistant.",
+            options: {},
+            color: "#FFD700",
+            prompt: PROMPT_PRO,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
