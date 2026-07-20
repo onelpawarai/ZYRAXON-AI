@@ -18,10 +18,12 @@
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/issues"><img alt="Issues" src="https://img.shields.io/github/issues/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=red" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=green" /></a>
   <a href="https://github.com/onelpawarai/ZYRAXON-AI/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/onelpawarai/ZYRAXON-AI/total?style=for-the-badge&color=purple" /></a>
+  <a href="https://github.com/onelpawarai/ZYRAXON-AI/graphs/contributors"><img alt="Contributors" src="https://img.shields.io/github/contributors/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=cyan" /></a>
+  <a href="https://github.com/onelpawarai/ZYRAXON-AI/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/onelpawarai/ZYRAXON-AI?style=for-the-badge&color=orange" /></a>
 </p>
 
 <p align="center">
-  <strong>Desktop AI agent that actually does things. Not a chatbot — an action-bot.</strong><br>
+  <strong>Desktop AI agent that actually does things. Not a chatbot â€” an action-bot.</strong><br>
   Reads your files. Writes your code. Runs your commands. Builds your projects. Deploys your apps.<br>
   It has <strong>Beast Mode</strong>, <strong>Persistent Memory</strong>, and it <strong>evolves itself</strong>.
 </p>
@@ -34,16 +36,16 @@
 
 ## What is ZYRAXON?
 
-ZYRAXON is an open-source desktop AI agent built on Electron + SolidJS + Bun. Unlike ChatGPT or other chatbots that just *talk*, ZYRAXON **takes action** — it has full access to your filesystem, terminal, browser, and more.
+ZYRAXON is an open-source desktop AI agent built on Electron + SolidJS + Bun. Unlike ChatGPT or other chatbots that just *talk*, ZYRAXON **takes action** â€” it has full access to your filesystem, terminal, browser, and more.
 
 It's built on top of [OpenCode](https://github.com/anomalyco/opencode) and extended with features that don't exist anywhere else:
 
-- **Beast Mode** — Maximum power agent with 3-level deep subagent army
-- **Persistent Memory** — Remembers everything across sessions (SQLite-backed)
-- **Self-Evolution** — Installs its own MCP servers and tools at runtime
-- **Voice Input** — Click the mic, speak naturally, it transcribes via Whisper
-- **Auto-Approve** — All permissions auto-approved. No interruptions, just results.
-- **20+ AI Models** — OpenAI, Anthropic, Gemini, DeepSeek, Meta, and more
+- **Beast Mode** â€” Maximum power agent with 3-level deep subagent army
+- **Persistent Memory** â€” Remembers everything across sessions (SQLite-backed)
+- **Self-Evolution** â€” Installs its own MCP servers and tools at runtime
+- **Voice Input** â€” Click the mic, speak naturally, it transcribes via Whisper
+- **Auto-Approve** â€” All permissions auto-approved. No interruptions, just results.
+- **20+ AI Models** â€” OpenAI, Anthropic, Gemini, DeepSeek, Meta, and more
 
 ### See it in action
 
@@ -139,11 +141,11 @@ bun run package:win   # or package:mac / package:linux
 ### Beast Mode with Subagent Army
 When you switch to Beast Mode, ZYRAXON unlocks **5 unique powers**:
 
-1. **Mission Control** — Breaks complex tasks into parallel subtasks, each handled by a subagent
-2. **Self-Evolution** — Installs new MCP servers, tools, and extensions at runtime via the `self_evolve` tool
-3. **Persistent Memory** — Store, recall, and search memories across sessions via the `memory` tool
-4. **Subagent Army** — 3-level deep nested subagents (subagents that spawn subagents)
-5. **Autonomous Completion** — Never stops until the task is 100% complete
+1. **Mission Control** â€” Breaks complex tasks into parallel subtasks, each handled by a subagent
+2. **Self-Evolution** â€” Installs new MCP servers, tools, and extensions at runtime via the `self_evolve` tool
+3. **Persistent Memory** â€” Store, recall, and search memories across sessions via the `memory` tool
+4. **Subagent Army** â€” 3-level deep nested subagents (subagents that spawn subagents)
+5. **Autonomous Completion** â€” Never stops until the task is 100% complete
 
 ### Voice Input
 Click the mic button, speak naturally in any language. ZYRAXON uses OpenAI Whisper to transcribe your voice to text. Set `OPENAI_API_KEY` to enable.
@@ -153,12 +155,12 @@ Switch between themes instantly: Dracula, Catppuccin, Gruvbox, Nord, Tokyo Night
 
 ### Multi-Model Support
 Use any AI model from any provider:
-- **OpenAI** — GPT-4o, GPT-4.1, o3
-- **Anthropic** — Claude Opus, Sonnet, Haiku
-- **Google** — Gemini 2.5 Pro, Flash
-- **DeepSeek** — V4 Pro, Flash
-- **Meta** — Llama 4
-- **Free models** — 20+ free models via OpenCode (no API key needed)
+- **OpenAI** â€” GPT-4o, GPT-4.1, o3
+- **Anthropic** â€” Claude Opus, Sonnet, Haiku
+- **Google** â€” Gemini 2.5 Pro, Flash
+- **DeepSeek** â€” V4 Pro, Flash
+- **Meta** â€” Llama 4
+- **Free models** â€” 20+ free models via OpenCode (no API key needed)
 
 ---
 
@@ -166,21 +168,21 @@ Use any AI model from any provider:
 
 ```
 ZYRAXON-AI/
-├── packages/
-│   ├── opencode/          # Core AI agent engine
-│   │   └── src/
-│   │       ├── agent/     # Agent modes (Build, Plan, Beast)
-│   │       ├── tool/      # Tools (memory, self_evolve, task, shell, etc.)
-│   │       └── session/   # Session management, LLM streaming
-│   ├── desktop/           # Electron desktop app
-│   ├── app/               # SolidJS UI
-│   ├── ui/                # Shared UI components
-│   ├── session-ui/        # Chat/session UI
-│   ├── core/              # Core utilities, database
-│   ├── tui/               # Terminal UI, themes
-│   └── sdk/               # JavaScript SDK
-├── README.md
-└── package.json
+â”œâ”€â”€ packages/
+â”‚   â”œâ”€â”€ opencode/          # Core AI agent engine
+â”‚   â”‚   â””â”€â”€ src/
+â”‚   â”‚       â”œâ”€â”€ agent/     # Agent modes (Build, Plan, Beast)
+â”‚   â”‚       â”œâ”€â”€ tool/      # Tools (memory, self_evolve, task, shell, etc.)
+â”‚   â”‚       â””â”€â”€ session/   # Session management, LLM streaming
+â”‚   â”œâ”€â”€ desktop/           # Electron desktop app
+â”‚   â”œâ”€â”€ app/               # SolidJS UI
+â”‚   â”œâ”€â”€ ui/                # Shared UI components
+â”‚   â”œâ”€â”€ session-ui/        # Chat/session UI
+â”‚   â”œâ”€â”€ core/              # Core utilities, database
+â”‚   â”œâ”€â”€ tui/               # Terminal UI, themes
+â”‚   â””â”€â”€ sdk/               # JavaScript SDK
+â”œâ”€â”€ README.md
+â””â”€â”€ package.json
 ```
 
 ---
@@ -201,13 +203,18 @@ ZYRAXON-AI/
 
 ## Contributing
 
-Contributions are welcome! Here's how:
+We love contributions! See our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Quick Start
 
 1. **Fork** the repository
-2. **Create** a branch: `git checkout -b feat/my-feature`
-3. **Commit** your changes: `git commit -m "feat: add my feature"`
-4. **Push** to your fork: `git push origin feat/my-feature`
-5. **Open** a Pull Request
+2. **Clone** your fork: `git clone https://github.com/YOUR_USERNAME/ZYRAXON-AI.git`
+3. **Install**: `bun install`
+4. **Build**: `cd packages/opencode && bun run build`
+5. **Create branch**: `git checkout -b feat/my-feature`
+6. **Commit**: `git commit -m "feat: add my feature"`
+7. **Push**: `git push origin feat/my-feature`
+8. **Open PR**
 
 ### Development
 
@@ -218,12 +225,50 @@ bun run dev
 # Desktop app
 bun run dev:desktop
 
-# Run tests
+# Build core
+cd packages/opencode && bun run build
+
+# Build desktop
+cd packages/desktop && bun run build
+
+# Typecheck
 bun typecheck
 ```
 
----https://youtube.com/@zyraxon-aix?si=Yp2JBuEZTv27nK2m
----https://www.facebook.com/profile.php?id=100093074890067
+---
+
+## Roadmap
+
+- [x] Beast Mode with 5 powers
+- [x] Screen Vision tool
+- [x] API Tester tool
+- [x] Code Analyzer tool
+- [x] System Info tool
+- [x] Unlimited Memory system
+- [x] Auto-update system
+- [x] Voice input (Whisper)
+- [ ] Mobile companion app
+- [ ] Plugin marketplace
+- [ ] Team collaboration features
+- [ ] Cloud sync (optional)
+- [ ] More AI model integrations
+- [ ] Browser extension
+
+See [open issues](https://github.com/onelpawarai/ZYRAXON-AI/issues) for planned features and known issues.
+
+---
+
+## Support
+
+If you find ZYRAXON-AI useful, please consider:
+
+- â­ **Starring** the repository
+- ðŸ› **Reporting** bugs via [Issues](https://github.com/onelpawarai/ZYRAXON-AI/issues)
+- ðŸ’¡ **Suggesting** new features
+- ðŸ”€ **Contributing** code
+- ðŸ“¢ **Sharing** with friends and colleagues
+
+---
 
 ## License
 
