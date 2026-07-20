@@ -1,0 +1,163 @@
+name: ZYRAXON Bot - Setup Guide
+
+on:
+  workflow_dispatch:
+    inputs:
+      setup_type:
+        description: 'Setup type'
+        required: true
+        default: 'guide'
+        type: choice
+        options:
+          - guide
+          - test
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  # ============================================
+  # STEP 1: CREATE GITHUB APP (Manual)
+  # ============================================
+  create-app:
+    name: "ðŸ“± Create GitHub App"
+    runs-on: ubuntu-latest
+    if: github.event.inputs.setup_type == 'guide'
+    steps:
+      - name: ðŸ“± GitHub App Setup Guide
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const guide = `## ðŸ¤– ZYRAXON AI Bot - Setup Guide
+            
+### ðŸŽ¯ Goal: Make @ZYRAXON-AI tag work
+            
+To tag @ZYRAXON-AI in comments, you need a **GitHub App**.
+            
+### ðŸ“± Step 1: Create GitHub App
+            
+1. **Go to:** https://github.com/settings/apps/new
+            
+2. **Fill in:**\n   - **GitHub App name:** \`ZYRAXON-AI\`
+   - **Homepage URL:** \`https://zyraxonai.lovable.app/\`
+   - **Webhook URL:** \`https://webhook.site/your-unique-url\`
+   - **Webhook secret:** \`zyraxon-bot-secret-2026\`
+            
+3. **Permissions:**\n   | Permission | Access |\n   |------------|--------|\n   | Contents | Read & Write |\n   | Issues | Read & Write |\n   | Pull Requests | Read & Write |\n   | Checks | Read & Write |\n   | Actions | Read & Write |\n   | Metadata | Read |\n            
+4. **Event subscriptions:**\n   - âœ… Issues\n   - âœ… Issue Comment\n   - âœ… Pull Request\n   - âœ… Pull Request Review\n   - âœ… Push\n   - âœ… Check Suite\n   - âœ… Workflow Run\n            
+5. **Where can this GitHub App be installed:**\n   - âœ… Any account\n            
+6. **Click:** \`Create GitHub App\`
+            
+### ðŸ” Step 2: Get Credentials
+            
+After creating the App:\n1. **Note the App ID** (shown on the App page)\n2. **Generate a private key** (click \"Generate a private key\")\n3. **Save the .pem file** (it downloads automatically)\n4. **Note the Client ID** (shown on the App page)\n5. **Note the Client Secret** (shown on the App page)
+            
+### ðŸ“¦ Step 3: Install on Repository
+            
+1. Go to: \`https://github.com/settings/apps/zyraxon-ai/installations\`\n2. Click \`Install\`\n3. Select: \`onelpawarai/ZYRAXON-AI\`\n4. Click \`Install\`
+            
+### ðŸ”‘ Step 4: Add Secrets to Repository
+            
+Go to: \`https://github.com/onelpawarai/ZYRAXON-AI/settings/secrets/actions\`
+            
+Add these secrets:\n| Secret Name | Value |\n|-------------|-------|\n| \`APP_ID\` | Your App ID |\n| \`APP_PRIVATE_KEY\` | Contents of .pem file |\n| \`APP_CLIENT_ID\` | Your Client ID |\n| \`APP_CLIENT_SECRET\` | Your Client Secret |\n| \`WEBHOOK_SECRET\` | zyraxon-bot-secret-2026 |
+            
+### âœ… Step 5: Test
+            
+After setup:\n1. Go to any Issue or PR\n2. Write: \`@ZYRAXON-AI help\`\n3. Bot should respond!\n            
+### ðŸŽ¯ How It Works
+            
+\`\`\`\nUser writes: @ZYRAXON-AI help\n     â†“\nGitHub triggers: issue_comment webhook\n     â†“\nBot receives: webhook payload\n     â†“\nBot parses: command after @ZYRAXON-AI\n     â†“\nBot responds: as @ZYRAXON-AI bot\n\`\`\`
+            
+### âš ï¸ Important Notes
+            
+- **App Name must be:** \`ZYRAXON-AI\` (exactly)\n- **After creating App:** You can tag it as \`@ZYRAXON-AI\`\n- **The bot will respond:** From the App's account\n- **All responses:** Show as \`@ZYRAXON-AI\`
+            
+### ðŸš€ What You Get
+            
+After setup:\n- âœ… \`@ZYRAXON-AI\` tag works in Issues\n- âœ… \`@ZYRAXON-AI\` tag works in PRs\n- âœ… Bot responds to commands\n- âœ… Bot can approve PRs\n- âœ… Bot can merge PRs\n- âœ… Bot can handle issues
+            
+> ðŸŽ¯ **Follow these steps to get @ZYRAXON-AI working!**
+            
+> ðŸ’¡ **Need help?** Ask me anytime!`;
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'ðŸ“± ZYRAXON AI Bot - Setup Guide',
+              body: guide,
+              labels: ['documentation', 'setup', 'bot']
+            });
+            
+            console.log('âœ… Setup guide created!');
+
+  # ============================================
+  # STEP 2: TEST BOT (After Setup)
+  # ============================================
+  test-bot:
+    name: "ðŸ§ª Test Bot"
+    runs-on: ubuntu-latest
+    if: github.event.inputs.setup_type == 'test'
+    steps:
+      - name: ðŸ§ª Testing Bot Setup
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Check if secrets exist
+            const hasAppId = !!process.env.APP_ID;
+            const hasPrivateKey = !!process.env.APP_PRIVATE_KEY;
+            const hasClientId = !!process.env.APP_CLIENT_ID;
+            const hasClientSecret = !!process.env.APP_CLIENT_SECRET;
+            
+            let status = \`## ðŸ§ª ZYRAXON Bot - Setup Test\n\n### Secret Status:\n\`;
+            status += \`| Secret | Status |\n|--------|--------|\n\`;
+            status += \`| APP_ID | \${hasAppId ? 'âœ… Set' : 'âŒ Missing'} |\n\`;
+            status += \`| APP_PRIVATE_KEY | \${hasPrivateKey ? 'âœ… Set' : 'âŒ Missing'} |\n\`;
+            status += \`| APP_CLIENT_ID | \${hasClientId ? 'âœ… Set' : 'âŒ Missing'} |\n\`;
+            status += \`| APP_CLIENT_SECRET | \${hasClientSecret ? 'âœ… Set' : 'âŒ Missing'} |\n\n\`;
+            
+            if (hasAppId && hasPrivateKey && hasClientId && hasClientSecret) {
+              status += \`### âœ… All secrets are set!\n\n\`;
+              status += \`### ðŸŽ¯ Next Steps:\n\`;
+              status += \`1. Create a test Issue\`;
+              status += \`2. Write: \`@ZYRAXON-AI help\`\n\`;
+              status += \`3. Bot should respond!\n\n\`;
+              status += \`> ðŸš€ **Bot is ready to use!**\n\`;
+            } else {
+              status += \`### âŒ Missing secrets!\n\n\`;
+              status += \`### ðŸ“‹ To fix:\n\`;
+              status += \`1. Go to: https://github.com/onelpawarai/ZYRAXON-AI/settings/secrets/actions\n\`;
+              status += \`2. Add missing secrets\`;
+              status += \`3. Run this test again\`;
+            }
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'ðŸ§ª ZYRAXON Bot - Setup Test Results',
+              body: status,
+              labels: ['test', 'bot']
+            });
+            
+            console.log('âœ… Test results posted!');
+
+  # ============================================
+  # STEP 3: MONITOR FOR @ZYRAXON-AI MENTIONS
+  # ============================================
+  monitor-mentions:
+    name: "ðŸ‘€ Monitor @ZYRAXON-AI"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.name == 'ZYRAXON Bot - Mention Handler'
+    steps:
+      - name: ðŸ‘€ Processing Mention
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            console.log('ðŸ‘€ Monitoring @ZYRAXON-AI mentions...');
+            console.log('Workflow run:', github.event.workflow_run.id);
+            console.log('Status:', github.event.workflow_run.conclusion);
