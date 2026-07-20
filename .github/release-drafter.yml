@@ -1,0 +1,103 @@
+name-template: 'v$RESOLVED_VERSION ðŸš€'
+tag-template: 'v$RESOLVED_VERSION'
+
+categories:
+  - title: 'ðŸš€ New Features'
+    labels:
+      - 'feature'
+      - 'enhancement'
+      - 'new'
+      - 'feat'
+  - title: 'ðŸ› Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+      - 'patch'
+  - title: 'ðŸ“š Documentation'
+    labels:
+      - 'documentation'
+      - 'docs'
+      - 'readme'
+  - title: 'ðŸ”§ CI/CD & Infrastructure'
+    labels:
+      - 'ci'
+      - 'github-actions'
+      - 'dependencies'
+      - 'infra'
+  - title: 'â™»ï¸ Refactoring'
+    labels:
+      - 'refactor'
+      - 'cleanup'
+      - 'perf'
+  - title: 'ðŸ§ª Testing'
+    labels:
+      - 'test'
+      - 'testing'
+  - title: 'ðŸ”’ Security'
+    labels:
+      - 'security'
+      - 'vulnerability'
+  - title: 'ðŸ¤– Bot Updates'
+    labels:
+      - 'omnibot'
+      - 'bot'
+
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&'
+no-changes-template: 'No changes.'
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+      - 'breaking'
+  minor:
+    labels:
+      - 'minor'
+      - 'feature'
+      - 'enhancement'
+  patch:
+    labels:
+      - 'patch'
+      - 'bug'
+      - 'fix'
+      - 'documentation'
+      - 'dependencies'
+  default: patch
+
+autolabeler:
+  - label: 'bug'
+    title:
+      - '/fix/i'
+      - '/bug/i'
+      - '/error/i'
+  - label: 'enhancement'
+    title:
+      - '/feat/i'
+      - '/add/i'
+      - '/new/i'
+  - label: 'documentation'
+    title:
+      - '/docs/i'
+      - '/readme/i'
+      - '/doc/i'
+  - label: 'dependencies'
+    title:
+      - '/chore/i'
+      - '/bump/i'
+      - '/dep/i'
+    branch:
+      - '/dependabot/i'
+  - label: 'ci'
+    title:
+      - '/ci/i'
+      - '/workflow/i'
+      - '/action/i'
+  - label: 'test'
+    title:
+      - '/test/i'
+      - '/spec/i'
+
+commitish: master
+filter-by-commitish: false
