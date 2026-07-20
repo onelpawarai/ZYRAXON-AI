@@ -38,7 +38,7 @@
   "devDependencies": {
     "zyraxon": "workspace:*",
     "@types/node": "catalog:",
-    "@astrojs/check": "0.9.6",
+    "@astrojs/check": "0.9.9",
     "typescript": "catalog:"
   }
 }

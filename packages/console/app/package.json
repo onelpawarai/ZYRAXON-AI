@@ -38,9 +38,9 @@
   "devDependencies": {
     "@types/bun": "catalog:",
     "@typescript/native-preview": "catalog:",
-    "@webgpu/types": "0.1.54",
+    "@webgpu/types": "0.1.71",
     "typescript": "catalog:",
-    "wrangler": "4.50.0"
+    "wrangler": "4.112.0"
   },
   "engines": {
     "node": ">=22"
