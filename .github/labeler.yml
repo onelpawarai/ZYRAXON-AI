@@ -1,0 +1,52 @@
+# Labeler Configuration
+# Auto-labels PRs based on file changes
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - 'docs/**'
+          - '**/README*'
+
+bug:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/**/fix*'
+          - 'src/**/bug*'
+          - '**/*error*'
+
+enhancement:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/**/feat*'
+          - 'src/**/feature*'
+          - 'src/**/add*'
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'bun.lock'
+          - '**/package.json'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/**'
+
+testing:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.test.*'
+          - '**/*.spec.*'
+          - '__tests__/**'
+
+core:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'packages/opencode/src/**'
+
+desktop:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'packages/desktop/**'
