@@ -1,4 +1,4 @@
-// ZYRAXON MCP Server — 124+ Real Working Tools
+// ZYRAXON MCP Server — 136+ Real Working Tools
 // The most powerful MCP server ever created
 // Cross-platform: Windows, Linux, Mac ALL supported
 
@@ -8,6 +8,7 @@ import { dataTools } from "./data-tools"
 import { securityTools } from "./security-tools"
 import { aiTools } from "./ai-tools"
 import { productivityTools } from "./productivity-tools"
+import { ultraTools } from "./ultra-tools"
 import { autoMemory } from "../memory/auto-injection"
 import { autoScreenVision } from "../screen/auto-vision"
 
@@ -175,6 +176,18 @@ export const TOOL_REGISTRY = {
     history: autoScreenVision.autoScreenVision.getCaptureHistory,
     describe: autoScreenVision.autoScreenVision.describeScreen,
   },
+
+  // DARK EMPEROR ULTRA TOOLS (8 tools)
+  ultra: {
+    ultraCodeGen: ultraTools.ultraCodeGen,
+    ultraAutoDeploy: ultraTools.ultraAutoDeploy,
+    ultraSecuritySweep: ultraTools.ultraSecuritySweep,
+    ultraPerformance: ultraTools.ultraPerformance,
+    ultraRefactor: ultraTools.ultraRefactor,
+    ultraTestGen: ultraTools.ultraTestGen,
+    ultraDocGen: ultraTools.ultraDocGen,
+    ultraDebug: ultraTools.ultraDebug,
+  },
 }
 
 // Tool count
@@ -187,7 +200,8 @@ export const TOOL_COUNT = {
   productivity: 20,
   memory: 4,
   vision: 4,
-  total: 128,
+  ultra: 8,
+  total: 136,
 }
 
 // Get tool by category and name

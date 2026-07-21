@@ -1674,7 +1674,7 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
                   </div>
                 </Show>
                 <Show when={!providersLoading()}>
-                  <Show when={store.mode !== "shell" && props.controls.agents.current !== "apex"}>
+                  <Show when={store.mode !== "shell" && props.controls.agents.current !== "apex" && props.controls.agents.current !== "dark-emperor"}>
                     <div
                       data-component="prompt-model-control"
                       classList={{ "animate-in fade-in duration-300": providersShouldFadeIn() }}

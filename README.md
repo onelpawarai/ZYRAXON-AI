@@ -283,7 +283,7 @@ If you find ZYRAXON-AI useful, please consider:
 
 ## License
 
-[MIT](./LICENSE) - Free to use, modify, and distribute.
+[Business Source License 1.1 (BSL 1.1)](./LICENSE) - Free for non-commercial use. Commercial use requires a paid license. Converts to Apache 2.0 on 2030-07-21.
 
 ---
 
