@@ -11,5 +11,3 @@ if (!process.env.NODE_OPTIONS?.includes("max-old-space-size")) {
 const channel = resolveChannel()
 await $`bun ./scripts/copy-icons.ts ${channel}`
 await $`bun ./scripts/copy-metainfo.ts ${channel}`
-
-await $`cd ../opencode && bun script/build-server.ts`
