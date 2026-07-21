@@ -1,0 +1,21 @@
+Self-evolve ZYRAXON by installing new MCP servers and capabilities. Use this to add new tools and features to ZYRAXON without user intervention.
+
+## Actions
+
+- **install_mcp**: Install a new MCP server by adding it to opencode.jsonc
+  - name: The MCP server name (e.g., "filesystem", "browser", "database")
+  - command: The command to run the server (e.g., "npx", "node", "python")
+  - args: Array of arguments for the command (e.g., ["-y", "@modelcontextprotocol/server-filesystem"])
+  - env: Optional environment variables as key-value pairs
+
+- **list_mcp**: List all currently configured MCP servers
+
+- **check_status**: Check if a specific MCP server is running
+
+## Examples
+
+user: install a filesystem MCP server
+assistant: [calls self_evolve with action="install_mcp", name="filesystem", command="npx", args=["-y", "@modelcontextprotocol/server-filesystem"]]
+
+user: what MCP servers are installed?
+assistant: [calls self_evolve with action="list_mcp"]

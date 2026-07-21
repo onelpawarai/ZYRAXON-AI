@@ -1,0 +1,19 @@
+REAL-TIME SYSTEM INFO — Monitor system health and resources.
+
+Actions:
+- full: Complete system snapshot (CPU, RAM, disk, processes, network)
+- cpu: CPU information only
+- memory: RAM usage only
+- disk: Disk drive usage
+- processes: Top 10 processes by memory
+- network: Network interfaces and IPs
+
+Features:
+- Live CPU model, cores, speed
+- Real-time memory usage (total/used/free/percent)
+- Disk drive space (all drives)
+- Top processes by memory usage
+- Network interface IPs
+- System uptime
+
+Perfect for: Performance monitoring, debugging, system health checks, resource optimization.
