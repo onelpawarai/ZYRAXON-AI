@@ -8,6 +8,12 @@
   --animate-apex-shake: apex-shake 0.5s ease-in-out;
   --animate-apex-glitch: apex-glitch 0.3s steps(2) infinite;
   --animate-apex-rage: apex-rage 0.2s ease-in-out infinite;
+  --animate-dark-emperor-rise: dark-emperor-rise 0.5s ease-out;
+  --animate-dark-emperor-fury: dark-emperor-fury 1.5s ease-in-out infinite;
+  --animate-dark-emperor-doom: dark-emperor-doom 2s ease-in-out infinite;
+  --animate-dark-emperor-shatter: dark-emperor-shatter 0.4s ease-in-out;
+  --animate-dark-emperor-vibrate: dark-emperor-vibrate 0.15s ease-in-out infinite;
+  --animate-dark-emperor-glow: dark-emperor-glow-intense 1s ease-in-out infinite;
 }
 
 /* EXISTING ANIMATIONS */
@@ -223,6 +229,150 @@
 
 .loading-apex {
   animation: loading-hunt 0.8s linear infinite;
+}
+
+/* DARK EMPEROR ANIMATIONS — SUPREME POWER */
+@keyframes dark-emperor-rise {
+  0% {
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+    filter: brightness(3) hue-rotate(-30deg);
+  }
+  30% {
+    transform: scale(1.1) translateY(-10px);
+    opacity: 0.8;
+    filter: brightness(2) hue-rotate(-15deg);
+  }
+  60% {
+    transform: scale(0.95) translateY(5px);
+    opacity: 1;
+    filter: brightness(1.5) hue-rotate(-5deg);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    filter: brightness(1) hue-rotate(0deg);
+  }
+}
+
+@keyframes dark-emperor-fury {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(139, 0, 0, 0.5),
+                0 0 15px rgba(139, 0, 0, 0.3),
+                0 0 30px rgba(139, 0, 0, 0.1);
+    border-color: rgba(139, 0, 0, 0.5);
+  }
+  25% {
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.8),
+                0 0 30px rgba(200, 0, 0, 0.5),
+                0 0 60px rgba(139, 0, 0, 0.3);
+    border-color: rgba(200, 0, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(139, 0, 0, 1),
+                0 0 40px rgba(255, 0, 0, 0.7),
+                0 0 80px rgba(139, 0, 0, 0.5);
+    border-color: rgba(255, 0, 0, 0.9);
+  }
+  75% {
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.8),
+                0 0 30px rgba(200, 0, 0, 0.5),
+                0 0 60px rgba(139, 0, 0, 0.3);
+    border-color: rgba(200, 0, 0, 0.7);
+  }
+}
+
+@keyframes dark-emperor-doom {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(139, 0, 0, 0.5),
+                 0 0 10px rgba(139, 0, 0, 0.3),
+                 0 0 20px rgba(139, 0, 0, 0.1);
+    color: #8B0000;
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.8),
+                 0 0 25px rgba(139, 0, 0, 0.6),
+                 0 0 50px rgba(139, 0, 0, 0.4);
+    color: #FF0000;
+  }
+}
+
+@keyframes dark-emperor-shatter {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  10% {
+    transform: scale(1.1) skewX(-2deg);
+    filter: brightness(2) saturate(2);
+  }
+  20% {
+    transform: scale(0.95) skewX(3deg);
+    filter: brightness(1.5);
+  }
+  30% {
+    transform: scale(1.05) skewX(-1deg);
+    filter: brightness(2.5) saturate(1.5);
+  }
+  40% {
+    transform: scale(1) skewX(0deg);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes dark-emperor-vibrate {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-2px, -2px) rotate(-1deg); }
+  20% { transform: translate(2px, 1px) rotate(1deg); }
+  30% { transform: translate(-1px, 2px) rotate(-0.5deg); }
+  40% { transform: translate(1px, -1px) rotate(0.5deg); }
+  50% { transform: translate(-2px, 0px) rotate(-1deg); }
+  60% { transform: translate(2px, 2px) rotate(0deg); }
+  70% { transform: translate(-1px, -2px) rotate(0.5deg); }
+  80% { transform: translate(1px, 1px) rotate(-0.5deg); }
+  90% { transform: translate(0px, -1px) rotate(0deg); }
+}
+
+@keyframes dark-emperor-glow-intense {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 5px rgba(139, 0, 0, 0.5));
+  }
+  50% {
+    filter: brightness(1.5) drop-shadow(0 0 20px rgba(255, 0, 0, 0.8));
+  }
+}
+
+/* DARK EMPEROR MODE ACTIVE CLASSES */
+.dark-emperor-mode {
+  animation: dark-emperor-fury 1.5s ease-in-out infinite;
+}
+
+.dark-emperor-glow {
+  animation: dark-emperor-doom 2s ease-in-out infinite;
+}
+
+.dark-emperor-rise {
+  animation: dark-emperor-rise 0.5s ease-out;
+}
+
+.dark-emperor-shatter {
+  animation: dark-emperor-shatter 0.4s ease-in-out;
+}
+
+.dark-emperor-vibrate {
+  animation: dark-emperor-vibrate 0.15s ease-in-out infinite;
+}
+
+.dark-emperor-glow-intense {
+  animation: dark-emperor-glow-intense 1s ease-in-out infinite;
+}
+
+.loading-dark-emperor {
+  animation: dark-emperor-rise 1s ease-in-out infinite;
 }
 
 /* TEXT ANIMATIONS — SCARY */
