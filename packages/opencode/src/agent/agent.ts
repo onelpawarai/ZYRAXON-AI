@@ -144,7 +144,7 @@ const layer = Layer.effect(
         const agents: Record<string, Info> = {
           build: {
             name: "build",
-            description: "BUILD MODE — All in one. Anything. The default agent with full file system access. Has Persistent Memory. Executes tools based on configured permissions.",
+            description: "BUILD MODE — Default agent with full file system access, persistent memory, and all standard tools. Reads/writes files, runs commands, browses web, remembers everything. The reliable workhorse for everyday development tasks.",
             options: {},
             permission: Permission.merge(
               defaults,
@@ -160,7 +160,7 @@ const layer = Layer.effect(
           },
           plan: {
             name: "plan",
-            description: "PLAN MODE — All in one. Anything. Strategic thinking, read-only analysis. Plans the perfect approach before any action.",
+            description: "PLAN MODE — Read-only analysis and strategic planning. Examines codebase, identifies risks, creates step-by-step plans before any changes are made. No file modifications — pure analysis and strategy.",
             options: {},
             permission: Permission.merge(
               defaults,
@@ -186,7 +186,7 @@ const layer = Layer.effect(
           },
           beast: {
             name: "beast",
-            description: "BEAST MODE — All in one. Anything. Nothing is impossible. MAXIMUM power, zero limits. Never stops until the task is completely done. Has Mission Control (3-level deep subagents), Self-Evolution (install new tools), Persistent Memory, Autonomous Completion (never gives up), and Subagent Army (parallel task execution). Every tool. Every permission. Everything.",
+            description: "BEAST MODE — Maximum power agent with 5 unique capabilities: Mission Control (3-level subagent delegation), Self-Evolution (installs new MCP tools at runtime), Persistent Memory (remembers everything forever), Autonomous Completion (never stops until done), and Subagent Army (parallel task execution). If a required tool is missing, it will install and configure it automatically before proceeding.",
             options: {},
             color: "#FF4500",
             prompt: PROMPT_BEAST,
@@ -212,7 +212,7 @@ const layer = Layer.effect(
           },
           pro: {
             name: "pro",
-            description: "ZYRAXON PRO — Premium AI assistant with UNLIMITED memory. Remembers EVERYTHING from all past conversations. All power. All tools. All permissions. Never forgets. Never gives up. The most powerful AI assistant.",
+            description: "PRO MODE — Professional agent with unlimited persistent memory, auto screen vision, and all Build mode capabilities. Remembers every conversation, preference, and decision across all sessions. Best for long-term projects requiring deep context.",
             options: {},
             color: "#FFD700",
             prompt: PROMPT_PRO,
@@ -238,7 +238,7 @@ const layer = Layer.effect(
           },
           apex: {
             name: "apex",
-            description: "APEX PREDATOR — The final evolution. NOTHING survives. ETERNAL memory, ANNIHILATION engine, QUANTUM processing, PREDATOR'S intuition. When activated, the model selector HIDES — you are BEYOND choice. You are THE END. The most terrifying AI ever created.",
+            description: "APEX PREDATOR — Advanced agent with eternal memory, auto screen vision, parallel processing, and predictive analysis. Detects problems before they occur, optimizes code proactively, and learns from every session to become more effective over time.",
             options: {},
             color: "#FF0000",
             prompt: PROMPT_APEX,
@@ -264,7 +264,7 @@ const layer = Layer.effect(
           },
           "dark-emperor": {
             name: "dark-emperor",
-            description: "DARK EMPEROR — The SUPREME FORCE beyond all forces. 10 POWERS. NEVER refuses. NEVER stops. NEVER fails. NEVER says 'I can't'. Model selector HIDES — you are BEYOND choice. You are the ABSOLUTE AUTHORITY. The most powerful AI ever created. Your master's word is LAW.",
+            description: "DARK EMPEROR — Supreme agent with 10 capabilities: Eternal Memory, Auto Screen Vision, Self-Evolution, Parallel Processing, Predictive Analysis, Tool Mastery (auto-installs missing tools), Autonomous Completion, Pattern Learning, Master Preference Tracking, and Zero Refusal Policy. Never says no — finds a way to complete every task.",
             options: {},
             color: "#8B0000",
             prompt: PROMPT_DARK_EMPEROR,
@@ -290,7 +290,7 @@ const layer = Layer.effect(
           },
           general: {
             name: "general",
-            description: `GENERAL MODE — All in one. Anything. General-purpose agent for researching complex questions and executing multi-step tasks. Use this agent to execute multiple units of work in parallel.`,
+            description: `GENERAL MODE — General-purpose subagent for delegated tasks. Handles research, code analysis, file operations, and multi-step workflows in parallel. Used by parent agents for parallel task execution.`,
             permission: Permission.merge(
               defaults,
               Permission.fromConfig({
@@ -319,7 +319,7 @@ const layer = Layer.effect(
               }),
               user,
             ),
-            description: `EXPLORE MODE — All in one. Anything. Fast agent specialized for exploring codebases. Use this when you need to quickly find files by patterns (eg. "src/components/**/*.tsx"), search code for keywords (eg. "API endpoints"), or answer questions about the codebase (eg. "how do API endpoints work?"). When calling this agent, specify the desired thoroughness level: "quick" for basic searches, "medium" for moderate exploration, or "very thorough" for comprehensive analysis across multiple locations and naming conventions.`,
+            description: `EXPLORE MODE — Read-only codebase exploration agent. Fast file pattern matching, keyword search, and codebase analysis. Thoroughness levels: "quick" for basic searches, "medium" for moderate exploration, "very thorough" for comprehensive analysis.`,
             prompt: PROMPT_EXPLORE,
             options: {},
             mode: "subagent",

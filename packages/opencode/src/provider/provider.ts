@@ -1,4 +1,17 @@
-﻿import { LayerNode } from "@opencode-ai/core/effect/layer-node"
+﻿// ============================================================================
+// ZYRAXON Provider System
+// ============================================================================
+// Central provider management for 25+ AI providers.
+// This file handles SDK loading, model resolution, authentication,
+// and provider-specific configuration for all supported AI providers.
+//
+// Providers supported: OpenAI, Anthropic, Google, Azure, Bedrock, xAI,
+// Mistral, Groq, DeepInfra, Cerebras, Cohere, TogetherAI, Perplexity,
+// Vercel, Alibaba, GitHub Copilot, GitLab, Venice, OpenRouter, NVIDIA,
+// Snowflake, Cloudflare, SAP, and more.
+// ============================================================================
+
+import { LayerNode } from "@opencode-ai/core/effect/layer-node"
 import os from "os"
 import { ConfigV1 } from "@opencode-ai/core/v1/config/config"
 import fuzzysort from "fuzzysort"
@@ -32,7 +45,15 @@ import { ModelStatus } from "./model-status"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { ProviderError } from "./error"
 
+// ============================================================================
+// Constants
+// ============================================================================
+
 const OPENAI_HEADER_TIMEOUT_DEFAULT = 10_000
+
+// ============================================================================
+// SSE Stream Helpers
+// ============================================================================
 
 function wrapSSE(res: Response, ms: number, ctl: AbortController) {
   if (typeof ms !== "number" || ms <= 0) return res
@@ -98,6 +119,10 @@ function googleVertexAnthropicBaseURL(project: string | undefined, location: str
   return `https://aiplatform.${location}.rep.googleapis.com/v1/projects/${project}/locations/${location}/publishers/anthropic/models`
 }
 
+// ============================================================================
+// Bundled SDK Registry
+// ============================================================================
+
 type BundledSDK = {
   languageModel(modelId: string): LanguageModelV3
   chat?: (modelId: string) => LanguageModelV3
@@ -132,6 +157,10 @@ const BUNDLED_PROVIDERS: Record<string, () => Promise<(opts: any) => BundledSDK>
     import("@opencode-ai/core/github-copilot/copilot-provider").then((m) => m.createOpenaiCompatible),
   "venice-ai-sdk-provider": () => import("venice-ai-sdk-provider").then((m) => m.createVenice),
 }
+
+// ============================================================================
+// Custom Provider Loaders
+// ============================================================================
 
 type CustomModelLoader = (sdk: any, modelID: string, options?: Record<string, any>, model?: Model) => Promise<any>
 type CustomVarsLoader = (options: Record<string, any>) => Record<string, string>
@@ -962,6 +991,10 @@ function custom(dep: CustomDep): Record<string, CustomLoader> {
   }
 }
 
+// ============================================================================
+// Schema Definitions — Provider & Model Types
+// ============================================================================
+
 const ProviderApiInfo = Schema.Struct({
   id: Schema.String,
   url: Schema.String,
@@ -1091,6 +1124,10 @@ export function defaultModelIDs<T extends { models: Record<string, { id: string 
   return mapValues(providers, (item) => sort(Object.values(item.models))[0].id)
 }
 
+// ============================================================================
+// Error Classes
+// ============================================================================
+
 export class ModelNotFoundError extends Schema.TaggedErrorClass<ModelNotFoundError>()("ProviderModelNotFoundError", {
   providerID: ProviderV2.ID,
   modelID: ModelV2.ID,
@@ -1145,6 +1182,10 @@ export class NoModelsError extends Schema.TaggedErrorClass<NoModelsError>()("Pro
 export type DefaultModelError = ModelNotFoundError | NoProvidersError | NoModelsError
 export type Error = ModelNotFoundError | InitError | NoProvidersError | NoModelsError
 
+// ============================================================================
+// Provider Service — Main Interface
+// ============================================================================
+
 export interface Interface {
   readonly list: () => Effect.Effect<Record<ProviderV2.ID, Info>>
   readonly getProvider: (providerID: ProviderV2.ID) => Effect.Effect<Info>
@@ -1170,6 +1211,10 @@ interface State {
 export class Service extends Context.Service<Service, Interface>()("@zyraxon/Provider") {}
 
 export const use = serviceUse(Service)
+
+// ============================================================================
+// Models.dev Conversion Helpers
+// ============================================================================
 
 function cost(c: ModelsDev.Model["cost"]): Model["cost"] {
   const result: Model["cost"] = {
@@ -1323,6 +1368,10 @@ function modelSuggestions(provider: Info | undefined, modelID: ModelV2.ID, enabl
     .slice(0, 3)
     .map((item) => item.id)
 }
+
+// ============================================================================
+// Provider Service Layer — Core Implementation
+// ============================================================================
 
 const layer = Layer.effect(
   Service,
@@ -1665,6 +1714,10 @@ const layer = Layer.effect(
 
     const list = Effect.fn("Provider.list")(() => InstanceState.use(state, (s) => s.providers))
 
+    // ========================================================================
+    // SDK Resolution — Dynamic loading of provider SDKs
+    // ========================================================================
+
     async function resolveSDK(model: Model, s: State, envs: Record<string, string | undefined>) {
       try {
         const provider = s.providers[model.providerID]
@@ -1977,6 +2030,10 @@ const layer = Layer.effect(
     return Service.of({ list, getProvider, getModel, getLanguage, closest, getSmallModel, defaultModel })
   }),
 )
+
+// ============================================================================
+// Model Priority & Sorting
+// ============================================================================
 
 const priority = ["gpt-5", "claude-sonnet-4", "big-pickle", "gemini-3-pro"]
 const smallModelFamilyPriority = ["gemini-flash", "gpt-nano", "claude-haiku"]

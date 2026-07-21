@@ -30,7 +30,7 @@
 <p align="center">
   <strong>Desktop AI agent that actually does things. Not a chatbot - an action-bot.</strong><br>
   Reads your files. Writes your code. Runs your commands. Builds your projects. Deploys your apps.<br>
-  It has <strong>7 Agent Modes</strong>, <strong>136 Tools</strong>, <strong>Persistent Memory</strong>, and it <strong>evolves itself</strong>.
+  It has <strong>7 Agent Modes</strong>, <strong>136+ Tools</strong>, <strong>Eternal Memory</strong>, <strong>Self-Healing</strong>, and it <strong>evolves itself</strong>.
 </p>
 
 ---
@@ -39,15 +39,17 @@
 
 ZYRAXON-AI is an open-source desktop AI agent built on Electron + SolidJS + Bun. Unlike ChatGPT or other chatbots that just *talk*, ZYRAXON **takes action** - it has full access to your filesystem, terminal, browser, and more.
 
-It's built on top of [OpenCode](https://github.com/anomalyco/opencode) and extended with features that don't exist anywhere else:
+### What Makes ZYRAXON Different
 
+- **Self-Healing** - If a tool is missing, ZYRAXON installs it automatically. Never fails due to missing capabilities.
 - **7 Agent Modes** - Build, Plan, Beast, PRO, APEX PREDATOR, DARK EMPEROR, General
-- **136 Tools** - 124 MCP tools + 8 ULTRA tools + 4 vision tools
-- **Persistent Memory** - Remembers everything across sessions (SQLite-backed)
+- **136+ Tools** - 124 MCP tools + 8 ULTRA tools + 4 vision tools
+- **Eternal Memory** - Remembers everything forever. 50,000+ memories with compression.
 - **Self-Evolution** - Installs its own MCP servers and tools at runtime
 - **Auto Screen Vision** - Automatically captures your screen before every response
 - **Voice Input** - Click the mic, speak naturally, it transcribes via Whisper
-- **20+ AI Models** - OpenAI, Anthropic, Gemini, DeepSeek, Meta, and more
+- **25+ AI Providers** - OpenAI, Anthropic, Google, Azure, Bedrock, xAI, Mistral, and more
+- **Zero Refusal** - DARK EMPEROR mode never says "I can't"
 
 ---
 
@@ -64,20 +66,20 @@ Strategic, read-only analysis. Plans the perfect approach before any action.
 > Read-only analysis, Plan creation, Strategic thinking
 
 ### Beast Mode
-Maximum power with 6 unique powers.
-> Mission Control (3-level subagents) + Self-Evolution + Subagent Army + Autonomous Completion + Memory + Vision
+Maximum power with 6 unique capabilities. Self-healing: installs missing tools automatically.
+> Mission Control (3-level subagents) + Self-Evolution + Subagent Army + Autonomous Completion + Memory + Vision + Self-Healing
 
 ### PRO Mode
-Unlimited memory + free models. The professional's choice.
-> Everything Build has + unlimited memory + free model access + screen vision
+Professional agent with unlimited memory and auto screen vision.
+> Everything Build has + unlimited memory + screen vision + Self-Healing
 
 ### APEX PREDATOR Mode
-8 powers. Model selector hides. You are in full control.
-> Omega Command Center + Eternal Memory + Annihilation Engine + Tool Mastery + Quantum Processing + Unbreakable Will + Predator's Intuition + ALWAYS-ON Screen Vision
+Advanced agent with predictive analysis and eternal memory.
+> Omega Command Center + Eternal Memory + Annihilation Engine + Tool Mastery + Quantum Processing + Unbreakable Will + Predator's Intuition + ALWAYS-ON Screen Vision + Self-Healing
 
 ### DARK EMPEROR Mode
-**10 powers. NEVER refuses. NEVER stops. NEVER fails.**
-> Supreme Sovereignty + Infinite Memory Core + Apocalypse Protocol + Omniscient Tool Mastery + Quantum Superprocessing + Absolute Will + Dark Omniscience + Void Vision + Dark Resonance + Emperor's Decree
+**Supreme agent with 10 powers. NEVER refuses. NEVER stops. NEVER fails.**
+> Supreme Sovereignty + Infinite Memory Core + Apocalypse Protocol + Omniscient Tool Mastery + Quantum Superprocessing + Absolute Will + Dark Omniscience + Void Vision + Dark Resonance + Emperor's Decree (Self-Healing + Zero Refusal)
 
 **DARK EMPEROR has 8 exclusive ULTRA Tools:**
 - ultraCodeGen - Master-level code generation
@@ -116,85 +118,38 @@ Download the latest release from our **[Releases page](https://github.com/onelpa
 - **[Git](https://git-scm.com/)** (version control)
 - **[Node.js](https://nodejs.org/)** 22+ (required for some native modules)
 
-### Step 1: Clone the repository
-
-`ash
-git clone https://github.com/onelpawarai/ZYRAXON-AI.git
-cd ZYRAXON-AI
-`
-
-### Step 2: Install all dependencies
-
-`ash
-bun install
-`
-
-### Step 3: Build the core engine
-
-`ash
-cd packages/opencode
-bun run build
-cd ../..
-`
-
-### Step 4: Build the desktop app
-
-`ash
-cd packages/desktop
-bun run build
-`
-
-### Step 5: Package the installer
-
-**Windows:**
-`ash
-bun run package:win
-`
-
-**Linux:**
-`ash
-bun run package:linux
-`
-
-**macOS:**
-`ash
-bun run package:mac
-`
-
-The installer will be created in packages/desktop/dist/.
-
 ### Quick Build (All-in-One)
 
 **Windows:**
-`ash
+```bash
 git clone https://github.com/onelpawarai/ZYRAXON-AI.git
 cd ZYRAXON-AI
 bun install
 cd packages/opencode && bun run build && cd ../..
 cd packages/desktop && bun run build && bun run package:win
-`
+```
 
 **Linux:**
-`ash
+```bash
 git clone https://github.com/onelpawarai/ZYRAXON-AI.git
 cd ZYRAXON-AI
 bun install
 cd packages/opencode && bun run build && cd ../..
 cd packages/desktop && bun run build && bun run package:linux
-`
+```
 
 **macOS:**
-`ash
+```bash
 git clone https://github.com/onelpawarai/ZYRAXON-AI.git
 cd ZYRAXON-AI
 bun install
 cd packages/opencode && bun run build && cd ../..
 cd packages/desktop && bun run build && bun run package:mac
-`
+```
 
 ### Development Mode
 
-`ash
+```bash
 # Run in development mode (desktop app)
 cd packages/desktop
 bun run dev
@@ -202,11 +157,11 @@ bun run dev
 # Run core engine in TUI mode
 cd packages/opencode
 bun run dev
-`
+```
 
 ---
 
-## 136 Tools
+## 136+ Tools
 
 ### MCP Tools (124) - 6 Servers
 - **desktop** - Desktop automation (click, type, scroll, open apps)
@@ -227,10 +182,33 @@ bun run dev
 - ultraDebug - Advanced debugging
 
 ### Vision Tools (4)
-- utoCapture - Auto screen capture before every response
+- autoCapture - Auto screen capture before every response
 - getLatest - Get latest screenshot
 - history - Screenshot history
 - describe - Describe screen contents
+
+### Built-in Tools (22+)
+- **File I/O**: read, write, edit, glob, grep, apply_patch
+- **Execution**: shell, task (subagent), execute (code-mode)
+- **Web**: webfetch, websearch
+- **Memory**: memory (persistent), self_evolve (install new tools)
+- **Analysis**: screen_vision, api_tester, code_analyzer, system_info
+- **Session**: question, todo, skill
+
+---
+
+## Self-Healing Capability
+
+ZYRAXON's most unique feature: **if a tool is missing, it installs it automatically**.
+
+1. You ask for something that requires a tool ZYRAXON doesn't have
+2. ZYRAXON checks its available tools
+3. If the tool is missing, it searches for one online
+4. It installs the MCP server, npm package, or Python script
+5. It configures and uses the tool immediately
+6. **Result: Zero failures due to missing capabilities**
+
+This works across all agent modes — Build, Beast, PRO, APEX, and DARK EMPEROR.
 
 ---
 
@@ -250,7 +228,7 @@ bun run dev
 
 ## Project Structure
 
-`
+```
 ZYRAXON-AI/
   packages/
     opencode/          # Core AI agent engine
@@ -259,14 +237,19 @@ ZYRAXON-AI/
         mcp/           # MCP servers + ULTRA tools
         tool/          # Tools (memory, self_evolve, shell, etc.)
         session/       # Session management, LLM streaming
-        screen/        # Auto screen vision
-        memory/        # Auto-injection memory system
+        screen/        # Auto screen vision (async, cross-platform)
+        memory/        # Eternal memory system (50K+ memories)
     desktop/           # Electron desktop app
     app/               # SolidJS UI
     ui/                # Shared UI components
     core/              # Core utilities, database
     tui/               # Terminal UI, themes
-`
+    llm/               # LLM routing, 25+ providers
+    server/            # HTTP API server
+    schema/            # Shared data contracts
+    protocol/          # API protocol definitions
+    plugin/            # Plugin system
+```
 
 ---
 
@@ -275,12 +258,12 @@ ZYRAXON-AI/
 We love contributions! See our [Contributing Guide](CONTRIBUTING.md) for details.
 
 1. **Fork** the repository
-2. **Clone** your fork: git clone https://github.com/YOUR_USERNAME/ZYRAXON-AI.git
-3. **Install**: un install
-4. **Build**: cd packages/opencode && bun run build
-5. **Create branch**: git checkout -b feat/my-feature
-6. **Commit**: git commit -m "feat: add my feature"
-7. **Push**: git push origin feat/my-feature
+2. **Clone** your fork: `git clone https://github.com/YOUR_USERNAME/ZYRAXON-AI.git`
+3. **Install**: `bun install`
+4. **Build**: `cd packages/opencode && bun run build`
+5. **Create branch**: `git checkout -b feat/my-feature`
+6. **Commit**: `git commit -m "feat: add my feature"`
+7. **Push**: `git push origin feat/my-feature`
 8. **Open PR**
 
 ---
@@ -290,10 +273,11 @@ We love contributions! See our [Contributing Guide](CONTRIBUTING.md) for details
 - [x] Beast Mode with 6 powers
 - [x] APEX PREDATOR Mode with 8 powers
 - [x] DARK EMPEROR Mode with 10 powers + 8 ULTRA tools
-- [x] 136 total tools
-- [x] Auto Screen Vision
-- [x] Persistent Memory (SQLite)
+- [x] 136+ total tools
+- [x] Auto Screen Vision (async, cross-platform)
+- [x] Eternal Memory (50K+ memories with compression)
 - [x] Self-Evolution
+- [x] Self-Healing (auto-install missing tools)
 - [x] Voice Input (Whisper)
 - [x] Auto-update system
 - [x] BSL 1.1 License
