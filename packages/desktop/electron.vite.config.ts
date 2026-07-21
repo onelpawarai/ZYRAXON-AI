@@ -55,12 +55,55 @@ import __cjs_mod__ from 'node:module';
 const __filename = import.meta.filename;
 const __dirname = import.meta.dirname;
 const require = __cjs_mod__.createRequire(import.meta.url);
+if (!import.meta.require) { import.meta.require = require; }
 `,
         },
       },
       externalizeDeps: { include: [nodePtyPkg] },
     },
     plugins: [
+      {
+        name: "opencode:bun-protocol-shim",
+        enforce: "pre",
+        resolveId(id) {
+          if (id === "bun:sqlite") return "\0bun:sqlite-shim.ts"
+          if (id === "bun:ffi") return "\0bun:ffi-shim.ts"
+        },
+        load(id) {
+          if (id === "\0bun:sqlite-shim.ts") {
+            return `
+import { DatabaseSync } from "node:sqlite";
+class Statement {
+  constructor(stmt) { this._stmt = stmt; }
+  all(...params) { return this._stmt.all(...params); }
+  values(...params) { this._stmt.setReturnArrays(true); return this._stmt.all(...params); }
+  run(...params) { return this._stmt.run(...params); }
+  safeIntegers() {}
+}
+export class Database {
+  constructor(filename, options) {
+    this._db = new DatabaseSync(filename, { readOnly: options?.readonly ?? false, open: true, enableForeignKeyConstraints: true });
+    if (options?.disableWAL !== true && !options?.readonly) this._db.exec("PRAGMA journal_mode = WAL;");
+  }
+  query(sql) { return new Statement(this._db.prepare(sql)); }
+  run(sql) { this._db.exec(sql); }
+  close() { this._db.close(); }
+  serialize() { return new Uint8Array(0); }
+  loadExtension(p) { this._db.loadExtension(p); }
+}
+`
+          }
+          if (id === "\0bun:ffi-shim.ts") {
+            return `
+export function dlopen() { return { symbols: {} }; }
+export function ptr() { return 0; }
+export function read() { return null; }
+export class CString { toString() { return ""; } }
+export const FFIType = { void:0, i8:1, u8:2, i16:3, u16:4, i32:5, u32:6, i64:7, u64:8, f32:9, f64:10, bool:11, ptr:12, cstring:13 };
+`
+          }
+        },
+      },
       {
         name: "opencode:node-pty-narrower",
         enforce: "pre",
