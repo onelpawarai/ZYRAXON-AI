@@ -68,6 +68,7 @@ import { createSessionLineage } from "@/pages/session/session-lineage"
 
 import { SessionPage, SessionRouteErrorBoundary, TargetSessionRouteContent } from "@/pages/session"
 import { NewHome, LegacyHome } from "@/pages/home"
+import StreamPage from "@/pages/stream"
 
 const NewSession = lazy(() => import("@/pages/new-session"))
 
@@ -608,6 +609,7 @@ function Routes(props: { serverScoped?: JSX.Element }) {
         <Route path="/server/:serverKey/session/:id" component={TargetSessionRoute} />
       </Show>
       <Route path="/new-session" component={DraftRoute} />
+      <Route path="/stream" component={StreamPage} />
     </>
   )
 }

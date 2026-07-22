@@ -41,6 +41,23 @@ export type FatalRendererError = {
   os?: string
 }
 
+export type StreamStatus = "idle" | "starting" | "streaming" | "stopping" | "error"
+
+export type StreamState = {
+  status: StreamStatus
+  error?: string
+  viewerCount: number
+  streamDuration: number
+  rtmpUrl: string
+}
+
+export type StreamConfig = {
+  streamKey: string
+  streamUrl?: string
+  youtubeApiKey?: string
+  quality?: "4k" | "1440p" | "1080p" | "720p"
+}
+
 export type ElectronAPI = {
   killSidecar: () => Promise<void>
   installCli: () => Promise<string>
@@ -114,4 +131,11 @@ export type ElectronAPI = {
   onSpeechResult: (cb: (text: string, isFinal: boolean) => void) => () => void
   onSpeechState: (cb: (listening: boolean) => void) => () => void
   onSpeechError: (cb: (error: string) => void) => () => void
+
+  youtubeStreamStart: (config: StreamConfig) => Promise<StreamState>
+  youtubeStreamStop: () => Promise<StreamState>
+  youtubeStreamStatus: () => Promise<StreamState>
+  onYouTubeStreamStatus: (cb: (state: StreamState) => void) => () => void
+  onYouTubeStreamViewers: (cb: (count: number) => void) => () => void
+  onYouTubeStreamDuration: (cb: (seconds: number) => void) => () => void
 }

@@ -15,6 +15,9 @@ import { getPinchZoomEnabled, getWindowID, setPinchZoomEnabled, setTitlebar, upd
 import { startSpeechRecognition, stopSpeechRecognition, createSpeechWindow, destroySpeechWindow } from "./speech-window"
 import type { UpdaterController } from "./updater-controller"
 import { createUpdaterSubscriptions } from "./updater-subscriptions"
+import { YouTubeStreamManager } from "./youtube-stream"
+
+const streamManager = new YouTubeStreamManager()
 
 const pickerFilters = (ext?: string[]) => {
   if (!ext || ext.length === 0) return undefined
@@ -333,6 +336,33 @@ export function registerIpcHandlers(deps: Deps) {
     }
 
     return (await res.text()).trim()
+  })
+  // YouTube Live Streaming
+  ipcMain.handle("youtube-stream-start", (event: IpcMainInvokeEvent, config: { streamKey: string; streamUrl?: string; youtubeApiKey?: string; quality?: "4k" | "1440p" | "1080p" | "720p" }) => {
+    streamManager.on("status", (state) => {
+      if (!event.sender.isDestroyed()) {
+        event.sender.send("youtube-stream-status", state)
+      }
+    })
+    streamManager.on("viewers", (count: number) => {
+      if (!event.sender.isDestroyed()) {
+        event.sender.send("youtube-stream-viewers", count)
+      }
+    })
+    streamManager.on("duration", (seconds: number) => {
+      if (!event.sender.isDestroyed()) {
+        event.sender.send("youtube-stream-duration", seconds)
+      }
+    })
+    return streamManager.start(config)
+  })
+
+  ipcMain.handle("youtube-stream-stop", () => {
+    return streamManager.stop()
+  })
+
+  ipcMain.handle("youtube-stream-status", () => {
+    return streamManager.getState()
   })
 }
 
