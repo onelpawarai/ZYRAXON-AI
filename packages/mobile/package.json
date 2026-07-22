@@ -1,0 +1,138 @@
+{
+  "name": "@zyraxon-ai/mobile",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "expo start",
+    "dev:android": "expo start --android",
+    "dev:ios": "expo start --ios",
+    "build:android": "eas build -p android --profile preview",
+    "build:prod": "eas build -p android --profile production",
+    "prebuild": "expo prebuild",
+    "run:android": "expo run:android",
+    "lint": "expo lint",
+    "typecheck": "tsc --noEmit",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-navigation/bottom-tabs": "^7.0.0",
+    "@react-navigation/native": "^7.0.0",
+    "@react-navigation/native-stack": "^7.0.0",
+    "clsx": "^2.1.0",
+    "date-fns": "^4.0.0",
+    "expo": "~52.0.0",
+    "expo-asset": "57.0.6",
+    "expo-av": "~15.0.0",
+    "expo-camera": "~16.0.0",
+    "expo-constants": "~17.0.0",
+    "expo-file-system": "~18.0.0",
+    "expo-font": "57.0.1",
+    "expo-haptics": "~14.0.0",
+    "expo-image-picker": "~16.0.0",
+    "expo-linking": "~7.0.0",
+    "expo-location": "~18.0.0",
+    "expo-notifications": "~0.29.0",
+    "expo-router": "~4.0.0",
+    "expo-secure-store": "~14.0.0",
+    "expo-sharing": "~12.0.0",
+    "expo-speech": "~13.0.0",
+    "expo-splash-screen": "57.0.4",
+    "expo-status-bar": "~2.0.0",
+    "react": "18.3.1",
+    "react-native": "0.76.5",
+    "react-native-gesture-handler": "~2.20.0",
+    "react-native-reanimated": "~3.16.0",
+    "react-native-safe-area-context": "4.12.0",
+    "react-native-screens": "~4.4.0",
+    "react-native-svg": "15.8.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.0",
+    "@expo/metro-config": "~0.19.0",
+    "@react-native-community/cli": "20.2.0",
+    "@react-native-community/cli-platform-android": "20.2.0",
+    "@types/react": "~18.3.0",
+    "eas-cli": "^16.0.0",
+    "expo-env": "~1.0.0",
+    "typescript": "~5.6.0"
+  },
+  "appConfig": {
+    "expo": {
+      "name": "ZYRAXON AI",
+      "slug": "zyraxon-ai",
+      "version": "1.0.0",
+      "orientation": "portrait",
+      "icon": "./assets/icon.png",
+      "scheme": "zyraxonai",
+      "userInterfaceStyle": "automatic",
+      "newArchEnabled": true,
+      "splash": {
+        "image": "./assets/splash-icon.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#0a0a0f"
+      },
+      "ios": {
+        "supportsTablet": true,
+        "bundleIdentifier": "ai.zyraxon.mobile",
+        "infoPlist": {
+          "NSCameraUsageDescription": "ZYRAXON needs camera access for screen vision and AI analysis",
+          "NSMicrophoneUsageDescription": "ZYRAXON needs microphone access for voice input",
+          "NSPhotoLibraryUsageDescription": "ZYRAXON needs photo library access to analyze images"
+        }
+      },
+      "android": {
+        "adaptiveIcon": {
+          "foregroundImage": "./assets/adaptive-icon.png",
+          "backgroundColor": "#0a0a0f",
+          "backgroundImage": "./assets/adaptive-icon-bg.png"
+        },
+        "package": "ai.zyraxon.mobile",
+        "permissions": [
+          "CAMERA",
+          "RECORD_AUDIO",
+          "READ_EXTERNAL_STORAGE",
+          "WRITE_EXTERNAL_STORAGE",
+          "ACCESS_FINE_LOCATION",
+          "ACCESS_COARSE_LOCATION"
+        ],
+        "intentFilters": [
+          {
+            "action": "VIEW",
+            "autoVerify": true,
+            "data": [
+              {
+                "scheme": "zyraxonai"
+              }
+            ],
+            "category": [
+              "BROWSABLE",
+              "DEFAULT"
+            ]
+          }
+        ]
+      },
+      "plugins": [
+        "expo-router",
+        [
+          "expo-camera",
+          {
+            "cameraPermission": "Allow ZYRAXON to access your camera for AI vision"
+          }
+        ],
+        [
+          "expo-speech",
+          {
+            "microphonePermission": "Allow ZYRAXON to access your microphone for voice input"
+          }
+        ]
+      ],
+      "experiments": {
+        "typedRoutes": true
+      }
+    }
+  }
+}
