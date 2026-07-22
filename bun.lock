@@ -380,7 +380,7 @@
     },
     "packages/desktop": {
       "name": "@zyraxon-ai/desktop",
-      "version": "1.13.3",
+      "version": "1.14.0",
       "dependencies": {
         "@zip.js/zip.js": "2.7.62",
         "effect": "catalog:",

@@ -2,7 +2,7 @@ import { createSignal, createEffect, onCleanup, Show, For } from "solid-js"
 import { Button } from "@opencode-ai/ui/button"
 import { showToast } from "@/utils/toast"
 import { useLanguage } from "@/context/language"
-import { viewerCount as sharedViewerCount, setViewerCount, streamStatus as sharedStreamStatus, setStreamStatus } from "@/hooks/stream-state"
+import { viewerCount as sharedViewerCount, setViewerCount, streamStatus as sharedStreamStatus, setStreamStatus, captureMode as sharedCaptureMode, setCaptureMode, audioMode as sharedAudioMode, setAudioMode, systemAudioAvailable as sharedSystemAudio, setSystemAudioAvailable, probedDevices as sharedProbedDevices, setProbedDevices } from "@/hooks/stream-state"
 
 type StreamStatus = "idle" | "starting" | "streaming" | "stopping" | "error"
 type StreamState = {
@@ -12,6 +12,9 @@ type StreamState = {
   streamDuration: number
   rtmpUrl: string
   resolution: string
+  captureMode: "fullscreen" | "app"
+  audioMode: "none" | "microphone" | "system"
+  systemAudioAvailable: boolean
 }
 
 function getApi(): any {
@@ -26,10 +29,21 @@ function formatDuration(seconds: number): string {
 }
 
 const QUALITY_OPTIONS = [
-  { value: "4k", label: "4K Ultra HD (3840x2160)", desc: "Maximum quality, requires fast internet" },
-  { value: "1440p", label: "2K QHD (2560x1440)", desc: "High quality, balanced" },
-  { value: "1080p", label: "Full HD (1920x1080)", desc: "Standard HD, widely compatible" },
-  { value: "720p", label: "HD (1280x720)", desc: "Lower bandwidth, still clear" },
+  { value: "4k", label: "4K Ultra HD (3840x2160)", desc: "Maximum quality, 20Mbps" },
+  { value: "1440p", label: "2K QHD (2560x1440)", desc: "High quality, 12Mbps" },
+  { value: "1080p", label: "Full HD (1920x1080)", desc: "Standard HD, 8Mbps" },
+  { value: "720p", label: "HD (1280x720)", desc: "Lower bandwidth, 4Mbps" },
+] as const
+
+const CAPTURE_OPTIONS = [
+  { value: "fullscreen" as const, label: "Full Screen", desc: "Stream entire monitor" },
+  { value: "app" as const, label: "App Only", desc: "Stream only the ZYRAXON window" },
+] as const
+
+const AUDIO_OPTIONS = [
+  { value: "none" as const, label: "No Audio", desc: "Silent stream" },
+  { value: "microphone" as const, label: "Microphone", desc: "Your voice + ambient sounds" },
+  { value: "system" as const, label: "System Audio", desc: "Songs, music, laptop sounds" },
 ] as const
 
 export default function StreamPage() {
@@ -37,26 +51,31 @@ export default function StreamPage() {
   const [streamKey, setStreamKey] = createSignal("")
   const [streamUrl, setStreamUrl] = createSignal("rtmp://a.rtmp.youtube.com/live2")
   const [youtubeApiKey, setYoutubeApiKey] = createSignal("")
-  const [quality, setQuality] = createSignal<"4k" | "1440p" | "1080p" | "720p">("1080p")
+  const [quality, setQuality] = createSignal<"4k" | "1440p" | "1080p" | "720p">("4k")
   const [error, setError] = createSignal<string | undefined>()
   const [duration, setDuration] = createSignal(0)
   const [rtmpUrl, setRtmpUrl] = createSignal("")
-  const [resolution, setResolution] = createSignal("1920x1080")
+  const [resolution, setResolution] = createSignal("3840x2160")
 
   const status = sharedStreamStatus
   const viewerCount = sharedViewerCount
+  const captureMode = sharedCaptureMode
+  const audioMode = sharedAudioMode
+  const systemAudioAvailable = sharedSystemAudio
+  const probedDevices = sharedProbedDevices
   const isElectron = !!getApi()
 
   createEffect(() => {
     if (!isElectron) return
     const api = getApi()
-    // Only set up local listeners for page-specific state
-    // Status + viewers are handled by global initStreamListeners()
     const unsubs = [
       api.onYouTubeStreamStatus?.((state: StreamState) => {
         setError(state.error)
         setRtmpUrl(state.rtmpUrl)
         if (state.resolution) setResolution(state.resolution)
+        if (state.captureMode) setCaptureMode(state.captureMode)
+        if (state.audioMode) setAudioMode(state.audioMode)
+        if (state.systemAudioAvailable !== undefined) setSystemAudioAvailable(state.systemAudioAvailable)
       }),
       api.onYouTubeStreamDuration?.((seconds: number) => {
         setDuration(seconds)
@@ -69,16 +88,34 @@ export default function StreamPage() {
     })
   })
 
+  const probeDevices = async () => {
+    if (!isElectron) return
+    const api = getApi()
+    try {
+      const result = await api.youtubeStreamProbeDevices()
+      if (result) {
+        setSystemAudioAvailable(result.systemAudioAvailable)
+        setProbedDevices(result.devices || [])
+      }
+    } catch {}
+  }
+
+  probeDevices()
+
   const loadSavedConfig = () => {
     if (!isElectron) return
     const savedKey = localStorage.getItem("yt_stream_key")
     const savedUrl = localStorage.getItem("yt_stream_url")
     const savedApiKey = localStorage.getItem("yt_youtube_api_key")
     const savedQuality = localStorage.getItem("yt_stream_quality") as any
+    const savedCaptureMode = localStorage.getItem("yt_capture_mode") as any
+    const savedAudioMode = localStorage.getItem("yt_audio_mode") as any
     if (savedKey) setStreamKey(savedKey)
     if (savedUrl) setStreamUrl(savedUrl)
     if (savedApiKey) setYoutubeApiKey(savedApiKey)
     if (savedQuality && ["4k", "1440p", "1080p", "720p"].includes(savedQuality)) setQuality(savedQuality)
+    if (savedCaptureMode && ["fullscreen", "app"].includes(savedCaptureMode)) setCaptureMode(savedCaptureMode)
+    if (savedAudioMode && ["none", "microphone", "system"].includes(savedAudioMode)) setAudioMode(savedAudioMode)
   }
 
   const saveConfig = () => {
@@ -86,6 +123,8 @@ export default function StreamPage() {
     localStorage.setItem("yt_stream_url", streamUrl())
     localStorage.setItem("yt_youtube_api_key", youtubeApiKey())
     localStorage.setItem("yt_stream_quality", quality())
+    localStorage.setItem("yt_capture_mode", captureMode())
+    localStorage.setItem("yt_audio_mode", audioMode())
   }
 
   loadSavedConfig()
@@ -107,11 +146,16 @@ export default function StreamPage() {
         streamUrl: streamUrl() || undefined,
         youtubeApiKey: youtubeApiKey() || undefined,
         quality: quality(),
+        captureMode: captureMode(),
+        audioMode: audioMode(),
       })
       setStreamStatus(state.status)
       setError(state.error)
       setRtmpUrl(state.rtmpUrl)
       if (state.resolution) setResolution(state.resolution)
+      if (state.captureMode) setCaptureMode(state.captureMode)
+      if (state.audioMode) setAudioMode(state.audioMode)
+      if (state.systemAudioAvailable !== undefined) setSystemAudioAvailable(state.systemAudioAvailable)
     } catch (err: any) {
       showToast({ variant: "error", title: "Stream failed", description: err.message || "Failed to start stream" })
     }
@@ -129,16 +173,6 @@ export default function StreamPage() {
     }
   }
 
-  const statusLabel = () => {
-    switch (status()) {
-      case "idle": return "Offline"
-      case "starting": return "Starting..."
-      case "streaming": return "LIVE"
-      case "stopping": return "Stopping..."
-      case "error": return "Error"
-    }
-  }
-
   const statusColor = () => {
     switch (status()) {
       case "idle": return "#888"
@@ -148,6 +182,8 @@ export default function StreamPage() {
       case "error": return "#e74c3c"
     }
   }
+
+  const isStreaming = () => status() === "streaming" || status() === "starting"
 
   return (
     <div class="flex-1 overflow-auto">
@@ -167,6 +203,71 @@ export default function StreamPage() {
         </div>
 
         <div class="flex flex-col gap-6">
+          {/* Capture Mode Toggle */}
+          <div class="flex flex-col gap-2">
+            <label class="text-14-medium text-text-base">Capture Mode</label>
+            <div class="grid grid-cols-2 gap-3">
+              <For each={CAPTURE_OPTIONS}>
+                {(opt) => (
+                  <button
+                    type="button"
+                    classList={{
+                      "p-4 rounded-xl border-2 text-left transition-all cursor-pointer": true,
+                      "border-blue-500 bg-blue-500/10": captureMode() === opt.value,
+                      "border-zinc-700 bg-background-stronger hover:border-zinc-500": captureMode() !== opt.value,
+                    }}
+                    onClick={() => setCaptureMode(opt.value)}
+                    disabled={isStreaming()}
+                  >
+                    <div class="text-14-medium text-text-strong">{opt.label}</div>
+                    <div class="text-12-regular text-text-weak mt-1">{opt.desc}</div>
+                  </button>
+                )}
+              </For>
+            </div>
+          </div>
+
+          {/* Audio Mode */}
+          <div class="flex flex-col gap-2">
+            <label class="text-14-medium text-text-base">Audio Source</label>
+            <div class="grid grid-cols-3 gap-3">
+              <For each={AUDIO_OPTIONS}>
+                {(opt) => (
+                  <button
+                    type="button"
+                    classList={{
+                      "p-4 rounded-xl border-2 text-left transition-all cursor-pointer": true,
+                      "border-green-500 bg-green-500/10": audioMode() === opt.value,
+                      "border-zinc-700 bg-background-stronger hover:border-zinc-500": audioMode() !== opt.value,
+                      "opacity-40 cursor-not-allowed": opt.value === "system" && !systemAudioAvailable() && audioMode() !== "system",
+                    }}
+                    onClick={() => {
+                      if (opt.value === "system" && !systemAudioAvailable()) return
+                      setAudioMode(opt.value)
+                    }}
+                    disabled={isStreaming()}
+                  >
+                    <div class="text-14-medium text-text-strong flex items-center gap-2">
+                      {opt.label}
+                      <Show when={opt.value === "system" && !systemAudioAvailable()}>
+                        <span class="text-[10px] text-red-400 font-normal">(Not found)</span>
+                      </Show>
+                      <Show when={opt.value === "system" && systemAudioAvailable()}>
+                        <span class="text-[10px] text-green-400 font-normal">(Detected)</span>
+                      </Show>
+                    </div>
+                    <div class="text-12-regular text-text-weak mt-1">{opt.desc}</div>
+                  </button>
+                )}
+              </For>
+            </div>
+            <Show when={!systemAudioAvailable()}>
+              <div class="text-12-regular text-yellow-400 mt-1">
+                System audio requires VB-CABLE or similar virtual audio device. Install from <a href="https://vb-audio.com/Cable/" target="_blank" class="underline">vb-audio.com</a> and restart the app.
+              </div>
+            </Show>
+          </div>
+
           {/* Stream Key */}
           <div class="flex flex-col gap-2">
             <label class="text-14-medium text-text-base">Stream Key</label>
@@ -176,7 +277,7 @@ export default function StreamPage() {
               onInput={(e) => setStreamKey(e.currentTarget.value)}
               placeholder="xxxx-xxxx-xxxx-xxxx"
               class="w-full px-4 py-3 rounded-xl bg-background-stronger border border-zinc-700 text-text-strong text-14-regular focus:outline-none focus:border-blue-500 transition-colors"
-              disabled={status() === "streaming" || status() === "starting"}
+              disabled={isStreaming()}
             />
           </div>
 
@@ -189,7 +290,7 @@ export default function StreamPage() {
               onInput={(e) => setStreamUrl(e.currentTarget.value)}
               placeholder="rtmp://a.rtmp.youtube.com/live2"
               class="w-full px-4 py-3 rounded-xl bg-background-stronger border border-zinc-700 text-text-strong text-14-regular focus:outline-none focus:border-blue-500 transition-colors"
-              disabled={status() === "streaming" || status() === "starting"}
+              disabled={isStreaming()}
             />
           </div>
 
@@ -202,12 +303,12 @@ export default function StreamPage() {
                   <button
                     type="button"
                     classList={{
-                      "p-4 rounded-xl border-2 text-left transition-all": true,
+                      "p-4 rounded-xl border-2 text-left transition-all cursor-pointer": true,
                       "border-blue-500 bg-blue-500/10": quality() === opt.value,
                       "border-zinc-700 bg-background-stronger hover:border-zinc-500": quality() !== opt.value,
                     }}
                     onClick={() => setQuality(opt.value)}
-                    disabled={status() === "streaming" || status() === "starting"}
+                    disabled={isStreaming()}
                   >
                     <div class="text-14-medium text-text-strong">{opt.label}</div>
                     <div class="text-12-regular text-text-weak mt-1">{opt.desc}</div>
@@ -228,14 +329,14 @@ export default function StreamPage() {
               onInput={(e) => setYoutubeApiKey(e.currentTarget.value)}
               placeholder="AIza..."
               class="w-full px-4 py-3 rounded-xl bg-background-stronger border border-zinc-700 text-text-strong text-14-regular focus:outline-none focus:border-blue-500 transition-colors"
-              disabled={status() === "streaming" || status() === "starting"}
+              disabled={isStreaming()}
             />
           </div>
 
           {/* Start/Stop Button */}
           <div class="flex gap-4 mt-2">
             <Show
-              when={status() === "streaming" || status() === "starting"}
+              when={isStreaming()}
               fallback={
                 <Button onClick={startStream} disabled={!streamKey()} class="px-8 py-3 text-16-medium">
                   Start Streaming
@@ -256,8 +357,8 @@ export default function StreamPage() {
           </Show>
 
           {/* Live Stats */}
-          <Show when={status() === "streaming"}>
-            <div class="grid grid-cols-3 gap-4">
+          <Show when={isStreaming()}>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div class="p-4 rounded-xl bg-surface-base border border-zinc-700 text-center">
                 <div class="text-32-bold font-mono text-text-strong">{formatDuration(duration())}</div>
                 <div class="text-12-regular text-text-weak mt-1">Duration</div>
@@ -270,11 +371,17 @@ export default function StreamPage() {
                 <div class="text-32-bold font-mono text-text-strong">{resolution()}</div>
                 <div class="text-12-regular text-text-weak mt-1">Resolution</div>
               </div>
+              <div class="p-4 rounded-xl bg-surface-base border border-zinc-700 text-center">
+                <div class="text-32-bold font-mono text-text-strong">
+                  {captureMode() === "app" ? "APP" : "FULL"}
+                </div>
+                <div class="text-12-regular text-text-weak mt-1">Capture</div>
+              </div>
             </div>
           </Show>
 
           {/* Stream Info */}
-          <Show when={status() === "streaming" && rtmpUrl()}>
+          <Show when={isStreaming() && rtmpUrl()}>
             <div class="p-4 rounded-xl bg-surface-base border border-zinc-700">
               <div class="text-12-regular text-text-weak mb-1">Stream URL</div>
               <div class="text-13-regular text-text-strong font-mono break-all">{rtmpUrl()}</div>
@@ -287,19 +394,6 @@ export default function StreamPage() {
               YouTube streaming is only available in the ZYRAXON desktop app. Run the app from the Electron shell to use this feature.
             </div>
           </Show>
-
-          {/* Instructions */}
-          <div class="mt-6 p-6 rounded-xl bg-surface-base border border-zinc-800">
-            <h3 class="text-16-medium text-text-strong mb-4">How to Stream</h3>
-            <ol class="text-14-regular text-text-weak flex flex-col gap-3 list-decimal list-inside">
-              <li>Go to <a href="https://studio.youtube.com" target="_blank" class="text-blue-400 hover:underline">YouTube Studio</a></li>
-              <li>Click <strong>Go Live</strong> in the top right</li>
-              <li>Choose <strong>Stream</strong> tab</li>
-              <li>Copy the <strong>Stream key</strong> from the stream settings</li>
-              <li>Paste it above, select quality, and click Start Streaming</li>
-              <li>You can minimize this app — the stream continues in the background!</li>
-            </ol>
-          </div>
         </div>
       </div>
     </div>

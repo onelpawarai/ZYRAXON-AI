@@ -28,7 +28,7 @@ import { tabKey, useTabs } from "@/context/tabs"
 import type { PromptSession } from "@/context/prompt"
 import "./titlebar.css"
 import { newTabTooltipKeybind } from "./command-tooltip-keybind"
-import { viewerCount, streamStatus } from "@/hooks/stream-state"
+import { viewerCount, streamStatus, captureMode, setCaptureMode } from "@/hooks/stream-state"
 
 type TauriDesktopWindow = {
   startDragging?: () => Promise<void>
@@ -529,6 +529,37 @@ export function Titlebar(props: { update?: TitlebarUpdate }) {
                 <div class="flex-1" />
                 <TooltipV2
                   placement="bottom"
+                  value={captureMode() === "app" ? "App Only — Click for Full Screen" : "Full Screen — Click for App Only"}
+                  class="shrink-0"
+                >
+                  <IconButtonV2
+                    type="button"
+                    variant="ghost-muted"
+                    size="large"
+                    class="shrink-0"
+                    icon={
+                      <div class="flex items-center gap-1">
+                        <div class={`w-1.5 h-1.5 rounded-full ${captureMode() === "app" ? "bg-green-500" : "bg-blue-500"}`} />
+                        <span class="text-[9px] font-bold text-text-weak uppercase leading-none">
+                          {captureMode() === "app" ? "APP" : "SCR"}
+                        </span>
+                      </div>
+                    }
+                    onClick={() => {
+                      const api = (window as any).api
+                      if (api) {
+                        const newMode = captureMode() === "app" ? "fullscreen" : "app"
+                        setCaptureMode(newMode)
+                        if (streamStatus() === "streaming" || streamStatus() === "starting") {
+                          api.youtubeStreamToggleCaptureMode?.()
+                        }
+                      }
+                    }}
+                    aria-label="Toggle capture mode"
+                  />
+                </TooltipV2>
+                <TooltipV2
+                  placement="bottom"
                   value={streamStatus() === "streaming" ? `YouTube Live — ${viewerCount()} watching` : "YouTube Live Stream"}
                   class="shrink-0"
                 >
@@ -710,6 +741,30 @@ export function Titlebar(props: { update?: TitlebarUpdate }) {
               data-tauri-drag-region
               onMouseDown={drag}
             >
+              <Tooltip placement="bottom" value={captureMode() === "app" ? "App Only — Click for Full Screen" : "Full Screen — Click for App Only"} openDelay={500}>
+                <Button
+                  variant="ghost"
+                  class="titlebar-icon w-8 h-6 p-0 box-border"
+                  onClick={() => {
+                    const api = (window as any).api
+                    if (api) {
+                      const newMode = captureMode() === "app" ? "fullscreen" : "app"
+                      setCaptureMode(newMode)
+                      if (streamStatus() === "streaming" || streamStatus() === "starting") {
+                        api.youtubeStreamToggleCaptureMode?.()
+                      }
+                    }
+                  }}
+                  aria-label="Toggle capture mode"
+                >
+                  <div class="flex items-center gap-1">
+                    <div class={`w-1.5 h-1.5 rounded-full ${captureMode() === "app" ? "bg-green-500" : "bg-blue-500"}`} />
+                    <span class="text-[9px] font-bold text-text-weak uppercase leading-none">
+                      {captureMode() === "app" ? "APP" : "SCR"}
+                    </span>
+                  </div>
+                </Button>
+              </Tooltip>
               <Tooltip placement="bottom" value={streamStatus() === "streaming" ? `YouTube Live — ${viewerCount()} watching` : "YouTube Live Stream"} openDelay={500}>
                 <Button
                   variant="ghost"

@@ -128,6 +128,7 @@ const api: ElectronAPI = {
   youtubeStreamStart: (config) => ipcRenderer.invoke("youtube-stream-start", config),
   youtubeStreamStop: () => ipcRenderer.invoke("youtube-stream-stop"),
   youtubeStreamStatus: () => ipcRenderer.invoke("youtube-stream-status"),
+  youtubeStreamProbeDevices: () => ipcRenderer.invoke("youtube-stream-probe-devices"),
   onYouTubeStreamStatus: (cb) => {
     const handler = (_: unknown, state: StreamState) => cb(state)
     ipcRenderer.on("youtube-stream-status", handler)

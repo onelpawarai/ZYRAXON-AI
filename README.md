@@ -47,17 +47,14 @@ ZYRAXON-AI is an open-source desktop AI agent built on Electron + SolidJS + Bun.
 - **Eternal Memory** - Remembers everything forever. 50,000+ memories with compression.
 - **Self-Evolution** - Installs its own MCP servers and tools at runtime
 - **Auto Screen Vision** - Automatically captures your screen before every response
-- **Voice Input** - Click the mic, speak naturally, it transcribes via Whisper
+- **YouTube Live Streaming** - Stream directly to YouTube (4K/1080p/720p, APP or full screen capture)
+- **Voice Input** - ~~Click the mic, speak naturally, it transcribes via Whisper~~ **(Temporarily disabled)** - We had to disable the chat box microphone due to a critical bug that caused system-level conflicts. We are working on a fix and will bring it back soon.
 - **25+ AI Providers** - OpenAI, Anthropic, Google, Azure, Bedrock, xAI, Mistral, and more
 - **Zero Refusal** - DARK EMPEROR mode never says "I can't"
 
 ---
 
 ## Agent Modes
-
-ZYRAXON has **7 built-in agent modes**. Switch with the Tab key:
-
-### Build Mode (Default)
 The reliable workhorse. Full file system access + persistent memory.
 > Read/Write files, Run commands, Browse web, Generate images, Remember everything
 
@@ -255,8 +252,9 @@ ZYRAXON-AI/
 
 ## Contributing
 
-We love contributions! See our [Contributing Guide](CONTRIBUTING.md) for details.
+We love contributions! ZYRAXON-AI is open-source and we welcome everyone.
 
+### How to Contribute
 1. **Fork** the repository
 2. **Clone** your fork: `git clone https://github.com/YOUR_USERNAME/ZYRAXON-AI.git`
 3. **Install**: `bun install`
@@ -265,6 +263,20 @@ We love contributions! See our [Contributing Guide](CONTRIBUTING.md) for details
 6. **Commit**: `git commit -m "feat: add my feature"`
 7. **Push**: `git push origin feat/my-feature`
 8. **Open PR**
+
+### Ways to Get Involved
+- **Code Contributors** - Fix bugs, add features, improve performance
+- **Bug Reporters** - Found an issue? Open a [GitHub Issue](https://github.com/onelpawarai/ZYRAXON-AI/issues)
+- **Documentation** - Help improve docs, tutorials, guides
+- **Testing** - Try ZYRAXON on different systems and report feedback
+- **Feature Requests** - Suggest new ideas and improvements
+
+### Contact Us
+- **GitHub Issues** - [Open an issue](https://github.com/onelpawarai/ZYRAXON-AI/issues) for bugs or feature requests
+- **YouTube** - [@zyraxon-aix](https://youtube.com/@zyraxon-aix)
+- **Website** - [zyraxonai.lovable.app](https://zyraxonai.lovable.app/)
+
+> Whether you want to contribute code, report bugs, suggest features, or just learn from the project - you are welcome. Contact us and we will work together!
 
 ---
 
@@ -278,7 +290,8 @@ We love contributions! See our [Contributing Guide](CONTRIBUTING.md) for details
 - [x] Eternal Memory (50K+ memories with compression)
 - [x] Self-Evolution
 - [x] Self-Healing (auto-install missing tools)
-- [x] Voice Input (Whisper)
+- [x] Voice Input (Whisper) - **Temporarily disabled due to critical system bug**
+- [x] YouTube Live Streaming
 - [x] Auto-update system
 - [x] BSL 1.1 License
 - [ ] Mobile companion app

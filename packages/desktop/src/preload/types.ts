@@ -50,6 +50,9 @@ export type StreamState = {
   streamDuration: number
   rtmpUrl: string
   resolution: string
+  captureMode: "fullscreen" | "app"
+  audioMode: "none" | "microphone" | "system"
+  systemAudioAvailable: boolean
 }
 
 export type StreamConfig = {
@@ -57,6 +60,8 @@ export type StreamConfig = {
   streamUrl?: string
   youtubeApiKey?: string
   quality?: "4k" | "1440p" | "1080p" | "720p"
+  captureMode?: "fullscreen" | "app"
+  audioMode?: "none" | "microphone" | "system"
 }
 
 export type ElectronAPI = {
@@ -129,6 +134,7 @@ export type ElectronAPI = {
   youtubeStreamStart: (config: StreamConfig) => Promise<StreamState>
   youtubeStreamStop: () => Promise<StreamState>
   youtubeStreamStatus: () => Promise<StreamState>
+  youtubeStreamProbeDevices: () => Promise<{ systemAudioAvailable: boolean; devices: string[] }>
   onYouTubeStreamStatus: (cb: (state: StreamState) => void) => () => void
   onYouTubeStreamViewers: (cb: (count: number) => void) => () => void
   onYouTubeStreamDuration: (cb: (seconds: number) => void) => () => void

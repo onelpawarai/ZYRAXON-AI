@@ -302,7 +302,7 @@ export function registerIpcHandlers(deps: Deps) {
     return (await res.text()).trim()
   })
   // YouTube Live Streaming
-  ipcMain.handle("youtube-stream-start", (event: IpcMainInvokeEvent, config: { streamKey: string; streamUrl?: string; youtubeApiKey?: string; quality?: "4k" | "1440p" | "1080p" | "720p" }) => {
+  ipcMain.handle("youtube-stream-start", (event: IpcMainInvokeEvent, config: { streamKey: string; streamUrl?: string; youtubeApiKey?: string; quality?: "4k" | "1440p" | "1080p" | "720p"; captureMode?: "fullscreen" | "app"; audioMode?: "none" | "microphone" | "system" }) => {
     // Remove old listeners before adding new ones (prevent leak on repeated start/stop)
     streamManager.removeAllListeners("status")
     streamManager.removeAllListeners("viewers")
@@ -330,8 +330,16 @@ export function registerIpcHandlers(deps: Deps) {
     return streamManager.stop()
   })
 
+  ipcMain.handle("youtube-stream-toggle-capture-mode", () => {
+    return streamManager.toggleCaptureMode()
+  })
+
   ipcMain.handle("youtube-stream-status", () => {
     return streamManager.getState()
+  })
+
+  ipcMain.handle("youtube-stream-probe-devices", () => {
+    return streamManager.probeDevices()
   })
 }
 
