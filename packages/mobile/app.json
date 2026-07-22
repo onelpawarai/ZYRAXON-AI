@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "ZYRAXON AI",
+    "slug": "zyraxon-ai",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "zyraxonai",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0a0f"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ai.zyraxon.mobile",
+      "infoPlist": {
+        "NSCameraUsageDescription": "ZYRAXON needs camera access for screen vision and AI analysis",
+        "NSMicrophoneUsageDescription": "ZYRAXON needs microphone access for voice input",
+        "NSPhotoLibraryUsageDescription": "ZYRAXON needs photo library access to analyze images"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0a0a0f",
+        "backgroundImage": "./assets/adaptive-icon-bg.png"
+      },
+      "package": "ai.zyraxon.mobile",
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
