@@ -107,4 +107,11 @@ export type ElectronAPI = {
   setForceFocus: (enabled: boolean) => Promise<void>
   recordFatalRendererError: (error: FatalRendererError) => Promise<void>
   transcribeAudio: (audioBase64: string, mimeType: string) => Promise<string>
+  speechInit: () => Promise<void>
+  speechStart: (lang?: string) => Promise<void>
+  speechStop: () => Promise<void>
+  speechDestroy: () => Promise<void>
+  onSpeechResult: (cb: (text: string, isFinal: boolean) => void) => () => void
+  onSpeechState: (cb: (listening: boolean) => void) => () => void
+  onSpeechError: (cb: (error: string) => void) => () => void
 }

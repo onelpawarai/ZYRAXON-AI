@@ -124,6 +124,25 @@ const api: ElectronAPI = {
   setForceFocus: (enabled) => ipcRenderer.invoke("set-force-focus", enabled),
   recordFatalRendererError: (error) => ipcRenderer.invoke("record-fatal-renderer-error", error),
   transcribeAudio: (audioBase64, mimeType) => ipcRenderer.invoke("transcribe-audio", audioBase64, mimeType),
+  speechInit: () => ipcRenderer.invoke("speech-init"),
+  speechStart: (lang) => ipcRenderer.invoke("speech-start", lang),
+  speechStop: () => ipcRenderer.invoke("speech-stop"),
+  speechDestroy: () => ipcRenderer.invoke("speech-destroy"),
+  onSpeechResult: (cb) => {
+    const handler = (_: unknown, text: string, isFinal: boolean) => cb(text, isFinal)
+    ipcRenderer.on("speech-result-to-renderer", handler)
+    return () => ipcRenderer.removeListener("speech-result-to-renderer", handler)
+  },
+  onSpeechState: (cb) => {
+    const handler = (_: unknown, listening: boolean) => cb(listening)
+    ipcRenderer.on("speech-state-to-renderer", handler)
+    return () => ipcRenderer.removeListener("speech-state-to-renderer", handler)
+  },
+  onSpeechError: (cb) => {
+    const handler = (_: unknown, error: string) => cb(error)
+    ipcRenderer.on("speech-error-to-renderer", handler)
+    return () => ipcRenderer.removeListener("speech-error-to-renderer", handler)
+  },
 }
 
 contextBridge.exposeInMainWorld("api", api)

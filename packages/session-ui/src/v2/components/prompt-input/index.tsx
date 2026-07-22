@@ -682,28 +682,13 @@ function PromptInputV2MicButton(props: {
   disabled?: boolean
 }) {
   const [recording, setRecording] = createSignal(false)
-  const [micAvailable, setMicAvailable] = createSignal(false)
-  const [transcribing, setTranscribing] = createSignal(false)
+  const [processing, setProcessing] = createSignal(false)
+  const [status, setStatus] = createSignal("")
   const [error, setError] = createSignal<string | null>(null)
-  let mediaStream: MediaStream | null = null
   let mediaRecorder: MediaRecorder | null = null
   let audioChunks: Blob[] = []
-
-  const cleanup = () => {
-    if (mediaRecorder && mediaRecorder.state !== "inactive") {
-      try { mediaRecorder.stop() } catch {}
-      mediaRecorder = null
-    }
-    audioChunks = []
-    if (mediaStream) {
-      mediaStream.getTracks().forEach((t) => t.stop())
-      mediaStream = null
-    }
-  }
-
-  onCleanup(() => {
-    cleanup()
-  })
+  let currentStream: MediaStream | null = null
+  let whisperPipeline: any = null
 
   const insertTextIntoEditor = (text: string) => {
     const editor = props.editor()
@@ -719,100 +704,114 @@ function PromptInputV2MicButton(props: {
     document.execCommand("insertText", false, text)
   }
 
-  const blobToBase64 = (blob: Blob): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const dataUrl = reader.result as string
-        resolve(dataUrl.split(",")[1])
-      }
-      reader.onerror = reject
-      reader.readAsDataURL(blob)
-    })
+  onCleanup(() => {
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+      try { mediaRecorder.stop() } catch (_e) {}
+    }
+    currentStream?.getTracks().forEach((t) => t.stop())
+  })
 
-  const toggleRecording = async () => {
+  const loadWhisper = async () => {
+    if (whisperPipeline) return whisperPipeline
+    setStatus("Loading AI speech model (first time only)...")
+    const { pipeline } = await import("@xenova/transformers")
+    whisperPipeline = await pipeline("automatic-speech-recognition", "Xenova/whisper-base", {
+      dtype: "fp32",
+    } as any)
+    return whisperPipeline
+  }
+
+  const transcribeAudio = async (audioBlob: Blob) => {
+    setProcessing(true)
+    try {
+      const transcriber = await loadWhisper()
+      setStatus("Transcribing...")
+      const result = await transcriber(audioBlob, {
+        task: "transcribe",
+      })
+      const text = result?.text?.trim()
+      if (text) {
+        insertTextIntoEditor(text + " ")
+      }
+    } catch (e: any) {
+      setError("Transcription failed: " + (e.message || "Unknown error"))
+    } finally {
+      setProcessing(false)
+      setStatus("")
+    }
+  }
+
+  const toggleMic = async () => {
     setError(null)
+    setStatus("")
 
+    // If currently transcribing, do nothing
+    if (processing()) return
+
+    // Stop recording
     if (recording()) {
+      mediaRecorder?.stop()
       setRecording(false)
-      if (mediaRecorder && mediaRecorder.state !== "inactive") {
-        mediaRecorder.stop()
-      }
       return
     }
 
-    if (transcribing()) return
-
+    // Start recording
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      mediaStream = stream
-      setMicAvailable(true)
-    } catch {
-      setMicAvailable(false)
-      setError("Microphone access denied")
-      return
-    }
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      })
+      currentStream = stream
 
-    const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-      ? "audio/webm;codecs=opus"
-      : MediaRecorder.isTypeSupported("audio/webm")
-        ? "audio/webm"
-        : MediaRecorder.isTypeSupported("audio/mp4")
-          ? "audio/mp4"
-          : "audio/wav"
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : MediaRecorder.isTypeSupported("audio/webm")
+          ? "audio/webm"
+          : "audio/mp4"
 
-    try {
-      const recorder = new MediaRecorder(mediaStream, { mimeType })
+      mediaRecorder = new MediaRecorder(stream, { mimeType })
       audioChunks = []
 
-      recorder.ondataavailable = (e) => {
+      mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) audioChunks.push(e.data)
       }
 
-      recorder.onstop = async () => {
-        if (audioChunks.length === 0) {
-          cleanup()
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: mimeType })
+        currentStream?.getTracks().forEach((t) => t.stop())
+        currentStream = null
+
+        // Skip if audio is too short (< 0.5s of silence)
+        if (audioBlob.size < 500) {
+          setProcessing(false)
+          setStatus("")
           return
         }
 
-        const blob = new Blob(audioChunks, { type: mimeType })
-        audioChunks = []
-        cleanup()
-
-        const api = (window as any).api
-        if (!api?.transcribeAudio) {
-          setError("Transcription not available (desktop only)")
-          return
-        }
-
-        setTranscribing(true)
-        try {
-          const base64 = await blobToBase64(blob)
-          const text: string = await api.transcribeAudio(base64, mimeType)
-          if (text && text.trim()) {
-            insertTextIntoEditor(text.trim())
-          }
-        } catch (e: any) {
-          setError(e?.message?.slice(0, 80) || "Transcription failed")
-        } finally {
-          setTranscribing(false)
-        }
+        transcribeAudio(audioBlob)
       }
 
-      recorder.start()
-      mediaRecorder = recorder
+      mediaRecorder.start()
       setRecording(true)
-    } catch {
-      setError("Failed to start recording")
-      cleanup()
+    } catch (e: any) {
+      if (e.name === "NotAllowedError" || e.name === "PermissionDeniedError") {
+        setError("Microphone permission denied")
+      } else if (e.name === "NotFoundError") {
+        setError("No microphone found")
+      } else {
+        setError("Could not access microphone")
+      }
     }
   }
 
   const tooltipText = () => {
     if (error()) return error()!
-    if (transcribing()) return "Transcribing..."
-    if (recording()) return "Click to stop & transcribe"
-    return "Voice input (record & transcribe)"
+    if (processing()) return status() || "Processing..."
+    if (recording()) return "Recording... Click to stop"
+    return "Voice input (click to start)"
   }
 
   return (
@@ -820,20 +819,20 @@ function PromptInputV2MicButton(props: {
       <button
         type="button"
         data-action="prompt-mic"
-        disabled={props.disabled}
+        disabled={props.disabled || processing()}
         onClick={(event) => {
           event.preventDefault()
           event.stopPropagation()
-          toggleRecording()
+          toggleMic()
         }}
         class={`relative size-7 rounded-md flex items-center justify-center transition-all duration-200 ${
           recording()
             ? "bg-red-500/20 text-red-500 zyraxon-mic-recording"
-            : transcribing()
-              ? "bg-blue-500/20 text-blue-500"
+            : processing()
+              ? "bg-yellow-500/20 text-yellow-500 animate-pulse"
               : "text-v2-icon-icon-muted hover:text-v2-text-text-base hover:bg-v2-overlay-simple-overlay-hover"
         } ${props.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-        aria-label={recording() ? "Stop recording" : transcribing() ? "Transcribing..." : "Voice input"}
+        aria-label={recording() ? "Stop listening" : "Voice input"}
       >
         <svg
           width="16"
@@ -851,9 +850,6 @@ function PromptInputV2MicButton(props: {
         </svg>
         <Show when={recording()}>
           <span class="absolute -top-0.5 -right-0.5 size-2.5 rounded-full bg-red-500 zyraxon-mic-pulse" />
-        </Show>
-        <Show when={transcribing()}>
-          <span class="absolute -top-0.5 -right-0.5 size-2.5 rounded-full bg-blue-500 zyraxon-mic-pulse" />
         </Show>
       </button>
     </TooltipV2>
