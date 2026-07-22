@@ -102,19 +102,18 @@ export class YouTubeStreamManager extends EventEmitter {
     const maxBitrate = this.getMaxBitrate()
 
     // YouTube REQUIRES both video AND audio streams.
-    // -f gdigrab captures desktop video on Windows
+    // -f gdigrab captures entire desktop video on Windows (no video_size = full screen)
     // -f lavfi generates silent audio so YouTube accepts the stream
     // Without audio, YouTube shows "No Data" / rejects the stream
     const ffmpegArgs = [
-      // Video input: desktop capture
+      // Video input: full desktop capture (no -video_size = capture entire screen)
       "-f", "gdigrab",
       "-framerate", "30",
-      "-video_size", "1920x1080",
       "-i", "desktop",
       // Audio input: silent audio (YouTube requires audio track)
       "-f", "lavfi",
       "-i", "anullsrc=r=44100:cl=stereo",
-      // Video encoding
+      // Video encoding + scale to output resolution
       "-vf", scaleFilter,
       "-c:v", "libx264",
       "-preset", "veryfast",
@@ -141,7 +140,7 @@ export class YouTubeStreamManager extends EventEmitter {
 
     try {
       this.process = spawn("ffmpeg", ffmpegArgs, {
-        stdio: ["ignore", "pipe", "pipe"],
+        stdio: ["pipe", "pipe", "pipe"],
         detached: false,
       })
 

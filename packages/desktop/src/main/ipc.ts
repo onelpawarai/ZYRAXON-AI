@@ -17,6 +17,7 @@ import { createUpdaterSubscriptions } from "./updater-subscriptions"
 import { YouTubeStreamManager } from "./youtube-stream"
 
 const streamManager = new YouTubeStreamManager()
+let streamListenerAttached = false
 
 const pickerFilters = (ext?: string[]) => {
   if (!ext || ext.length === 0) return undefined
@@ -302,6 +303,11 @@ export function registerIpcHandlers(deps: Deps) {
   })
   // YouTube Live Streaming
   ipcMain.handle("youtube-stream-start", (event: IpcMainInvokeEvent, config: { streamKey: string; streamUrl?: string; youtubeApiKey?: string; quality?: "4k" | "1440p" | "1080p" | "720p" }) => {
+    // Remove old listeners before adding new ones (prevent leak on repeated start/stop)
+    streamManager.removeAllListeners("status")
+    streamManager.removeAllListeners("viewers")
+    streamManager.removeAllListeners("duration")
+
     streamManager.on("status", (state) => {
       if (!event.sender.isDestroyed()) {
         event.sender.send("youtube-stream-status", state)

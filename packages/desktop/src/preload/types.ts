@@ -49,6 +49,7 @@ export type StreamState = {
   viewerCount: number
   streamDuration: number
   rtmpUrl: string
+  resolution: string
 }
 
 export type StreamConfig = {

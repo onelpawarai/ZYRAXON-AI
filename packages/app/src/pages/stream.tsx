@@ -2,6 +2,7 @@ import { createSignal, createEffect, onCleanup, Show, For } from "solid-js"
 import { Button } from "@opencode-ai/ui/button"
 import { showToast } from "@/utils/toast"
 import { useLanguage } from "@/context/language"
+import { viewerCount as sharedViewerCount, setViewerCount, streamStatus as sharedStreamStatus, setStreamStatus } from "@/hooks/stream-state"
 
 type StreamStatus = "idle" | "starting" | "streaming" | "stopping" | "error"
 type StreamState = {
@@ -36,28 +37,26 @@ export default function StreamPage() {
   const [streamKey, setStreamKey] = createSignal("")
   const [streamUrl, setStreamUrl] = createSignal("rtmp://a.rtmp.youtube.com/live2")
   const [youtubeApiKey, setYoutubeApiKey] = createSignal("")
-  const [quality, setQuality] = createSignal<"4k" | "1440p" | "1080p" | "720p">("4k")
-  const [status, setStatus] = createSignal<StreamStatus>("idle")
+  const [quality, setQuality] = createSignal<"4k" | "1440p" | "1080p" | "720p">("1080p")
   const [error, setError] = createSignal<string | undefined>()
-  const [viewerCount, setViewerCount] = createSignal(0)
   const [duration, setDuration] = createSignal(0)
   const [rtmpUrl, setRtmpUrl] = createSignal("")
-  const [resolution, setResolution] = createSignal("3840x2160")
+  const [resolution, setResolution] = createSignal("1920x1080")
 
+  const status = sharedStreamStatus
+  const viewerCount = sharedViewerCount
   const isElectron = !!getApi()
 
   createEffect(() => {
     if (!isElectron) return
     const api = getApi()
+    // Only set up local listeners for page-specific state
+    // Status + viewers are handled by global initStreamListeners()
     const unsubs = [
       api.onYouTubeStreamStatus?.((state: StreamState) => {
-        setStatus(state.status)
         setError(state.error)
         setRtmpUrl(state.rtmpUrl)
         if (state.resolution) setResolution(state.resolution)
-      }),
-      api.onYouTubeStreamViewers?.((count: number) => {
-        setViewerCount(count)
       }),
       api.onYouTubeStreamDuration?.((seconds: number) => {
         setDuration(seconds)
@@ -109,7 +108,7 @@ export default function StreamPage() {
         youtubeApiKey: youtubeApiKey() || undefined,
         quality: quality(),
       })
-      setStatus(state.status)
+      setStreamStatus(state.status)
       setError(state.error)
       setRtmpUrl(state.rtmpUrl)
       if (state.resolution) setResolution(state.resolution)
@@ -123,7 +122,7 @@ export default function StreamPage() {
     const api = getApi()
     try {
       const state = await api.youtubeStreamStop()
-      setStatus(state.status)
+      setStreamStatus(state.status)
       setError(state.error)
     } catch (err: any) {
       showToast({ variant: "error", title: "Stop failed", description: err.message || "Failed to stop stream" })
