@@ -42,7 +42,9 @@ export class YouTubeStreamManager extends EventEmitter {
 
   private getFullRtmpUrl(): string {
     const base = this.config.streamUrl || "rtmp://a.rtmp.youtube.com/live2"
-    return `${base}/${this.config.streamKey}`
+    const key = this.config.streamKey
+    if (!key) return base
+    return `${base}/${key}`
   }
 
   private getResolution(): string {
@@ -51,27 +53,27 @@ export class YouTubeStreamManager extends EventEmitter {
       case "1440p": return "2560x1440"
       case "1080p": return "1920x1080"
       case "720p": return "1280x720"
-      default: return "3840x2160"
+      default: return "1920x1080"
     }
   }
 
   private getBitrate(): string {
     switch (this.config.quality) {
-      case "4k": return "20000k"
-      case "1440p": return "13000k"
-      case "1080p": return "8000k"
-      case "720p": return "4500k"
-      default: return "20000k"
+      case "4k": return "12000k"
+      case "1440p": return "8000k"
+      case "1080p": return "5000k"
+      case "720p": return "2500k"
+      default: return "5000k"
     }
   }
 
   private getMaxBitrate(): string {
     switch (this.config.quality) {
-      case "4k": return "25000k"
-      case "1440p": return "18000k"
-      case "1080p": return "12000k"
-      case "720p": return "6000k"
-      default: return "25000k"
+      case "4k": return "15000k"
+      case "1440p": return "10000k"
+      case "1080p": return "6500k"
+      case "720p": return "3500k"
+      default: return "6500k"
     }
   }
 
@@ -81,7 +83,7 @@ export class YouTubeStreamManager extends EventEmitter {
       case "1440p": return "scale=2560:1440:flags=lanczos"
       case "1080p": return "scale=1920:1080:flags=lanczos"
       case "720p": return "scale=1280:720:flags=lanczos"
-      default: return "scale=3840:2160:flags=lanczos"
+      default: return "scale=1920:1080:flags=lanczos"
     }
   }
 
@@ -99,40 +101,57 @@ export class YouTubeStreamManager extends EventEmitter {
     const bitrate = this.getBitrate()
     const maxBitrate = this.getMaxBitrate()
 
-    // Full desktop capture at 4K quality
-    // -f gdigrab captures entire primary display on Windows
-    // -i screen = primary monitor
-    // Even when app is minimized, ffmpeg keeps streaming
+    // YouTube REQUIRES both video AND audio streams.
+    // -f gdigrab captures desktop video on Windows
+    // -f lavfi generates silent audio so YouTube accepts the stream
+    // Without audio, YouTube shows "No Data" / rejects the stream
     const ffmpegArgs = [
+      // Video input: desktop capture
       "-f", "gdigrab",
       "-framerate", "30",
-      "-i", "screen",
+      "-video_size", "1920x1080",
+      "-i", "desktop",
+      // Audio input: silent audio (YouTube requires audio track)
+      "-f", "lavfi",
+      "-i", "anullsrc=r=44100:cl=stereo",
+      // Video encoding
       "-vf", scaleFilter,
       "-c:v", "libx264",
       "-preset", "veryfast",
       "-tune", "zerolatency",
       "-b:v", bitrate,
       "-maxrate", maxBitrate,
-      "-bufsize", "40000k",
+      "-bufsize", "20000k",
       "-pix_fmt", "yuv420p",
       "-g", "60",
-      "-movflags", "+faststart",
+      // Audio encoding (silent)
+      "-c:a", "aac",
+      "-b:a", "128k",
+      "-ar", "44100",
+      // Map both streams
+      "-map", "0:v:0",
+      "-map", "1:a:0",
+      "-shortest",
+      // Output format for YouTube RTMP
       "-f", "flv",
       rtmpUrl,
     ]
 
+    console.log("[YouTubeStream] Starting ffmpeg with args:", ffmpegArgs.join(" "))
+
     try {
       this.process = spawn("ffmpeg", ffmpegArgs, {
         stdio: ["ignore", "pipe", "pipe"],
-        // Detach process so it survives app minimize/close
         detached: false,
       })
 
       this.process.on("error", (err) => {
+        console.error("[YouTubeStream] Process error:", err.message)
         this.handleError(`Failed to start ffmpeg: ${err.message}`)
       })
 
       this.process.on("exit", (code, signal) => {
+        console.log(`[YouTubeStream] ffmpeg exited: code=${code} signal=${signal}`)
         if (this.status === "stopping") {
           this.setStatus("idle")
         } else if (code !== null && code !== 0) {
@@ -144,19 +163,42 @@ export class YouTubeStreamManager extends EventEmitter {
         }
       })
 
+      let stderrBuffer = ""
       this.process.stderr?.on("data", (data: Buffer) => {
         const output = data.toString()
-        if (output.includes("error") || output.includes("Error")) {
-          console.error("[ffmpeg stderr]", output.slice(0, 500))
+        stderrBuffer += output
+        // Log key ffmpeg messages for debugging
+        if (output.includes("Stream #") || output.includes("error") || output.includes("Error") ||
+            output.includes("Output #") || output.includes("encoder") || output.includes("rtmp")) {
+          console.log("[ffmpeg]", output.trim().slice(0, 300))
+        }
+        // If we see encoding has started, the stream is working
+        if (output.includes("frame=") && this.status === "starting") {
+          console.log("[YouTubeStream] Stream encoding started successfully")
+          this.setStatus("streaming")
         }
       })
 
       this.streamStartTime = Date.now()
-      this.setStatus("streaming")
 
-      this.startViewerPolling()
-      this.startDurationTimer()
+      // Wait briefly for ffmpeg to initialize, then check if it started
+      await new Promise<void>((resolve) => {
+        setTimeout(() => {
+          if (this.process && !this.process.killed) {
+            if (this.status === "starting") {
+              // If we haven't detected encoding yet, assume it's working
+              // (ffmpeg may not output "frame=" immediately)
+              this.setStatus("streaming")
+            }
+            this.startViewerPolling()
+            this.startDurationTimer()
+          }
+          resolve()
+        }, 3000)
+      })
+
     } catch (err: any) {
+      console.error("[YouTubeStream] Spawn error:", err.message)
       this.handleError(`Failed to spawn ffmpeg: ${err.message}`)
     }
 
@@ -174,11 +216,12 @@ export class YouTubeStreamManager extends EventEmitter {
 
     if (this.process) {
       try {
-        this.process.kill("SIGTERM")
+        // Send 'q' to ffmpeg to gracefully stop encoding
+        this.process.stdin?.write("q")
         await new Promise<void>((resolve) => {
           const timer = setTimeout(() => {
             if (this.process) {
-              this.process.kill("SIGKILL")
+              try { this.process.kill("SIGKILL") } catch {}
             }
             resolve()
           }, 5000)
@@ -204,6 +247,7 @@ export class YouTubeStreamManager extends EventEmitter {
   }
 
   private handleError(message: string) {
+    console.error("[YouTubeStream] Error:", message)
     this.error = message
     this.setStatus("error")
     this.stopViewerPolling()
@@ -265,7 +309,7 @@ export class YouTubeStreamManager extends EventEmitter {
     this.stopViewerPolling()
     this.stopDurationTimer()
     if (this.process) {
-      this.process.kill("SIGKILL")
+      try { this.process.kill("SIGKILL") } catch {}
       this.process = null
     }
   }

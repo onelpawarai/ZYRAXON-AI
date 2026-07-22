@@ -190,10 +190,9 @@ const main = Effect.gen(function* () {
   useEnvProxy()
   app.commandLine.appendSwitch("proxy-bypass-list", "<-loopback>")
   const features = app.commandLine.getSwitchValue("enable-features")
-  const speechFeature = "SpeechRecognition"
   app.commandLine.appendSwitch(
     "enable-features",
-    features ? `${jsCallStackFeature},${speechFeature},${features}` : `${jsCallStackFeature},${speechFeature}`,
+    features ? `${jsCallStackFeature},${features}` : jsCallStackFeature,
   )
   if (!app.isPackaged) app.commandLine.appendSwitch("remote-debugging-port", "9222")
 

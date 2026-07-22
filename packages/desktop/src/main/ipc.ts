@@ -12,7 +12,6 @@ import { setForceFocus } from "./debug"
 import { assertAttachmentBudget, createPickedFileAuthorizations } from "./attachment-picker"
 import { getStore, removeStoreFileIfEmpty } from "./store"
 import { getPinchZoomEnabled, getWindowID, setPinchZoomEnabled, setTitlebar, updateTitlebar } from "./windows"
-import { startSpeechRecognition, stopSpeechRecognition, createSpeechWindow, destroySpeechWindow } from "./speech-window"
 import type { UpdaterController } from "./updater-controller"
 import { createUpdaterSubscriptions } from "./updater-subscriptions"
 import { YouTubeStreamManager } from "./youtube-stream"
@@ -94,42 +93,6 @@ export function registerIpcHandlers(deps: Deps) {
     deps.recordFatalRendererError(error),
   )
 
-  // Speech recognition via mini Chromium window
-  ipcMain.handle("speech-init", () => {
-    createSpeechWindow()
-  })
-
-  ipcMain.handle(
-    "speech-start",
-    (event: IpcMainInvokeEvent, lang?: string) => {
-      const sender = event.sender
-      startSpeechRecognition(
-        {
-          onResult: (text, isFinal) => {
-            if (sender.isDestroyed()) return
-            sender.send("speech-result-to-renderer", text, isFinal)
-          },
-          onStateChange: (listening) => {
-            if (sender.isDestroyed()) return
-            sender.send("speech-state-to-renderer", listening)
-          },
-          onError: (error) => {
-            if (sender.isDestroyed()) return
-            sender.send("speech-error-to-renderer", error)
-          },
-        },
-        lang,
-      )
-    },
-  )
-
-  ipcMain.handle("speech-stop", () => {
-    stopSpeechRecognition()
-  })
-
-  ipcMain.handle("speech-destroy", () => {
-    destroySpeechWindow()
-  })
   ipcMain.handle("store-get", (_event: IpcMainInvokeEvent, name: string, key: string) => {
     try {
       const store = getStore(name)
