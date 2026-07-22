@@ -56,6 +56,14 @@ const getBase = (appId: string): Configuration => ({
       to: "native/",
       filter: ["index.js", "index.d.ts", "build/Release/mac_window.node", "swift-build/**"],
     },
+    {
+      from: "speech.html",
+      to: "speech.html",
+    },
+    {
+      from: "out/preload/speech-preload.js",
+      to: "speech-preload.js",
+    },
   ],
   mac: {
     category: "public.app-category.developer-tools",

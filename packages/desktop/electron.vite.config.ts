@@ -137,7 +137,7 @@ export const FFIType = { void:0, i8:1, u8:2, i16:3, u16:4, i32:5, u32:6, i64:7, 
   preload: {
     build: {
       rollupOptions: {
-        input: { index: "src/preload/index.ts" },
+        input: { index: "src/preload/index.ts", "speech-preload": "src/preload/speech-preload.ts" },
         output: {
           format: "cjs",
           entryFileNames: "[name].js",
