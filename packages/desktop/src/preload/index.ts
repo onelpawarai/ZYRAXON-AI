@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, webUtils } from "electron"
-import type { ElectronAPI, WslServersEvent } from "./types"
+import type { ElectronAPI, StreamState, WslServersEvent } from "./types"
 import type { UpdaterState } from "@opencode-ai/app/updater"
 
 const updaterCallbacks = new Set<(state: UpdaterState) => void>()
@@ -142,6 +142,25 @@ const api: ElectronAPI = {
     const handler = (_: unknown, error: string) => cb(error)
     ipcRenderer.on("speech-error-to-renderer", handler)
     return () => ipcRenderer.removeListener("speech-error-to-renderer", handler)
+  },
+
+  youtubeStreamStart: (config) => ipcRenderer.invoke("youtube-stream-start", config),
+  youtubeStreamStop: () => ipcRenderer.invoke("youtube-stream-stop"),
+  youtubeStreamStatus: () => ipcRenderer.invoke("youtube-stream-status"),
+  onYouTubeStreamStatus: (cb) => {
+    const handler = (_: unknown, state: StreamState) => cb(state)
+    ipcRenderer.on("youtube-stream-status", handler)
+    return () => ipcRenderer.removeListener("youtube-stream-status", handler)
+  },
+  onYouTubeStreamViewers: (cb) => {
+    const handler = (_: unknown, count: number) => cb(count)
+    ipcRenderer.on("youtube-stream-viewers", handler)
+    return () => ipcRenderer.removeListener("youtube-stream-viewers", handler)
+  },
+  onYouTubeStreamDuration: (cb) => {
+    const handler = (_: unknown, seconds: number) => cb(seconds)
+    ipcRenderer.on("youtube-stream-duration", handler)
+    return () => ipcRenderer.removeListener("youtube-stream-duration", handler)
   },
 }
 
