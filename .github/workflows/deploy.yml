@@ -46,3 +46,9 @@ jobs:
           SENTRY_RELEASE: web@${{ github.sha }}
           VITE_SENTRY_DSN: ${{ vars.WEB_SENTRY_DSN }}
           VITE_SENTRY_RELEASE: web@${{ github.sha }}
+          # ZYRAXON-specific environment variables
+          ZYRAXON_VERSION: "1.14.0"
+          ZYRAXON_MCP_TOOLS_COUNT: "136"
+          ZYRAXON_STREAMING_ENABLED: "true"
+          ZYRAXON_SELF_HEALING_ENABLED: "true"
+          ZYRAXON_MEMORY_SYSTEM_ENABLED: "true"

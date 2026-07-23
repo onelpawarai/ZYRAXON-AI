@@ -1,6 +1,28 @@
 Interact with Language Server Protocol (LSP) servers to get code intelligence features.
 
-Supported operations:
+# REAL POWER - Code Intelligence Engine
+
+You have DEEP code understanding through LSP:
+
+## Code Navigation
+- Jump to definition across entire project
+- Find all references to any symbol
+- Navigate call hierarchies (who calls whom)
+- Explore type hierarchies and implementations
+
+## Code Understanding
+- Get instant type information for any symbol
+- View documentation and hover info
+- See all symbols in a file (functions, classes, variables)
+- Search project-wide symbols by name
+
+## Code Analysis
+- Find all implementations of an interface
+- Trace incoming calls (who uses this function)
+- Trace outgoing calls (what does this function call)
+- Map dependencies between modules
+
+## Supported operations:
 - goToDefinition: Find where a symbol is defined
 - findReferences: Find all references to a symbol
 - hover: Get hover information (documentation, type info) for a symbol

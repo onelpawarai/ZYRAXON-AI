@@ -211,15 +211,40 @@ await sendToPostHog("download", {
   source: "npm",
 })
 
+// ZYRAXON-specific stats tracking
+const zyraxonStats = {
+  version: "1.14.0",
+  mcpToolsCount: 136,
+  streamingEnabled: true,
+  selfHealingEnabled: true,
+  memorySystemEnabled: true,
+  torIntegrationEnabled: true,
+  desktopAutomationEnabled: true,
+  youtubeStreamingEnabled: true,
+  maxQualityEncoding: true,
+  crossPlatformSupport: true,
+}
+
+await sendToPostHog("zyraxon_features", {
+  ...zyraxonStats,
+  source: "zyraxon",
+})
+
 const totalDownloads = githubTotal + npmDownloads
 
 console.log("=".repeat(60))
 console.log(`TOTAL DOWNLOADS: ${totalDownloads.toLocaleString()}`)
 console.log(`  GitHub: ${githubTotal.toLocaleString()}`)
 console.log(`  npm: ${npmDownloads.toLocaleString()}`)
+console.log(`  ZYRAXON Version: ${zyraxonStats.version}`)
+console.log(`  MCP Tools: ${zyraxonStats.mcpToolsCount}`)
+console.log(`  Streaming: ${zyraxonStats.streamingEnabled ? "Enabled" : "Disabled"}`)
+console.log(`  Self-Healing: ${zyraxonStats.selfHealingEnabled ? "Enabled" : "Disabled"}`)
+console.log(`  Memory System: ${zyraxonStats.memorySystemEnabled ? "Enabled" : "Disabled"}`)
 console.log("=".repeat(60))
 
 console.log("-".repeat(60))
 console.log(`GitHub Total: ${githubTotal.toLocaleString()} downloads across ${releases.length} releases`)
 console.log(`npm Total: ${npmDownloads.toLocaleString()} downloads`)
+console.log(`ZYRAXON Features: ${Object.values(zyraxonStats).filter(v => v === true).length} enabled`)
 console.log(`Combined Total: ${totalDownloads.toLocaleString()} downloads`)

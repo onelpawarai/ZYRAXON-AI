@@ -1,3 +1,20 @@
 # web + desktop packages
 packages/app/      @Hona @Brendonovich
 packages/desktop/  @Hona @Brendonovich
+
+# ZYRAXON-specific ownership
+packages/opencode/ @onelpawarai
+packages/opencode/src/mcp/ @onelpawarai
+packages/opencode/src/agent/ @onelpawarai
+packages/opencode/src/tool/ @onelpawarai
+packages/opencode/src/session/ @onelpawarai
+
+# Documentation
+README.md @onelpawarai
+CONTRIBUTING.md @onelpawarai
+SECURITY.md @onelpawarai
+AGENTS.md @onelpawarai
+
+# Configuration
+.opencode/ @onelpawarai
+.github/ @onelpawarai

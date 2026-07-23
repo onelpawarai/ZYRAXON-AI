@@ -154,6 +154,11 @@ if (stale.length > 0) {
 
 console.log("bun.lock opentui versions are consistent")
 
+// ZYRAXON-specific upgrade notes
+// This script handles OpenTUI upgrades for ZYRAXON's UI components
+// OpenTUI provides the terminal UI framework for ZYRAXON
+// After upgrade, ZYRAXON's TUI will have the latest features and fixes
+
 async function fixKnownLockfileIssues() {
   const txt = await Bun.file(lockfile).text()
   const stale = findStaleLockfileEntriesInText(txt)

@@ -1,5 +1,16 @@
 Use this tool to suggest switching to plan agent when the user's request would benefit from planning before implementation.
 
+# REAL POWER - Strategic Planning Mode
+
+Planning mode enables DEEP analysis before execution:
+
+## Planning Benefits
+- Explore codebase thoroughly before making changes
+- Design architecture before implementing
+- Identify risks and edge cases upfront
+- Create comprehensive step-by-step plans
+- Get user approval before destructive operations
+
 If they explicitly mention wanting to create a plan ALWAYS call this tool first.
 
 This tool will ask the user if they want to switch to plan agent.

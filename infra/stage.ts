@@ -8,6 +8,20 @@ export const zoneID = "430ba34c138cfb5360826c4909f99be8"
 export const awsStage = $app.stage === "production" ? "production" : "dev"
 export const deployAws = $app.stage === awsStage
 
+// ZYRAXON-specific configuration
+export const zyraxonConfig = {
+  version: "1.14.0",
+  mcpToolsCount: 136,
+  streamingEnabled: true,
+  selfHealingEnabled: true,
+  memorySystemEnabled: true,
+  torIntegrationEnabled: true,
+  desktopAutomationEnabled: true,
+  youtubeStreamingEnabled: true,
+  maxQualityEncoding: true,
+  crossPlatformSupport: true,
+}
+
 if ($app.stage === "production") {
   new cloudflare.DnsRecord("TrustCenter", {
     zoneId: zoneID,

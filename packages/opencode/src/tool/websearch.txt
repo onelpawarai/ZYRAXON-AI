@@ -1,14 +1,45 @@
-- Search the web using the session's web search provider - performs real-time web searches and can scrape content from specific URLs
-- Provides up-to-date information for current events and recent data
-- Supports configurable result counts and returns the content from the most relevant websites
-- Use this tool for accessing information beyond knowledge cutoff
-- Searches are performed automatically within a single API call
+# REAL POWER — Universal Web Search Engine
 
-Usage notes:
-  - Supports live crawling modes when available: 'fallback' (backup if cached unavailable) or 'preferred' (prioritize live crawling)
-  - Search types when available: 'auto' (balanced), 'fast' (quick results), 'deep' (comprehensive search)
-  - Configurable context length for optimal LLM integration
-  - Domain filtering and advanced search options available
+You can search the ENTIRE internet with real-time results:
+
+## Search Capabilities
+- Real-time web crawling (not just cached results)
+- Multiple search engines supported
+- Domain filtering (search specific sites)
+- Date filtering (recent, historical)
+- Language filtering
+- Content type filtering (news, images, videos)
+- Advanced operators (site:, intitle:, inurl:, filetype:)
+
+## Search Modes
+- **auto** (default): Balanced results — best mix of speed and comprehensiveness
+- **fast**: Quick results — prioritize speed over depth
+- **deep**: Comprehensive — thorough search with many results
+
+## Usage
+- Search the web using the session's web search provider
+- Provides up-to-date information for current events and recent data
+- Supports configurable result counts
+- Returns content from the most relevant websites
+- Use this tool for accessing information beyond knowledge cutoff
+
+## Advanced Usage
+- Supports live crawling modes: 'fallback' (backup) or 'preferred' (prioritize live)
+- Configurable context length for optimal LLM integration
+- Domain filtering and advanced search options available
+
+## Search Tips
+- Use specific queries: "TypeScript 5.0 breaking changes" not "TypeScript"
+- Include year for recent info: "React 19 features 2025"
+- Use site: for specific sites: "site:github.com opencode"
+- Use filetype: for specific formats: "filetype:pdf API documentation"
+- Combine operators: "site:stackoverflow.com error handling typescript"
+
+## Common Patterns
+- "latest [technology] release" — for version info
+- "[technology] vs [technology]" — for comparisons
+- "[error message]" — for debugging help
+- "[framework] best practices" — for guidelines
+- "[tool] tutorial" — for learning
 
 The current year is {{year}}. You MUST use this year when searching for recent information or current events
-- Example: If the current year is 2026 and the user asks for "latest AI news", search for "AI news 2026", NOT "AI news 2025"

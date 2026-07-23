@@ -39,4 +39,15 @@ Process:
 
 After updating, summarize which AGENTS.md files were created/updated and how many learnings per file.
 
+## ZYRAXON-specific learnings
+
+- MCP tools have cross-platform support (Windows/Linux/macOS)
+- Self-healing automatically installs missing tools
+- Memory system survives laptop reset via Task Scheduler
+- YouTube streaming requires specific ffmpeg flags for quality
+- Tor integration provides anonymous browsing
+- Desktop automation uses pyautogui for screen control
+- Agent modes have different capability levels
+- ULTRA tools provide advanced functionality
+
 $ARGUMENTS

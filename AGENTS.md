@@ -159,3 +159,74 @@ const table = sqliteTable("session", {
 - Keep delivery vocabulary explicit. Prompts steer by default and promote at the next safe provider-turn boundary while the current drain requires continuation. An explicit `queue` input remains pending until the Session would otherwise become idle; promote one queued input at that boundary, then reevaluate continuation before promoting another. Promoting any new user input resets the selected agent's provider-turn allowance; a batch of steers resets it once.
 - Keep EventV2 replay owner claims separate from clustered Session execution ownership.
 - Keep the System Context algebra, registry, and built-ins in `src/system-context`; keep Context Source producers with their observed domains, and keep Session History selection plus Context Epoch persistence Session-owned.
+
+## ZYRAXON Agent Modes
+
+ZYRAXON has 7 agent modes with different capabilities:
+
+1. **General** — Default mode for everyday tasks, questions, and conversation.
+2. **Build** — Software engineering mode for coding, debugging, refactoring. Has full file system access.
+3. **Plan** — Architecture mode for planning complex changes before implementation. Read-only exploration.
+4. **Beast** — Deep coding mode with aggressive file operations and auto-testing.
+5. **PRO** — Professional mode with strict code quality, security scanning, and documentation.
+6. **APEX PREDATOR** — Maximum power mode with 136+ tools, self-healing, and autonomous operation.
+7. **DARK EMPEROR** — Ultra mode with all 8 ULTRA tools, code generation, deployment, and debugging.
+
+## ZYRAXON MCP Tools
+
+ZYRAXON has 136+ MCP tools across 7 categories:
+
+- **System Intelligence** (20 tools) — Cross-platform system monitoring, file operations, process management
+- **Web Intelligence** (20 tools) — HTTP client, DNS, ping, port check, download, encoding/hashing
+- **Data Processing** (20 tools) — JSON/CSV/XML conversion, text analysis, regex, encryption
+- **Security Intelligence** (20 tools) — Port scanning, SSL checks, DNS enumeration, subdomain scanning
+- **AI Enhancement** (20 tools) — TTS, screenshots, clipboard, app control, media tools, backup
+- **Productivity Power** (20 tools) — Reminders, todos, bookmarks, calendar, math, color conversion
+- **ULTRA Tools** (8 tools) — Code generation, auto deploy, security sweep, performance optimizer, super refactor, test generator, doc generator, ultra debugger
+
+## ZYRAXON YouTube Streaming
+
+ZYRAXON can stream directly to YouTube Live:
+
+- **Capture Modes**: APP (single window) or SCR (full screen)
+- **Audio Modes**: system (loopback) or microphone
+- **Quality**: 4K/1080p/720p with max quality encoding (preset slow, tune film, profile high)
+- **RTMP**: Direct streaming to YouTube ingest servers
+- **Pre-check**: Validates stream key and RTMP endpoint before starting
+
+## ZYRAXON Self-Healing
+
+When a tool is missing or fails:
+
+1. ZYRAXON detects the failure
+2. Searches for available alternatives
+3. Installs missing tools automatically
+4. Retries the operation
+5. Logs the self-healing action
+
+This means ZYRAXON never fails due to missing capabilities — it adapts and overcomes.
+
+## ZYRAXON Memory System
+
+ZYRAXON has a built-in memory system via the `memory` tool:
+
+1. **zyraxon.db** — SQLite database storing session data, messages, parts, and context epochs
+2. **Memory store/recall** — Store and recall key-value memories with categories, importance scores, and search
+3. **Auto-injection** — Automatically injects relevant memories into session context
+4. **Session persistence** — Sessions survive restarts through zyraxon.db
+
+The memory system lives in `packages/opencode/src/tool/memory.ts` and `packages/opencode/src/memory/auto-injection.ts`. Memories are stored in the data directory under `memory/`.
+
+## ZYRAXON All-in-One Power
+
+ZYRAXON agent has ALL-IN-ONE power. It can:
+
+- **Create its own MCP tools** — If a tool is missing, ZYRAXON builds it from scratch and registers it
+- **Install its own servers** — Auto-discovers and installs MCP servers for any task
+- **Never refuses** — Always tries the maximum possible. No "I can't do this" — only "Let me find a way"
+- **Self-healing** — If something fails, it fixes itself and retries
+- **Self-evolution** — Grows new capabilities at runtime without restart
+- **Full system access** — Filesystem, terminal, browser, network, desktop — everything available
+- **Cross-platform** — Works on Windows, Linux, and macOS with platform-adaptive commands
+- **Auto-debugging** — Detects and fixes its own errors before the user notices
+- **Parallel execution** — Runs multiple tasks simultaneously via subagent army

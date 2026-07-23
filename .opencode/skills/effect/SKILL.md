@@ -36,3 +36,13 @@ Use the current Effect v4 / effect-smol source, not memory or older Effect v2/v3
 - Run tests from package directories such as `packages/ZYRAXON`; never run package tests from the repo root.
 - Prefer explicit test layers over ad hoc managed runtimes. Keep dependency provisioning visible in the test file.
 - Use scoped fixtures and finalizers for resources that must be cleaned up, including temporary directories, flags, databases, fibers, servers, and global state.
+
+## ZYRAXON-specific Effect patterns
+
+- Use Effect for ZYRAXON's MCP tool execution workflows
+- Use Effect for streaming state management
+- Use Effect for memory system operations
+- Use Effect for self-healing action orchestration
+- Use Effect for Tor network integration
+- Use Effect for desktop automation workflows
+- Use Effect for agent mode transitions

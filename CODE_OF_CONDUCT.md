@@ -39,3 +39,33 @@ All complaints will be reviewed and investigated promptly and fairly.
 ## Attribution
 
 This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1, available at https://www.contributor-covenant.org/version/2/1/code_of_conduct.html.
+
+## ZYRAXON Community Guidelines
+
+### What We Build
+
+ZYRAXON is an all-in-one AI desktop agent with 136+ tools, YouTube streaming, self-healing, and cross-platform support. We welcome contributions that enhance these capabilities.
+
+### How to Contribute
+
+- **Tools**: Add new MCP tools in `packages/opencode/src/mcp/` with cross-platform support
+- **Agents**: Create or enhance agent prompts in `packages/opencode/src/agent/prompt/`
+- **Streaming**: Improve YouTube/streaming features in `packages/desktop/electron/`
+- **Security**: Report vulnerabilities via GitHub Security Advisory
+- **Documentation**: Improve README, CONTRIBUTING, or inline docs
+
+### Quality Standards
+
+- All code must be TypeScript
+- Cross-platform compatibility required (Windows/Linux/macOS)
+- No hardcoded paths or platform-specific assumptions
+- Input validation for all user-facing tools
+- No eval() or dangerous code execution patterns
+- Test changes before submitting PRs
+
+### Communication
+
+- Use Bengali or English in discussions
+- Be respectful and constructive
+- Focus on technical merit
+- Welcome newcomers warmly

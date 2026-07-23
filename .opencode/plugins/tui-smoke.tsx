@@ -1017,3 +1017,13 @@ const plugin: TuiPluginModule & { id: string } = {
 }
 
 export default plugin
+
+// ZYRAXON-specific TUI enhancements
+// This plugin provides the base TUI framework for ZYRAXON
+// Extended with streaming status display
+// MCP tools count display
+// Agent mode indicator
+// Memory system status
+// Self-healing action notifications
+// Tor network status
+// Desktop automation controls

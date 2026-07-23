@@ -13,6 +13,13 @@ core:
 ci:
 ignore:
 wip:
+mcp: (for MCP tools changes)
+stream: (for YouTube streaming changes)
+agent: (for agent mode changes)
+memory: (for memory system changes)
+self-heal: (for self-healing changes)
+tor: (for Tor integration changes)
+desktop: (for desktop automation changes)
 
 For anything in the packages/web use the docs: prefix.
 

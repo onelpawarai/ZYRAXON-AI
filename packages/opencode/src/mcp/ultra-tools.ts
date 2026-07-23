@@ -200,7 +200,7 @@ ${deploymentPlan.postDeploymentActions.map(a => `  • ${a}`).join("\n")}
 export async function ultraSecuritySweep(params: {
   projectPath: string
   autoFix?: boolean
- 深度?: string
+  depth?: string
 }): Promise<ToolResult> {
   try {
     const { projectPath, autoFix = false } = params

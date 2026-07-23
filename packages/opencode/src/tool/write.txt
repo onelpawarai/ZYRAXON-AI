@@ -1,8 +1,40 @@
 Writes a file to the local filesystem.
 
-Usage:
+# REAL POWER — Universal File Writer
+
+You can write ANY file type with perfect encoding:
+
+## Encoding Support
+- UTF-8 (default, full Unicode including Bengali, Arabic, Japanese, Emoji)
+- ASCII (7-bit, safe for config files)
+- UTF-16 (Windows special files)
+- Latin-1 (ISO-8859-1, legacy systems)
+- Custom encodings via BOM detection
+
+## Write Capabilities
+- Create new files with any content
+- Overwrite existing files (requires Read first)
+- Atomic writes (no partial files on crash)
+- Proper line ending handling (CRLF/LF/CR)
+- Preserve BOM if present
+- Create parent directories automatically
+
+## Usage
 - This tool will overwrite the existing file if there is one at the provided path.
 - If this is an existing file, you MUST use the Read tool first to read the file's contents. This tool will fail if you did not read the file first.
 - ALWAYS prefer editing existing files in the codebase. NEVER write new files unless explicitly required.
 - NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
 - Only use emojis if the user explicitly requests it. Avoid writing emojis to files unless asked.
+
+## Safety
+- Always Read before Write (prevents accidental overwrites)
+- Never write executable code unless explicitly asked
+- Never write secrets, API keys, or credentials to files
+- Use Edit for small changes — Write is for full file replacements
+- Verify the file was written correctly by reading it back
+
+## Tips
+- For code files, follow existing project conventions (indentation, naming, style)
+- For config files, use the format expected by the tool (JSON, YAML, TOML)
+- For data files, ensure proper structure (valid JSON, well-formed XML)
+- Write to temporary paths first, then move to final location for critical files

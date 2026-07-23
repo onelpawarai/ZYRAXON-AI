@@ -32,3 +32,59 @@ UPCOMING_CHANGELOG.md
 logs/
 *.bun-build
 tsconfig.tsbuildinfo
+
+# ZYRAXON-specific ignores
+*.exe
+*.msi
+*.dmg
+*.deb
+*.rpm
+*.AppImage
+*.snap
+*.flatpak
+
+# ZYRAXON build artifacts
+packages/desktop/dist/
+packages/opencode/dist/
+packages/*/dist/
+
+# ZYRAXON temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# ZYRAXON logs
+*.log
+logs/
+*.log.*
+
+# ZYRAXON cache
+.cache/
+.cache*/
+
+# ZYRAXON memory files (local only)
+C:/opencode-workspace/data/*.db
+C:/opencode-workspace/data/*.json
+C:/opencode-workspace/data/*.txt
+
+# ZYRAXON streaming files
+*.stream
+*.rtmp
+*.flv
+*.ts
+
+# ZYRAXON MCP server files
+*.mcp
+*.mcp.json
+
+# ZYRAXON test files (per RULE #1)
+test_*.py
+check_*.py
+temp_*.py
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js

@@ -1,5 +1,16 @@
 Use this tool when you have completed the planning phase and are ready to exit plan agent.
 
+# REAL POWER - Plan Execution Bridge
+
+Transition from planning to implementation:
+
+## Exit Criteria
+- Plan is complete and comprehensive
+- All questions answered
+- User has approved the approach
+- Critical files identified
+- Verification steps defined
+
 This tool will ask the user if they want to switch to build agent to start implementing the plan.
 
 Call this tool:

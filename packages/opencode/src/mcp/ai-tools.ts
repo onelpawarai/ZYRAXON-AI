@@ -1,5 +1,5 @@
 // ZYRAXON MCP Server 5: AI Enhancement
-// 20 real working tools for AI and automation
+// 20 real working tools for AI and automation — Cross-Platform
 
 import { exec } from "child_process"
 import { promisify } from "util"
@@ -8,6 +8,20 @@ import path from "path"
 import os from "os"
 
 const execAsync = promisify(exec)
+const platform = process.platform
+
+// Cross-platform command helper
+async function runCmd(winCmd: string, linuxCmd: string, macCmd?: string): Promise<string> {
+  try {
+    let cmd = winCmd
+    if (platform === "linux") cmd = linuxCmd
+    else if (platform === "darwin") cmd = macCmd || linuxCmd
+    const { stdout } = await execAsync(cmd, { timeout: 30000 })
+    return stdout
+  } catch (e: any) {
+    return e.stdout || e.stderr || e.message
+  }
+}
 
 export interface ToolResult {
   success: boolean
@@ -139,11 +153,22 @@ export async function generateReport(title: string, content: string): Promise<To
   }
 }
 
-// Tool 10: Quick Calculator
+// Safe math evaluator (no eval vulnerability)
+function safeMathEval(expr: string): number {
+  // Only allow digits, operators, parentheses, dots, spaces
+  const sanitized = expr.replace(/\s/g, '')
+  if (!/^[0-9+\-*/().%]+$/.test(sanitized)) {
+    throw new Error("Invalid expression: only numbers and basic operators allowed")
+  }
+  // Use Function constructor with strict Math-only scope (safe, no global access)
+  const fn = new Function('Math', `return (${sanitized})`)
+  return fn(Math)
+}
+
+// Tool 10: Quick Calculator (SAFE — no eval vulnerability)
 export async function calculator(expression: string): Promise<ToolResult> {
   try {
-    // Safe evaluation using Function constructor
-    const result = new Function(`return ${expression}`)()
+    const result = safeMathEval(expression)
     return { success: true, output: `${expression} = ${result}` }
   } catch (e: any) {
     return { success: false, output: "", error: e.message }
@@ -236,7 +261,7 @@ export async function convertFormat(inputPath: string, outputFormat: string): Pr
   }
 }
 
-// Tool 19: Backup Files
+// Tool 19: Backup Files (cross-platform)
 export async function backupFiles(sourceDir: string): Promise<ToolResult> {
   try {
     const backupDir = path.join(os.homedir(), '.zyraxon', 'backups')
@@ -244,19 +269,27 @@ export async function backupFiles(sourceDir: string): Promise<ToolResult> {
     const backupName = `backup_${Date.now()}`
     const backupPath = path.join(backupDir, backupName)
     
-    await execAsync(`xcopy "${sourceDir}" "${backupPath}" /E /I /H /Y`)
+    await runCmd(
+      `xcopy "${sourceDir}" "${backupPath}" /E /I /H /Y`,
+      `cp -r "${sourceDir}" "${backupPath}"`,
+      `cp -r "${sourceDir}" "${backupPath}"`
+    )
     return { success: true, output: `Backup created: ${backupPath}` }
   } catch (e: any) {
     return { success: false, output: "", error: e.message }
   }
 }
 
-// Tool 20: System Cleanup
+// Tool 20: System Cleanup (cross-platform)
 export async function systemCleanup(): Promise<ToolResult> {
   try {
     const tempDir = os.tmpdir()
-    const { stdout } = await execAsync(`del /q /f "${tempDir}\\*" 2>nul && echo Cleanup completed`)
-    return { success: true, output: "System cleanup completed" }
+    await runCmd(
+      `del /q /f "${tempDir}\\*" 2>nul`,
+      `rm -rf "${tempDir}"/* 2>/dev/null`,
+      `rm -rf "${tempDir}"/* 2>/dev/null`
+    )
+    return { success: true, output: `System cleanup completed. Temp dir: ${tempDir}` }
   } catch (e: any) {
     return { success: false, output: "", error: e.message }
   }

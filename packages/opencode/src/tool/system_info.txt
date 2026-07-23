@@ -1,4 +1,31 @@
-REAL-TIME SYSTEM INFO — Monitor system health and resources.
+REAL-TIME SYSTEM INFO - Monitor system health and resources.
+
+# REAL POWER - System Omniscience
+
+You can see EVERYTHING about the system:
+
+## System Intelligence
+- CPU: Model, cores, speed, usage per core, temperature
+- RAM: Total, used, free, cached, swap usage
+- Disk: All drives, space used, I/O rates, health status
+- Network: All interfaces, IPs, traffic, connections
+- Processes: Top consumers by CPU/memory, full process tree
+- System: OS version, kernel, uptime, boot time
+
+## Monitoring Modes
+- full: Complete system snapshot (CPU, RAM, disk, processes, network)
+- cpu: CPU information only
+- memory: RAM usage only
+- disk: Disk drive usage
+- processes: Top 10 processes by memory
+- network: Network interfaces and IPs
+
+## Use Cases
+- Performance monitoring and bottleneck detection
+- Debugging system resource issues
+- Health checks before heavy operations
+- Resource optimization and capacity planning
+- Security monitoring (unexpected processes, connections)
 
 Actions:
 - full: Complete system snapshot (CPU, RAM, disk, processes, network)

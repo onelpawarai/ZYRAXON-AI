@@ -21,3 +21,14 @@ Please list any matching issues with:
 - Link to the issue
 
 If no clear matches are found, say so.
+
+## ZYRAXON-specific issue categories
+
+- MCP tools issues (136+ tools across 7 categories)
+- YouTube streaming issues (capture modes, audio modes, quality)
+- Self-healing issues (auto-install, retry logic)
+- Memory system issues (zyraxon.db auto-injection, session memory)
+- Agent mode issues (General, Build, Plan, Beast, PRO, APEX PREDATOR, DARK EMPEROR)
+- Tor integration issues (anonymous browsing, .onion sites)
+- Desktop automation issues (screenshot, TTS, app control)
+- Cross-platform issues (Windows, Linux, macOS)

@@ -61,3 +61,15 @@ Prefer guidance that is:
 - Keep examples short
 - Add or update the `Sources` section whenever you add a new rule
 - Prefer PR-backed guidance over invented term mappings; start with general guidance if no term-level corrections exist yet
+
+## ZYRAXON-specific terms
+
+- **MCP Tools**: Model Context Protocol tools (136+ tools across 7 categories)
+- **Self-Healing**: ZYRAXON's ability to detect and fix missing capabilities automatically
+- **Memory System**: Cross-session memory via zyraxon.db with auto-injection of relevant memories per session
+- **Agent Mode**: Operating mode (General, Build, Plan, Beast, PRO, APEX PREDATOR, DARK EMPEROR)
+- **Stream Key**: YouTube RTMP stream key for live streaming
+- **Tor Integration**: Anonymous browsing through Tor network
+- **Desktop Automation**: Screen capture, TTS, app control capabilities
+- **ULTRA Tools**: Advanced tools (code generation, auto deploy, security sweep, performance optimizer)
+- **Service Manager**: Python script managing all ZYRAXON services

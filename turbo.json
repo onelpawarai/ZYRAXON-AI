@@ -1,12 +1,28 @@
 {
   "$schema": "https://v2-8-13.turborepo.dev/schema.json",
-  "globalEnv": ["CI", "OPENCODE_DISABLE_SHARE"],
-  "globalPassThroughEnv": ["CI", "OPENCODE_DISABLE_SHARE"],
+  "globalEnv": ["CI", "OPENCODE_DISABLE_SHARE", "ZYRAXON_MODE", "ZYRAXON_STREAM_KEY"],
+  "globalPassThroughEnv": ["CI", "OPENCODE_DISABLE_SHARE", "ZYRAXON_MODE", "ZYRAXON_STREAM_KEY"],
   "tasks": {
     "typecheck": {},
     "build": {
       "dependsOn": [],
       "outputs": ["dist/**"]
+    },
+    "zyraxon:stream": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "zyraxon:mcp": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "zyraxon:build": {
+      "dependsOn": ["build"],
+      "outputs": ["dist/**"]
+    },
+    "zyraxon:package": {
+      "dependsOn": ["zyraxon:build"],
+      "outputs": ["dist/**", "*.exe"]
     },
     "opencode#test": {
       "dependsOn": ["^build"],

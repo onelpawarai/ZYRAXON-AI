@@ -38,6 +38,27 @@ inputs:
     description: "Base URL for OIDC token exchange API. Only required when running a custom GitHub App install. Defaults to https://api.ZYRAXON.ai"
     required: false
 
+  # ZYRAXON-specific inputs
+  mcp_tools_enabled:
+    description: "Enable MCP tools (defaults to true)"
+    required: false
+    default: "true"
+
+  streaming_enabled:
+    description: "Enable YouTube streaming (defaults to false)"
+    required: false
+    default: "false"
+
+  self_healing_enabled:
+    description: "Enable self-healing (defaults to true)"
+    required: false
+    default: "true"
+
+  memory_system_enabled:
+    description: "Enable memory system (defaults to true)"
+    required: false
+    default: "true"
+
 runs:
   using: "composite"
   steps:
@@ -77,3 +98,8 @@ runs:
         MENTIONS: ${{ inputs.mentions }}
         VARIANT: ${{ inputs.variant }}
         OIDC_BASE_URL: ${{ inputs.oidc_base_url }}
+        # ZYRAXON-specific environment variables
+        ZYRAXON_MCP_TOOLS_ENABLED: ${{ inputs.mcp_tools_enabled }}
+        ZYRAXON_STREAMING_ENABLED: ${{ inputs.streaming_enabled }}
+        ZYRAXON_SELF_HEALING_ENABLED: ${{ inputs.self_healing_enabled }}
+        ZYRAXON_MEMORY_SYSTEM_ENABLED: ${{ inputs.memory_system_enabled }}

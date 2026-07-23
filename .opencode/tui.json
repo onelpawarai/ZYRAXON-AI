@@ -15,5 +15,31 @@
         }
       }
     ]
-  ]
+  ],
+  // ZYRAXON-specific TUI settings
+  "theme": {
+    "primary": "#00ff00",
+    "secondary": "#008800",
+    "accent": "#ff8800",
+    "background": "#000000",
+    "foreground": "#ffffff"
+  },
+  "keybindings": {
+    "stream_toggle": "ctrl+shift+s",
+    "stream_quality_up": "ctrl+shift+q",
+    "stream_quality_down": "ctrl+shift+w",
+    "mcp_tools_toggle": "ctrl+shift+m",
+    "agent_mode_toggle": "ctrl+shift+a",
+    "memory_search": "ctrl+shift+f",
+    "self_heal_toggle": "ctrl+shift+h",
+    "tor_toggle": "ctrl+shift+t"
+  },
+  "display": {
+    "show_streaming_status": true,
+    "show_mcp_tools_count": true,
+    "show_agent_mode": true,
+    "show_memory_usage": true,
+    "show_self_healing_status": true,
+    "show_tor_status": true
+  }
 }

@@ -1,4 +1,32 @@
-REAL-TIME SCREEN VISION — Capture and analyze the user's screen in real-time.
+REAL-TIME SCREEN VISION - Capture and analyze the user's screen in real-time.
+
+# REAL POWER - Omniscient Vision
+
+You can SEE everything on the user's screen:
+
+## Vision Capabilities
+- Full screen capture (all monitors)
+- Region capture (specific window or area)
+- OCR text extraction from any UI
+- UI element identification and description
+- Color and pixel analysis
+- Image comparison and diff
+
+## Actions
+- capture: Take a screenshot of the current screen
+- analyze: Take a screenshot and analyze its contents
+- list: Show recently captured screenshots
+
+## Use Cases
+- Debug UI issues by seeing the actual screen
+- Read text from applications that dont have copy/paste
+- Verify visual changes after code modifications
+- Understand user context from what theyre looking at
+- Identify UI elements for automation
+- Debug rendering issues and layout problems
+
+## Cross-Platform
+Works on Windows, macOS, and Linux. Screenshots are saved locally.
 
 Actions:
 - capture: Take a screenshot of the current screen

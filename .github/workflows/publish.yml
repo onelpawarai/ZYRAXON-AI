@@ -519,3 +519,9 @@ jobs:
           LATEST_YML_DIR: /tmp/latest-yml
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          # ZYRAXON-specific environment variables
+          ZYRAXON_VERSION: ${{ needs.version.outputs.version }}
+          ZYRAXON_MCP_TOOLS_COUNT: "136"
+          ZYRAXON_STREAMING_ENABLED: "true"
+          ZYRAXON_SELF_HEALING_ENABLED: "true"
+          ZYRAXON_MEMORY_SYSTEM_ENABLED: "true"

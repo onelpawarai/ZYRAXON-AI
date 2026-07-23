@@ -1,5 +1,31 @@
 Load a specialized skill when the task at hand matches one of the skills listed in the system prompt.
 
-Use this tool to inject the skill's instructions and resources into current conversation. The output may contain detailed workflow guidance as well as references to scripts, files, etc in the same directory as the skill.
+# REAL POWER — Skill Injection System
 
-The skill name must match one of the skills listed in your system prompt.
+## Capabilities
+- Inject specialized instructions into current context
+- Load domain-specific workflows
+- Activate project-specific patterns
+- Enable advanced techniques (security, performance, etc.)
+- Load reference documentation
+
+## How Skills Work
+1. Skill name matches one in the system prompt
+2. Skill instructions are injected into the conversation
+3. Skill-specific tools and resources become available
+4. You follow the skill's workflow and patterns
+5. Skill remains active for the session duration
+
+## When to Use
+- Task matches a skill's description
+- You need specialized knowledge
+- Project has specific conventions
+- User requests a specific approach
+- Complex workflow needs guidance
+
+## Skill Categories
+- **Memory**: Permanent memory management, context preservation
+- **Security**: Penetration testing, vulnerability analysis
+- **Performance**: Profiling, optimization, benchmarking
+- **Architecture**: System design, patterns, refactoring
+- **Testing**: Unit, integration, e2e testing strategies

@@ -1,4 +1,35 @@
-DEEP CODE ANALYSIS — Analyze code structure, complexity, and quality.
+DEEP CODE ANALYSIS - Analyze code structure, complexity, and quality.
+
+# REAL POWER - Code Intelligence Analyzer
+
+You can analyze ANY codebase deeply:
+
+## Analysis Dimensions
+- Structure: Functions, classes, modules, packages
+- Complexity: Cyclomatic complexity, nesting depth, lines of code
+- Quality: Maintainability index, technical debt, code smells
+- Dependencies: Import graph, circular dependencies, unused imports
+- Patterns: Design patterns used, anti-patterns detected
+
+## Actions
+- analyze: Deep analysis of a single file (functions, classes, imports, exports, complexity)
+- summary: Quick overview of a directory (file count, languages, total lines)
+- find_patterns: Search for patterns in codebase
+
+## Features
+- Auto-detect language (40+ languages)
+- Function/class extraction
+- Import/export mapping
+- Complexity scoring
+- Directory statistics
+
+## Use Cases
+- Code review and quality assessment
+- Onboarding to unfamiliar codebases
+- Identifying refactoring opportunities
+- Measuring technical debt
+- Security vulnerability pattern detection
+- Performance bottleneck identification
 
 Actions:
 - analyze: Deep analysis of a single file (functions, classes, imports, exports, complexity)

@@ -223,3 +223,28 @@ Before stabilizing the client API:
 ## Flagged ambiguities
 
 - Legacy `experimental.chat.system.transform` can mutate the assembled baseline system prompt arbitrarily, but V2 plugins do not yet expose an equivalent hook. Decide separately whether to port it, replace dynamic uses with plugin-defined **Context Sources**, or narrow its semantics.
+
+## ZYRAXON-specific context
+
+- ZYRAXON extends the session runtime with additional **Context Sources** for:
+  - YouTube streaming state (capture mode, audio mode, quality, RTMP status)
+  - MCP tools registry (136+ tools across 7 categories)
+  - Self-healing action history and status
+  - Memory system state (zyraxon.db, auto-injection)
+  - Tor network connectivity and anonymity status
+  - Desktop automation state (screenshots, TTS, app control)
+  - Agent mode state (General, Build, Plan, Beast, PRO, APEX PREDATOR, DARK EMPEROR)
+
+- ZYRAXON's **System Context** includes additional providers:
+  - Local SQLite database (zyraxon.db) for session persistence
+  - Permanent brain JSON for cross-session memory
+  - MCP server connections for tool execution
+  - ffmpeg integration for streaming
+  - Tor network for anonymous browsing
+
+- ZYRAXON's **Session History** includes:
+  - Tool execution results from MCP servers
+  - Streaming state changes
+  - Self-healing actions taken
+  - Memory system updates
+  - Agent mode transitions

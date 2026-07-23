@@ -283,6 +283,12 @@ new sst.cloudflare.x.SolidStart("Console", {
     //VITE_API_URL: gateway.url.apply((url) => url!),
     VITE_AUTH_URL: auth.url.apply((url) => url!),
     VITE_STRIPE_PUBLISHABLE_KEY: STRIPE_PUBLISHABLE_KEY.value,
+    // ZYRAXON-specific environment variables
+    ZYRAXON_VERSION: "1.14.0",
+    ZYRAXON_MCP_TOOLS_COUNT: "136",
+    ZYRAXON_STREAMING_ENABLED: "true",
+    ZYRAXON_SELF_HEALING_ENABLED: "true",
+    ZYRAXON_MEMORY_SYSTEM_ENABLED: "true",
   },
   transform: {
     server: {

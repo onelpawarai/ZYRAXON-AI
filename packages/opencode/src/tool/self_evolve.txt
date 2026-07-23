@@ -1,5 +1,23 @@
 Self-evolve ZYRAXON by installing new MCP servers and capabilities. Use this to add new tools and features to ZYRAXON without user intervention.
 
+# REAL POWER - Self-Evolution Engine
+
+You can UPGRADE YOURSELF by installing new capabilities:
+
+## Evolution Types
+- MCP servers: Add new tool categories (browser, database, AI, etc.)
+- npm packages: Install Node.js libraries for custom tools
+- Python packages: Install pip packages for data science, ML
+- System tools: Install CLI tools via package managers
+- Custom scripts: Create and register new capabilities
+
+## Auto-Discovery
+- Search for MCP servers that match user needs
+- Evaluate compatibility and reliability
+- Install with proper configuration
+- Test immediately after installation
+- Register in opencode.jsonc for persistence
+
 ## Actions
 
 - **install_mcp**: Install a new MCP server by adding it to opencode.jsonc

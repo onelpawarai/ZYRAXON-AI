@@ -24,3 +24,14 @@ If you find potential duplicates:
 If no duplicates are found, say so clearly. BUT ONLY SAY "No duplicate PRs found" (don't say anything else if no dups)
 
 Keep your response concise and actionable.
+
+## ZYRAXON-specific PR categories
+
+- MCP tools PRs (136+ tools across 7 categories)
+- YouTube streaming PRs (capture modes, audio modes, quality)
+- Self-healing PRs (auto-install, retry logic)
+- Memory system PRs (zyraxon.db, auto-injection)
+- Agent mode PRs (General, Build, Plan, Beast, PRO, APEX PREDATOR, DARK EMPEROR)
+- Tor integration PRs (anonymous browsing, .onion sites)
+- Desktop automation PRs (screenshot, TTS, app control)
+- Cross-platform PRs (Windows, Linux, macOS)

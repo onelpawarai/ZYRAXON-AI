@@ -242,11 +242,20 @@ export async function listBookmarks(): Promise<ToolResult> {
   }
 }
 
-// Tool 12: Quick Math
+// Safe math evaluator (no eval vulnerability)
+function safeMathEval(expr: string): number {
+  const sanitized = expr.replace(/\s/g, '')
+  if (!/^[0-9+\-*/().%]+$/.test(sanitized)) {
+    throw new Error("Invalid expression: only numbers and basic operators allowed")
+  }
+  const fn = new Function('Math', `return (${sanitized})`)
+  return fn(Math)
+}
+
+// Tool 12: Quick Math (SAFE — no eval vulnerability)
 export async function quickMath(expression: string): Promise<ToolResult> {
   try {
-    // Safe evaluation
-    const result = new Function(`return ${expression}`)()
+    const result = safeMathEval(expression)
     return { success: true, output: `${expression} = ${result}` }
   } catch (e: any) {
     return { success: false, output: "", error: e.message }

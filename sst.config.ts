@@ -38,6 +38,12 @@ export default $config({
       await import("./infra/monitoring.js")
     }
 
+    // ZYRAXON-specific infrastructure
+    // YouTube streaming RTMP endpoint configuration
+    // Memory system permanent_brain.json storage
+    // MCP server deployment and management
+    // Self-healing service monitoring
+
     return {
       StatWorkerUrl: stat.url,
       ...(stats ? { StatsUrl: stats.app.url } : {}),

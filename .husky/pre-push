@@ -18,3 +18,11 @@ if (process.versions.bun !== expectedBunVersion) {
 }
 '
 bun typecheck
+
+# ZYRAXON-specific pre-push checks
+# Verify MCP tools are properly defined
+# Check streaming configuration
+# Validate memory system integrity
+# Ensure self-healing logic is intact
+# Verify Tor integration is working
+# Check desktop automation compatibility

@@ -12,3 +12,16 @@ Requirements:
 - Also preserve every term listed in the Do-Not-Translate glossary below.
 - Also apply locale-specific guidance from `.ZYRAXON/glossary/<locale>.md` when available (for example, `zh-cn.md`).
 - Do not modify fenced code blocks.
+
+## ZYRAXON-specific translation rules
+
+- Preserve MCP tool names and descriptions
+- Preserve streaming settings and terminology
+- Preserve agent mode names and descriptions
+- Preserve memory system terminology
+- Preserve self-healing action names
+- Preserve Tor network terminology
+- Preserve desktop automation terminology
+- Keep Bengali/English mixed content as-is
+- Preserve Chinese/Japanese/Korean character encoding
+- Keep RTL language formatting for Arabic

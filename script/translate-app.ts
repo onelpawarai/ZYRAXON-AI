@@ -521,3 +521,9 @@ if (import.meta.main) {
     process.exitCode = 1
   })
 }
+
+// ZYRAXON-specific translation support
+// Bengali language support for UI elements
+// Chinese/Japanese/Korean character handling
+// RTL language support for Arabic
+// Multi-byte character encoding support

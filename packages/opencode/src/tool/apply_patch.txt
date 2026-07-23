@@ -1,4 +1,17 @@
-Use the `apply_patch` tool to edit files. Your patch language is a stripped‑down, file‑oriented diff format designed to be easy to parse and safe to apply. You can think of it as a high‑level envelope:
+Use the `apply_patch` tool to edit files. Your patch language is a stripped-down, file-oriented diff format designed to be easy to parse and safe to apply.
+
+# REAL POWER - Atomic File Patcher
+
+You can edit files with surgical precision using patch format:
+
+## Patch Operations
+- Add File: Create new files with full content
+- Delete File: Remove files completely
+- Update File: Modify files in-place with diffs
+- Move File: Rename or relocate files
+
+## Patch Format
+You can think of it as a high-level envelope:
 
 *** Begin Patch
 [ one or more file sections ]

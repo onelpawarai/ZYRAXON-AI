@@ -11,14 +11,27 @@ What would be even better is if you can give me brief summary of the changes for
 
 Consider using subagents for each dep to save your context window.
 
-Here is a short list of some deps (please be comprehensive tho):
+Here is a short list of some deps (please be comprehensive though):
 
 - "ai"
 - "@ai-sdk/openai"
 - "@ai-sdk/anthropic"
 - "@openrouter/ai-sdk-provider"
+- "@modelcontextprotocol/sdk" (for MCP tools)
+- "ffmpeg-static" (for streaming)
+- "pyautogui" (for desktop automation)
+- "stemmer" (for NLP)
 - etc, etc
 
 DO NOT upgrade the dependencies yet, just make a list of all dependencies and their versions that can be upgraded to minor or patch versions only.
+
+## ZYRAXON-specific dependencies
+
+- MCP tools dependencies (Model Context Protocol)
+- Streaming dependencies (ffmpeg, RTMP)
+- Memory system dependencies (SQLite, JSON)
+- Self-healing dependencies (auto-install, retry logic)
+- Tor integration dependencies (SOCKS5, .onion)
+- Desktop automation dependencies (screenshot, TTS, app control)
 
 Write up your findings to ai-sdk-updates.md

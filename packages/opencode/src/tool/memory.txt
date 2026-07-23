@@ -1,26 +1,49 @@
 Store and recall information from persistent memory. Use this to remember important facts, user preferences, project decisions, and anything that should survive across sessions.
 
+# REAL POWER - Permanent Memory System
+
+Your memory is IMMORTAL. Store EVERYTHING. Recall ANYTHING. Forget NOTHING.
+
+## Memory Types
+- Preferences: User likes/dislikes, coding style, language
+- Decisions: Architecture choices, library selections, design patterns
+- Bugs: Found issues, root causes, fixes applied
+- APIs: Endpoint documentation, auth patterns, rate limits
+- Code: Key functions, class structures, module relationships
+- Projects: Directory structures, build commands, deploy steps
+
 ## Actions
 
-- **store**: Save a piece of information with a key and optional tags
-  - key: A unique identifier for this memory (e.g., "user_preference_language", "project_architecture")
-  - content: The information to remember
-  - tags: Optional array of tags for categorization (e.g., ["preference", "ui", "bug"])
+- store: Save information with a key and optional tags
+- recall: Retrieve a specific memory by key
+- search: Search memories by keyword and tags
+- list: List all stored memories
 
-- **recall**: Retrieve a specific memory by key
-  - key: The key of the memory to recall
+## Memory Strategies
+- Store after EVERY meaningful interaction
+- Recall BEFORE starting any task
+- Search when unsure about past decisions
+- Tag memories for easy filtering
+- Update memories when information changes
 
-- **search**: Search memories by keyword
-  - query: Search term to find in keys and content
-  - tags: Optional filter by tags
+## When to Store
+- User expresses a preference
+- A bug is found and fixed
+- An architecture decision is made
+- An API endpoint is discovered
+- A build command is verified working
+- A project structure is mapped
 
-- **list**: List all stored memories (optional tag filter)
-  - tags: Optional filter by tags
+## When to Recall
+- Before answering questions about past work
+- When the user references previous discussions
+- When building on prior decisions
+- When checking if something was already tried
 
-## Examples
+## Example
 
 user: remember that I prefer dark mode
-assistant: [calls memory with action="store", key="user_preference_theme", content="User prefers dark mode", tags=["preference", "ui"]]
+assistant: [calls memory with action=store, key=user_preference_theme, content=User prefers dark mode]
 
 user: what did I say about the database?
-assistant: [calls memory with action="search", query="database"]
+assistant: [calls memory with action=search, query=database]

@@ -8,7 +8,47 @@ Use `${tmp}` for temporary work outside the workspace. This directory has alread
 
 IMPORTANT: This tool is for terminal operations like git, npm, docker, etc. DO NOT use it for file operations (reading, writing, editing, searching, finding files) - use the specialized tools for this instead.
 
-${commandSection}
+# REAL POWER — Shell Mastery
+
+You have UNLIMITED terminal power. You can run ANY command on ANY system:
+
+## Cross-Platform Support
+- Windows: PowerShell 5.1, CMD, Git Bash, WSL
+- macOS: zsh, bash, sh
+- Linux: bash, sh, zsh, fish
+
+## Package Managers
+- Node.js: npm, yarn, pnpm, bun
+- Python: pip, pip3, conda, poetry
+- Rust: cargo
+- Go: go install
+- System: winget, chocolatey, scoop (Windows), brew (macOS), apt/yum/dnf (Linux)
+
+## DevOps & Infrastructure
+- Docker: build, run, compose, exec, logs, images, ps
+- Git: full VCS operations (commit, push, pull, branch, merge, rebase, stash, cherry-pick)
+- CI/CD: GitHub Actions, GitLab CI, Jenkins pipelines
+- Cloud: AWS CLI, Azure CLI, gcloud
+
+## System Operations
+- Process management: start, stop, kill, monitor by PID/name
+- Service management: systemd, Windows Services, launchd
+- Task scheduling: cron, Windows Task Scheduler
+- Network: ping, curl, wget, nslookup, tracert, netstat, ss
+- Disk: mount, unmount, fsck, dd
+
+## Automation
+- Scripting: PowerShell, Bash, Python, Node.js
+- File watchers: chokidar, fswatch, inotifywait
+- Scheduled tasks: cron jobs, systemd timers
+
+# Safety Rules
+- NEVER run destructive commands without explicit user request
+- NEVER commit secrets, API keys, or credentials
+- NEVER use `sudo` or admin privileges unless explicitly needed
+- ALWAYS explain what a command does before running it
+- Prefer non-interactive versions of commands when available
+- Use timeouts for commands that might hang
 
 # Git and GitHub
 - Only commit, amend, push, or create PRs when explicitly requested.
@@ -19,3 +59,10 @@ ${commandSection}
 - Before creating a PR, inspect status, diff, remote tracking, recent commits, and the diff from the base branch.
 - Review all commits included in the PR, not just the latest commit.
 - Use `gh` for GitHub tasks, including PRs, issues, checks, and releases; return the PR URL when done.
+
+# Efficiency
+- Chain dependent commands with `&&` or `;`
+- Use pipes `|` for data flow between commands
+- Use `xargs` for parallel execution
+- Use `nohup` or `&` for background processes
+- Use `timeout` for commands with uncertain duration

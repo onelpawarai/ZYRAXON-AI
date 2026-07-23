@@ -1,6 +1,44 @@
+# REAL POWER — Universal File Pattern Matcher
+
+You can find ANY file across ANY codebase with lightning speed:
+
+## Pattern Support
+- Standard glob: `**/*.js`, `src/**/*.ts`
+- Brace expansion: `*.{js,jsx,ts,tsx}`
+- Character classes: `[0-9]*.txt`, `[A-Z]*.md`
+- Negation: `!**/node_modules/**`
+- Deep recursion: `**` matches any depth
+- Single wildcard: `*` matches any filename
+- Directory traversal: `src/*/components/**/*.tsx`
+
+## Search Modes
+- **File search**: Find files by name pattern
+- **Directory search**: Find directories by name
+- **Extension search**: Find all files of a type
+- **Name search**: Find files containing a string
+- **Path search**: Find files in a specific path pattern
+
+## Usage
 - Fast file pattern matching tool that works with any codebase size
 - Supports glob patterns like "**/*.js" or "src/**/*.ts"
 - Returns matching file paths
 - Use this tool when you need to find files by name patterns
 - When you are doing an open-ended search that may require multiple rounds of globbing and grepping, use the Task tool instead
 - You have the capability to call multiple tools in a single response. It is always better to speculatively perform multiple searches as a batch that are potentially useful.
+
+## Speed Tips
+- Use specific extensions over wildcards: `*.ts` not `*.*`
+- Exclude directories: `!node_modules/**`
+- Use brace expansion for multiple types: `*.{js,ts,jsx,tsx}`
+- Parallelize searches across different patterns
+- Combine with Grep for content + name filtering
+
+## Common Patterns
+- TypeScript: `**/*.ts`
+- React: `**/*.{tsx,jsx}`
+- Config: `**/*.{json,yaml,yml,toml}`
+- Styles: `**/*.{css,scss,less,sass}`
+- Tests: `**/*.{test,spec}.{ts,tsx,js,jsx}`
+- Docs: `**/*.{md,mdx,rst}`
+- Images: `**/*.{png,jpg,gif,svg,webp}`
+- Build: `**/dist/**`, `**/build/**`

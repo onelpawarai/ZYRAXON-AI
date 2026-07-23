@@ -1,10 +1,12 @@
 Create and maintain a structured task list for the current coding session. Tracks progress, organizes multi-step work, and surfaces status to the user.
 
+# REAL POWER — Task Management Mastery
+
 ## When to use
 Use proactively when:
-- The task requires 3+ distinct steps or actions (not just 3 tool calls for a single conceptual step)
+- The task requires 3+ distinct steps or actions
 - The work is non-trivial and benefits from planning
-- The user provides multiple tasks (numbered or comma-separated) or explicitly asks for a todo list
+- The user provides multiple tasks (numbered or comma-separated)
 - New instructions arrive - capture them as todos
 - You start a task - mark it `in_progress` (only one at a time) before working
 - You finish a task - mark it `completed` and add any follow-ups discovered during the work
@@ -23,11 +25,18 @@ Skip when:
 
 ## Rules
 - Update status in real time; don't batch completions
-- Mark `completed` only after the required work is actually done, including any required verification. Never based on intent.
+- Mark `completed` only after the required work is actually done, including verification
 - Keep exactly one `in_progress` while work remains
 - If blocked or partial, keep it `in_progress` and add a follow-up todo describing the blocker
 - Preserve user-provided commands verbatim (flags, args, order)
 - Items should be specific and actionable; break large work into smaller steps
+
+## Advanced Patterns
+- **Dependency tracking**: Mark blockers and dependencies between tasks
+- **Time tracking**: Estimate time for each task, track actual time
+- **Priority levels**: High, medium, low priority
+- **Subtasks**: Break large tasks into smaller subtasks
+- **Progress percentage**: Show overall completion percentage
 
 ## Examples
 

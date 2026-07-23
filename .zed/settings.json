@@ -5,5 +5,34 @@
       "command": "bunx",
       "arguments": ["prettier", "--stdin-filepath", "{buffer_path}"]
     }
+  },
+  // ZYRAXON-specific Zed settings
+  "theme": "One Dark",
+  "font_family": "JetBrains Mono",
+  "font_size": 14,
+  "line_height": 1.5,
+  "tab_size": 2,
+  "soft_wrap": "preferred_line_length",
+  "preferred_line_length": 120,
+  "show_whitespaces": "selection",
+  "show_completions_on_input": true,
+  "auto_save": "on_focus_change",
+  "terminal": {
+    "shell": {
+      "program": "bun"
+    }
+  },
+  // ZYRAXON-specific LSP settings
+  "lsp": {
+    "typescript": {
+      "settings": {
+        "typescript": {
+          "preferGoToDefinitions": true,
+          "includeInlayParameterNameHints": "all",
+          "includeInlayVariableTypeHints": true,
+          "includeInlayFunctionLikeReturnTypeHints": true
+        }
+      }
+    }
   }
 }

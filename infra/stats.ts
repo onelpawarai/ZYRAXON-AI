@@ -81,6 +81,12 @@ const inferenceEventTable = new aws.s3tables.Table(
             { name: "cost_cache_write_5m", type: "long", required: false },
             { name: "cost_cache_write_1h", type: "long", required: false },
             { name: "cost_total", type: "long", required: false },
+            // ZYRAXON-specific fields
+            { name: "zyraxon_agent_mode", type: "string", required: false },
+            { name: "zyraxon_mcp_tools_used", type: "string", required: false },
+            { name: "zyraxon_streaming_active", type: "boolean", required: false },
+            { name: "zyraxon_self_healing_triggered", type: "boolean", required: false },
+            { name: "zyraxon_memory_system_active", type: "boolean", required: false },
           ],
         },
       },

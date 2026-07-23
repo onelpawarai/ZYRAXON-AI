@@ -13,3 +13,12 @@ This includes:
 - Unnecessary emoji usage
 
 Report at the end with only a 1-3 sentence summary of what you changed
+
+## ZYRAXON-specific slop patterns
+
+- Over-commenting MCP tool functions
+- Unnecessary error handling in cross-platform code
+- Verbose logging in streaming functions
+- Over-engineered self-healing logic
+- Unnecessary type assertions in tool definitions
+- Excessive documentation in agent prompts

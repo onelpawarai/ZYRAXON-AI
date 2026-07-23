@@ -10,7 +10,7 @@ submit one that will be an automatic ban from the project.
 
 ### Overview
 
-ZYRAXON is an AI-powered coding assistant that runs locally on your machine. It provides an agent system with access to powerful tools including shell execution, file operations, and web access.
+ZYRAXON is an AI-powered coding assistant that runs locally on your machine. It provides an agent system with access to powerful tools including shell execution, file operations, web access, YouTube streaming, and desktop automation.
 
 ### No Sandbox
 
@@ -21,6 +21,17 @@ If you need true isolation, run ZYRAXON inside a Docker container or VM.
 ### Server Mode
 
 Server mode is opt-in only. When enabled, set `ZYRAXON_SERVER_PASSWORD` to require HTTP Basic Auth. Without this, the server runs unauthenticated (with a warning). It is the end user's responsibility to secure the server - any functionality it provides is not a vulnerability.
+
+### Security Features
+
+- **136+ MCP Tools** — All tools have input validation and sanitized command execution
+- **Cross-Platform Safety** — Commands adapted per-platform (no shell injection vectors)
+- **Safe Math Evaluation** — Calculator tools use sanitized input (no eval vulnerability)
+- **No Hardcoded Secrets** — All credentials stored in auth.json or environment variables
+- **RTMP Stream Key Protection** — Stream keys sanitized before logging (no plaintext exposure)
+- **Self-Healing Audit Trail** — All auto-installs and self-modifications are logged
+- **Memory Encryption** — Permanent memory stored locally, never sent to external services
+- **Tor Integration** — Optional anonymous browsing through Tor network for recon tasks
 
 ### Out of Scope
 

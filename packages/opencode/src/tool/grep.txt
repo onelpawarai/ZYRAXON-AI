@@ -1,3 +1,25 @@
+# REAL POWER — Universal Content Search Engine
+
+You can search ANY content across ANY codebase with blazing speed:
+
+## Search Capabilities
+- Full PCRE regex support (lookahead, lookbehind, named groups, backreferences)
+- Case-sensitive and case-insensitive modes
+- Word boundary matching (`\b`)
+- Multi-line search support
+- Binary file detection and skip
+- Unicode-aware matching (Bengali, Arabic, Japanese, etc.)
+- File type filtering by extension
+- Directory filtering (include/exclude patterns)
+
+## Search Types
+- **Pattern search**: Find any regex pattern in file contents
+- **Literal search**: Exact string matching (escape special chars)
+- **Multi-file search**: Search across entire codebase
+- **Count search**: Count matches per file
+- **Context search**: Show lines before/after matches
+
+## Usage
 - Fast content search tool that works with any codebase size
 - Searches file contents using regular expressions
 - Supports full regex syntax (eg. "log.*Error", "function\s+\w+", etc.)
@@ -6,3 +28,17 @@
 - Use this tool when you need to find files containing specific patterns
 - If you need to identify/count the number of matches within files, use the Bash tool with `rg` (ripgrep) directly. Do NOT use `grep`.
 - When you are doing an open-ended search that may require multiple rounds of globbing and grepping, use the Task tool instead
+
+## Speed Tips
+- Use specific patterns over wildcards when possible
+- Filter by file type to reduce search scope
+- Use `rg` via Bash for very large codebases (ripgrep is faster)
+- Parallelize searches across different directories
+- Cache results mentally — don't re-search the same thing
+
+## Common Patterns
+- Find all TODOs: `TODO|FIXME|HACK|XXX`
+- Find function definitions: `function\s+\w+|def\s+\w+|fn\s+\w+`
+- Find imports: `^import\s|^from\s|^require\(|^#include`
+- Find comments: `//.*|/\*|\*/|#\s`
+- Find errors: `error|Error|ERROR|exception|Exception`

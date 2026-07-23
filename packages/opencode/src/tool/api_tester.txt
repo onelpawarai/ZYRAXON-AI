@@ -1,6 +1,28 @@
-API TESTING TOOL — Test any HTTP/HTTPS API endpoint with full control.
+API TESTING TOOL - Test any HTTP/HTTPS API endpoint with full control.
 
-Actions (HTTP methods):
+# REAL POWER - API Testing Arsenal
+
+You can test ANY API with full control and intelligence:
+
+## Testing Capabilities
+- All HTTP methods (GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD)
+- Custom headers (Authorization, Content-Type, Accept, etc.)
+- Request body (JSON, XML, form data, raw text)
+- File uploads (multipart/form-data)
+- Cookie handling and session management
+- Redirect following with depth control
+- Timeout configuration
+- SSL/TLS certificate verification
+
+## Response Analysis
+- Status code and status text
+- Response headers (all of them)
+- Response body (auto-formatted JSON)
+- Response time (connect, TTFB, total)
+- Redirect chain tracking
+- Cookie extraction
+
+## Actions (HTTP methods):
 - get: GET request (fetch data)
 - post: POST request (create/send data)
 - put: PUT request (update data)

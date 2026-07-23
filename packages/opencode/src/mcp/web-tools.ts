@@ -4,6 +4,12 @@
 import https from "https"
 import http from "http"
 import { URL } from "url"
+import { exec } from "child_process"
+import { promisify } from "util"
+import crypto from "crypto"
+
+const execAsync = promisify(exec)
+const platform = process.platform
 
 export interface ToolResult {
   success: boolean
@@ -98,54 +104,98 @@ export async function urlStatus(url: string): Promise<ToolResult> {
   }
 }
 
-// Tool 4: DNS Lookup
+// Tool 4: DNS Lookup (cross-platform)
 export async function dnsLookup(domain: string): Promise<ToolResult> {
   try {
-    const { stdout } = await execAsync(`nslookup ${domain}`)
+    const cmd = platform === 'win32' ? `nslookup ${domain}` : `dig ${domain} +noall +answer 2>/dev/null || nslookup ${domain}`
+    const { stdout } = await execAsync(cmd, { timeout: 10000 })
     return { success: true, output: stdout }
   } catch (e: any) {
     return { success: false, output: "", error: e.message }
   }
 }
 
-// Tool 5: Ping
+// Tool 5: Ping (cross-platform)
 export async function ping(host: string): Promise<ToolResult> {
   try {
-    const { stdout } = await execAsync(`ping -n 4 ${host}`)
+    const cmd = platform === 'win32' ? `ping -n 4 ${host}` : `ping -c 4 ${host}`
+    const { stdout } = await execAsync(cmd, { timeout: 30000 })
     return { success: true, output: stdout }
   } catch (e: any) {
     return { success: false, output: "", error: e.message }
   }
 }
 
-// Tool 6: Port Check
+// Tool 6: Port Check (TCP connect — cross-platform)
 export async function portCheck(host: string, port: string): Promise<ToolResult> {
   try {
-    const { stdout } = await execAsync(`netstat -an | findstr :${port}`)
-    return { success: true, output: stdout || `Port ${port} status checked` }
+    const net = require('net')
+    const portNum = parseInt(port)
+    if (isNaN(portNum)) return { success: false, output: "", error: "Invalid port number" }
+    
+    return new Promise((resolve) => {
+      const socket = new net.Socket()
+      socket.setTimeout(5000)
+      socket.on('connect', () => {
+        socket.destroy()
+        resolve({ success: true, output: `Port ${port} on ${host}: OPEN` })
+      })
+      socket.on('timeout', () => {
+        socket.destroy()
+        resolve({ success: true, output: `Port ${port} on ${host}: CLOSED (timeout)` })
+      })
+      socket.on('error', () => {
+        socket.destroy()
+        resolve({ success: true, output: `Port ${port} on ${host}: CLOSED` })
+      })
+      socket.connect(portNum, host)
+    })
   } catch (e: any) {
     return { success: false, output: "", error: e.message }
   }
 }
 
-// Tool 7: Download File
+// Tool 7: Download File (cross-platform)
 export async function downloadFile(url: string, dest: string): Promise<ToolResult> {
   try {
-    const { stdout } = await execAsync(`curl -L -o "${dest}" "${url}"`)
+    const cmd = platform === 'win32'
+      ? `curl -L -o "${dest}" "${url}"`
+      : `curl -L -o "${dest}" "${url}" || wget -O "${dest}" "${url}"`
+    const { stdout } = await execAsync(cmd, { timeout: 120000 })
     return { success: true, output: `Downloaded: ${url} -> ${dest}` }
   } catch (e: any) {
     return { success: false, output: "", error: e.message }
   }
 }
 
-// Tool 8: Web Scrape (simple)
+// Tool 8: Web Scrape (cross-platform)
 export async function webScrape(url: string): Promise<ToolResult> {
-  try {
-    const { stdout } = await execAsync(`curl -s "${url}" | head -100`)
-    return { success: true, output: stdout }
-  } catch (e: any) {
-    return { success: false, output: "", error: e.message }
-  }
+  return new Promise((resolve) => {
+    try {
+      const parsedUrl = new URL(url)
+      const client = parsedUrl.protocol === 'https:' ? https : http
+      client.get(url, { timeout: 15000 }, (res) => {
+        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          resolve({ success: true, output: `Redirect to: ${res.headers.location}` })
+          return
+        }
+        let data = ''
+        res.on('data', chunk => data += chunk)
+        res.on('end', () => {
+          // Extract text content (strip HTML tags)
+          const text = data
+            .replace(/<script[\s\S]*?<\/script>/gi, '')
+            .replace(/<style[\s\S]*?<\/style>/gi, '')
+            .replace(/<[^>]+>/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+          resolve({ success: true, output: `Status: ${res.statusCode}\nContent length: ${data.length}\n\nText preview:\n${text.substring(0, 5000)}` })
+        })
+      }).on('error', (e: any) => resolve({ success: false, output: "", error: e.message }))
+    } catch (e: any) {
+      resolve({ success: false, output: "", error: e.message })
+    }
+  })
 }
 
 // Tool 9: JSON Parse
@@ -208,21 +258,21 @@ export async function urlDecode(encoded: string): Promise<ToolResult> {
   }
 }
 
-// Tool 15: MD5 Hash
+// Tool 15: MD5 Hash (cross-platform — Node crypto, no shell injection)
 export async function md5Hash(text: string): Promise<ToolResult> {
   try {
-    const { stdout } = await execAsync(`echo ${text} | md5sum`)
-    return { success: true, output: stdout }
+    const hash = crypto.createHash('md5').update(text).digest('hex')
+    return { success: true, output: hash }
   } catch (e: any) {
     return { success: false, output: "", error: e.message }
   }
 }
 
-// Tool 16: SHA256 Hash
+// Tool 16: SHA256 Hash (cross-platform — Node crypto, no shell injection)
 export async function sha256Hash(text: string): Promise<ToolResult> {
   try {
-    const { stdout } = await execAsync(`echo ${text} | sha256sum`)
-    return { success: true, output: stdout }
+    const hash = crypto.createHash('sha256').update(text).digest('hex')
+    return { success: true, output: hash }
   } catch (e: any) {
     return { success: false, output: "", error: e.message }
   }
@@ -282,11 +332,6 @@ export async function webhookTest(url: string, method: string = 'POST', payload:
     return { success: false, output: "", error: e.message }
   }
 }
-
-// Import exec for some tools
-import { exec } from "child_process"
-import { promisify } from "util"
-const execAsync = promisify(exec)
 
 // Export all tools
 export const webTools = {
