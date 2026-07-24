@@ -55,6 +55,8 @@ import {
 import { setSessionHandoff } from "@/pages/session/handoff"
 import { useSessionLayout } from "@/pages/session/session-layout"
 import { SessionFileBrowserTab, type SessionFileBrowserState } from "@/pages/session/v2/session-file-browser-tab"
+import { SitePreview } from "@/pages/session/site-preview"
+import { getPreviewActive, setPreviewActiveState, getPreviewWidth, setPreviewWidthState } from "@/pages/session/preview-state"
 
 type RenderDiff = (SnapshotFileDiff & { file: string }) | VcsFileDiff
 
@@ -91,6 +93,9 @@ export function SessionSidePanel(props: {
 
   const isDesktop = createMediaQuery("(min-width: 768px)")
   const shown = settings.visibility.fileTree
+  const previewActive = getPreviewActive()
+  const setPreviewActive = setPreviewActiveState
+  const previewWidth = getPreviewWidth()
 
   const reviewOpen = createMemo(() => isDesktop() && view().reviewPanel.opened())
   const fileOpen = createMemo(
@@ -101,10 +106,11 @@ export function SessionSidePanel(props: {
         opened: layout.fileTree.opened(),
       }),
   )
-  const open = createMemo(() => reviewOpen() || fileOpen())
+  const open = createMemo(() => reviewOpen() || fileOpen() || previewActive())
   const reviewTab = createMemo(() => isDesktop())
   const panelWidth = createMemo(() => {
     if (!open()) return "0px"
+    if (previewActive()) return `${previewWidth()}px`
     if (reviewOpen()) return "auto"
     return `${layout.fileTree.width()}px`
   })
@@ -215,9 +221,27 @@ export function SessionSidePanel(props: {
     const next = normalizeTab(value)
     const path = file.pathFromTab(next)
     if (path) void file.load(path)
-    openReviewPanel()
+    if (next === "review") openReviewPanel()
+    setPreviewActive(next === "preview")
     tabs().setActive(next)
   }
+
+  // Sync tab when shared preview state changes (from header toggle button)
+  let skipPreviewSync = false
+  createEffect(() => {
+    const isActive = previewActive()
+    if (skipPreviewSync) {
+      skipPreviewSync = false
+      return
+    }
+    if (isActive && activeTab() !== "preview") {
+      skipPreviewSync = true
+      tabs().setActive("preview")
+    } else if (!isActive && activeTab() === "preview") {
+      skipPreviewSync = true
+      tabs().setActive("review")
+    }
+  })
   const browserTab = createMemo(() => {
     if (!props.fileBrowserState) return undefined
     const active = activeTab()
@@ -311,7 +335,7 @@ export function SessionSidePanel(props: {
               "border-l border-border-weaker-base": !settings.general.newLayoutDesigns(),
             }}
           >
-            <Show when={reviewOpen()}>
+            <Show when={reviewOpen() || previewActive()}>
               <div
                 class="relative min-w-0 h-full flex-1 overflow-hidden"
                 classList={{
@@ -319,6 +343,22 @@ export function SessionSidePanel(props: {
                   "bg-background-base": !settings.general.newLayoutDesigns(),
                 }}
               >
+                {/* Preview resize handle — drag to make preview bigger/smaller */}
+                <Show when={previewActive()}>
+                  <div onPointerDown={() => props.size.start()}>
+                    <ResizeHandle
+                      direction="horizontal"
+                      edge="start"
+                      size={previewWidth()}
+                      min={360}
+                      max={1200}
+                      onResize={(width) => {
+                        props.size.touch()
+                        setPreviewWidthState(width)
+                      }}
+                    />
+                  </div>
+                </Show>
                 <div
                   class="size-full min-w-0 h-full"
                   classList={{
@@ -387,6 +427,12 @@ export function SessionSidePanel(props: {
                                   </div>
                                 </Tabs.Trigger>
                               </Show>
+                              <Tabs.Trigger value="preview">
+                                <div class="flex items-center gap-1.5">
+                                  <Icon name="globe" size="small" />
+                                  <span>Preview</span>
+                                </div>
+                              </Tabs.Trigger>
                               <SortableProvider ids={openedTabs()}>
                                 <For each={panelTabs()}>
                                   {(tab) => (
@@ -491,6 +537,12 @@ export function SessionSidePanel(props: {
                               <div class="relative pt-2 flex-1 min-h-0 overflow-hidden">
                                 <SessionContextTab />
                               </div>
+                            </Tabs.Content>
+                          </Show>
+
+                          <Show when={activeTab() === "preview"}>
+                            <Tabs.Content value="preview" class="flex flex-col h-full overflow-hidden contain-strict">
+                              <SitePreview />
                             </Tabs.Content>
                           </Show>
 
@@ -601,6 +653,12 @@ export function SessionSidePanel(props: {
                                 </div>
                               </Tabs.Trigger>
                             </Show>
+                            <Tabs.Trigger value="preview">
+                              <div class="flex items-center gap-1.5">
+                                <Icon name="globe" size="small" />
+                                <span>Preview</span>
+                              </div>
+                            </Tabs.Trigger>
                             <For each={panelTabs()}>
                               {(tab) => (
                                 <Show
@@ -719,6 +777,12 @@ export function SessionSidePanel(props: {
                             <div class="relative pt-2 flex-1 min-h-0 overflow-hidden">
                               <SessionContextTab />
                             </div>
+                          </Tabs.Content>
+                        </Show>
+
+                        <Show when={activeTab() === "preview"}>
+                          <Tabs.Content value="preview" class="flex flex-col h-full overflow-hidden contain-strict">
+                            <SitePreview />
                           </Tabs.Content>
                         </Show>
 

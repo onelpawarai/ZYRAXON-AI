@@ -18,6 +18,7 @@ import PROMPT_BEAST from "./prompt/beast.txt"
 import PROMPT_PRO from "./prompt/pro.txt"
 import PROMPT_APEX from "./prompt/apex.txt"
 import PROMPT_DARK_EMPEROR from "./prompt/dark-emperor.txt"
+import PROMPT_PRO_BUILDER from "./prompt/pro-builder.txt"
 import { Permission } from "@/permission"
 import { mergeDeep, pipe, sortBy, values } from "remeda"
 import { Global } from "@opencode-ai/core/global"
@@ -282,6 +283,40 @@ const layer = Layer.effect(
                 todowrite: "allow",
                 memory: "allow",
                 self_evolve: "allow",
+              }),
+              user,
+            ),
+            mode: "primary",
+            native: true,
+          },
+          "pro-builder": {
+            name: "pro-builder",
+            description: "PRO BUILDER — Professional website builder agent. Creates complete, production-ready websites from natural language. Fetches media from the internet, generates SVG icons, builds responsive HTML/CSS/JS. Publishes to GitHub Pages (free forever, custom domains supported). In-app live preview. Websites stay live even when app is closed.",
+            options: {},
+            color: "#10B981",
+            prompt: PROMPT_PRO_BUILDER,
+            permission: Permission.merge(
+              defaults,
+              Permission.fromConfig({
+                question: "allow",
+                plan_enter: "allow",
+                plan_exit: "allow",
+                task: {
+                  "*": "allow",
+                  general: "allow",
+                  explore: "allow",
+                },
+                todowrite: "allow",
+                memory: "allow",
+                self_evolve: "allow",
+                shell: "allow",
+                write: "allow",
+                edit: "allow",
+                read: "allow",
+                glob: "allow",
+                grep: "allow",
+                webfetch: "allow",
+                websearch: "allow",
               }),
               user,
             ),

@@ -34,6 +34,7 @@ import { Tabs } from "@opencode-ai/ui/tabs"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 import { createAutoScroll } from "@opencode-ai/ui/hooks"
 import { previewSelectedLines } from "@opencode-ai/session-ui/pierre/selection-bridge"
+import { getPreviewActive, getPreviewWidth } from "@/pages/session/preview-state"
 import { Button } from "@opencode-ai/ui/button"
 import { showToast } from "@/utils/toast"
 import { base64Encode, checksum } from "@opencode-ai/core/util/encode"
@@ -495,9 +496,12 @@ export default function Page() {
       split: splitReview(),
     }),
   )
+  const previewActive = getPreviewActive()
+  const previewWidth = getPreviewWidth()
   const sessionPanelWidth = createMemo(() => {
-    if (!desktopSidePanelOpen()) return "100%"
+    if (!desktopSidePanelOpen() && !previewActive()) return "100%"
     if (desktopSessionResizeOpen()) return `${sessionPanelResizedWidth()}px`
+    if (previewActive()) return `calc(100% - ${previewWidth()}px)`
     return `calc(100% - ${layout.fileTree.width()}px)`
   })
   const centered = createMemo(() => isDesktop() && (newSessionDesign() || !desktopReviewOpen()))
@@ -2335,7 +2339,7 @@ export default function Page() {
           </Show>
         </div>
 
-        <Show when={!newSessionDesign() && desktopSidePanelOpen()}>
+        <Show when={!newSessionDesign() && (desktopSidePanelOpen() || activeTab() === "preview")}>
           <SessionSidePanel
             canReview={canReview}
             diffs={reviewDiffs}
@@ -2352,9 +2356,9 @@ export default function Page() {
           />
         </Show>
         <Show when={newSessionDesign()}>
-          <Show when={isDesktop() ? desktopV2PanelLayout().visible : terminalOpen()}>
+          <Show when={isDesktop() ? (desktopV2PanelLayout().visible || activeTab() === "preview") : terminalOpen()}>
             <div class="min-w-0 h-full flex flex-1 flex-col">
-              <Show when={isDesktop() && (desktopV2ReviewOpen() || desktopFileTreeOpen())}>
+              <Show when={isDesktop() && (desktopV2ReviewOpen() || desktopFileTreeOpen() || activeTab() === "preview")}>
                 <div class="min-h-0 flex-1">
                   <SessionSidePanel
                     canReview={canReview}

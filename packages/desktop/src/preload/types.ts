@@ -64,6 +64,13 @@ export type StreamConfig = {
   audioMode?: "none" | "microphone" | "system"
 }
 
+export type PreviewState = {
+  url: string | null
+  siteName: string | null
+  siteId: string | null
+  timestamp: string
+}
+
 export type ElectronAPI = {
   killSidecar: () => Promise<void>
   installCli: () => Promise<string>
@@ -138,4 +145,8 @@ export type ElectronAPI = {
   onYouTubeStreamStatus: (cb: (state: StreamState) => void) => () => void
   onYouTubeStreamViewers: (cb: (count: number) => void) => () => void
   onYouTubeStreamDuration: (cb: (seconds: number) => void) => () => void
+
+  getPreviewState: () => Promise<PreviewState>
+  setPreviewState: (state: PreviewState) => Promise<void>
+  onSitePreviewUpdate: (cb: (state: PreviewState) => void) => () => void
 }

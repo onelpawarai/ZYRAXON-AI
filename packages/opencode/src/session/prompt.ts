@@ -46,6 +46,7 @@ import { Cause, Effect, Exit, Latch, Layer, Option, Scope, Context, Schema, Type
 import { InstanceState } from "@/effect/instance-state"
 import { TaskTool, type TaskPromptOps } from "@/tool/task"
 import { SessionRunState } from "./run-state"
+import { autoInjectContext, autoStoreConversation } from "../memory/auto-injection"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { EventV2Bridge } from "@/event-v2-bridge"
 import { Database } from "@opencode-ai/core/database/database"
@@ -1267,6 +1268,16 @@ const layer = Layer.effect(
               ...(mcpInstructions ? [mcpInstructions] : []),
               ...(skills ? [skills] : []),
             ]
+
+            const lastUserText = msgs
+              .filter((m) => m.info.role === "user")
+              .at(-1)
+              ?.parts.filter((p): p is SessionV1.TextPart => p.type === "text")
+              .map((p) => p.text)
+              .join("\n") ?? ""
+            const autoCtx = yield* Effect.promise(() => autoInjectContext(lastUserText, lastUser.agent))
+            if (autoCtx) system.push(autoCtx)
+
             const format = lastUser.format ?? { type: "text" as const }
             if (format.type === "json_schema") system.push(STRUCTURED_OUTPUT_SYSTEM_PROMPT)
             const result = yield* handle.process({
@@ -1294,6 +1305,15 @@ const layer = Layer.effect(
 
             const finished = handle.message.finish && !["tool-calls", "unknown"].includes(handle.message.finish)
             if (finished && !handle.message.error) {
+              const assistantText = handle.message.parts
+                .filter((p): p is SessionV1.TextPart => p.type === "text")
+                .map((p) => p.text)
+                .join("\n")
+              if (lastUserText && assistantText) {
+                yield* Effect.promise(() =>
+                  autoStoreConversation(lastUserText, assistantText, lastUser.agent, `${lastUser.model.providerID}/${lastUser.model.modelID}`, undefined, sessionID),
+                ).pipe(Effect.catchAll(() => Effect.void))
+              }
               // Surface any content-filter finish (e.g. Anthropic stop_reason:
               // refusal) as an error. These turns may have produced no visible
               // output at all — previously the session went idle silently — or

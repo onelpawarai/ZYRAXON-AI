@@ -33,6 +33,14 @@ import { ScreenVisionTool } from "./screen_vision"
 import { ApiTesterTool } from "./api_tester"
 import { CodeAnalyzerTool } from "./code_analyzer"
 import { SystemInfoTool } from "./system_info"
+import { SiteCreateTool } from "./site_create"
+import { SitePublishTool } from "./site_publish"
+import { SiteUnpublishTool } from "./site_unpublish"
+import { MediaFetchTool } from "./media_fetch"
+import { SvgGenerateTool } from "./svg_generate"
+import { SiteDomainTool } from "./site_domain"
+import { SitePreviewTool } from "./site_preview"
+import { GithubConnectTool } from "./github_connect"
 import * as Truncate from "./truncate"
 import { ApplyPatchTool } from "./apply_patch"
 import { Glob } from "@opencode-ai/core/util/glob"
@@ -121,6 +129,14 @@ const layer = Layer.effect(
     const apiTesterToolDef = yield* ApiTesterTool
     const codeAnalyzerToolDef = yield* CodeAnalyzerTool
     const systemInfoToolDef = yield* SystemInfoTool
+    const siteCreateToolDef = yield* SiteCreateTool
+    const sitePublishToolDef = yield* SitePublishTool
+    const siteUnpublishToolDef = yield* SiteUnpublishTool
+    const mediaFetchToolDef = yield* MediaFetchTool
+    const svgGenerateToolDef = yield* SvgGenerateTool
+    const siteDomainToolDef = yield* SiteDomainTool
+    const sitePreviewToolDef = yield* SitePreviewTool
+    const githubConnectToolDef = yield* GithubConnectTool
     const agent = yield* Agent.Service
     const codeMode = flags.experimentalCodeMode ? yield* Effect.promise(() => import("./code-mode")) : undefined
     const codeModeTool = codeMode ? yield* codeMode.CodeModeTool : undefined
@@ -236,6 +252,14 @@ const layer = Layer.effect(
           api_tester: Tool.init(apiTesterToolDef),
           code_analyzer: Tool.init(codeAnalyzerToolDef),
           system_info: Tool.init(systemInfoToolDef),
+          site_create: Tool.init(siteCreateToolDef),
+          site_publish: Tool.init(sitePublishToolDef),
+          site_unpublish: Tool.init(siteUnpublishToolDef),
+          media_fetch: Tool.init(mediaFetchToolDef),
+          svg_generate: Tool.init(svgGenerateToolDef),
+          site_domain: Tool.init(siteDomainToolDef),
+          site_preview: Tool.init(sitePreviewToolDef),
+          github_connect: Tool.init(githubConnectToolDef),
           ...(codeModeTool ? { execute: Tool.init(codeModeTool) } : {}),
         })
 
@@ -262,6 +286,14 @@ const layer = Layer.effect(
             tool.api_tester,
             tool.code_analyzer,
             tool.system_info,
+            tool.site_create,
+            tool.site_publish,
+            tool.site_unpublish,
+            tool.media_fetch,
+            tool.svg_generate,
+            tool.site_domain,
+            tool.site_preview,
+            tool.github_connect,
             ...(tool.execute ? [tool.execute] : []),
             ...(flags.experimentalLspTool ? [tool.lsp] : []),
             ...(flags.experimentalPlanMode && flags.client === "cli" ? [tool.plan] : []),

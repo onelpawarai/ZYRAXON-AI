@@ -33,6 +33,7 @@ import { KeybindV2 } from "@opencode-ai/ui/v2/keybind-v2"
 import { TooltipV2 } from "@opencode-ai/ui/v2/tooltip-v2"
 import { reviewTooltipKeybind } from "../command-tooltip-keybind"
 import { useTitlebarRightMount } from "../titlebar"
+import { togglePreview, getPreviewActive } from "@/pages/session/preview-state"
 
 const OPEN_APPS = [
   "vscode",
@@ -479,6 +480,21 @@ export function SessionHeader() {
                       </TooltipKeybind>
 
                       <TooltipKeybind
+                        title="Preview"
+                        keybind={[]}
+                      >
+                        <Button
+                          variant="ghost"
+                          class="titlebar-icon w-8 h-6 p-0 box-border"
+                          onClick={togglePreview}
+                          aria-label="Toggle website preview"
+                          aria-expanded={getPreviewActive()}
+                        >
+                          <Icon size="small" name={getPreviewActive() ? "globe" : "globe"} />
+                        </Button>
+                      </TooltipKeybind>
+
+                      <TooltipKeybind
                         title={language.t("command.fileTree.toggle")}
                         keybind={command.keybind("fileTree.toggle")}
                       >
@@ -563,6 +579,23 @@ function SessionHeaderV2Actions(props: { state: SessionHeaderV2ActionsState }) {
           />
         </TooltipV2>
       </Show>
+      <TooltipV2
+        class="shrink-0"
+        placement="bottom"
+        value="Website Preview"
+      >
+        <IconButtonV2
+          type="button"
+          variant="ghost-muted"
+          size="large"
+          class="!w-9 shrink-0"
+          state={getPreviewActive() ? "pressed" : undefined}
+          onClick={togglePreview}
+          aria-label="Toggle website preview"
+          aria-expanded={getPreviewActive()}
+          icon={<IconV2 name="globe" />}
+        />
+      </TooltipV2>
     </div>
   )
 }

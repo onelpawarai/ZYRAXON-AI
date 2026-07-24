@@ -117,13 +117,36 @@ Download the latest release from our **[Releases page](https://github.com/onelpa
 
 ### Quick Build (All-in-One)
 
+The build process has **4 steps** that MUST be run in order:
+
+1. Install all dependencies (root)
+2. Build the core engine (`packages/opencode`)
+3. Build the node server bundle + generate web UI
+4. Build + package the desktop app
+
 **Windows:**
 ```bash
 git clone https://github.com/onelpawarai/ZYRAXON-AI.git
 cd ZYRAXON-AI
+
+# Step 1: Install all dependencies
 bun install
-cd packages/opencode && bun run build && cd ../..
-cd packages/desktop && bun run build && bun run package:win
+
+# Step 2: Build core engine
+cd packages/opencode
+bun run build
+cd ../..
+
+# Step 3: Build node server bundle
+cd packages/opencode
+bun run script/build-node.ts
+cd ../..
+
+# Step 4: Generate web UI import map (scans packages/app/dist)
+# This is a separate step — not part of build-node.ts
+cd packages/desktop
+bun run build
+bun run package:win
 ```
 
 **Linux:**
@@ -132,6 +155,7 @@ git clone https://github.com/onelpawarai/ZYRAXON-AI.git
 cd ZYRAXON-AI
 bun install
 cd packages/opencode && bun run build && cd ../..
+cd packages/opencode && bun run script/build-node.ts && cd ../..
 cd packages/desktop && bun run build && bun run package:linux
 ```
 
@@ -141,8 +165,11 @@ git clone https://github.com/onelpawarai/ZYRAXON-AI.git
 cd ZYRAXON-AI
 bun install
 cd packages/opencode && bun run build && cd ../..
+cd packages/opencode && bun run script/build-node.ts && cd ../..
 cd packages/desktop && bun run build && bun run package:mac
 ```
+
+> **Note:** `build-node.ts` produces `packages/opencode/dist/node/node.js`. The desktop build-wrapper checks for this file and auto-generates `opencode-web-ui.gen.ts` (import map for all non-.map files in `packages/app/dist`). Both must exist for the desktop build to succeed.
 
 ### Development Mode
 
