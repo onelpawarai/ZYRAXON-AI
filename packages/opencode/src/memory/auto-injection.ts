@@ -351,6 +351,7 @@ async function compressOldMemories(memories: MemoryEntry[]): Promise<void> {
 
 export async function autoInjectContext(userMessage: string, agent: string): Promise<string> {
   const context = await loadAutoContext()
+  if (!context.enabled) return ""
   const memories = await loadMemories()
   const compressed = await loadCompressed()
   const now = Date.now()

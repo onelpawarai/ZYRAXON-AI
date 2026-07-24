@@ -1,5 +1,5 @@
 ﻿import { randomUUID } from "node:crypto"
-import { mkdirSync, rmSync } from "node:fs"
+import { mkdirSync, rmSync, readFileSync, existsSync } from "node:fs"
 import * as http from "node:http"
 import { createServer } from "node:net"
 import { homedir, tmpdir } from "node:os"
@@ -11,10 +11,10 @@ import { app } from "electron"
 import { Deferred, Effect, Fiber } from "effect"
 import contextMenu from "electron-context-menu"
 
-import type { ServerReadyData } from "../preload/types"
+import type { ServerReadyData, PreviewState } from "../preload/types"
 import { checkAppExists, resolveAppPath } from "./apps"
 import { CHANNEL } from "./constants"
-import { registerIpcHandlers, sendDeepLinks, sendMenuCommand } from "./ipc"
+import { registerIpcHandlers, sendDeepLinks, sendMenuCommand, broadcastPreviewState } from "./ipc"
 import { forwardInitializationFailure } from "./initialization"
 import { exportDebugLogs, initCrashReporter, initLogging, startNetLog, write as writeLog } from "./logging"
 import { parseMarkdown } from "./markdown"
@@ -304,6 +304,34 @@ const main = Effect.gen(function* () {
   })
   registerWslIpcHandlers(wslServers)
   void updater.start()
+
+  // ─── Preview State File Watcher ─────────────────────────────────────────────
+  // Watches ~/.zyraxon/websites/preview-state.json for changes.
+  // When the tool publishes a site, it writes the URL here,
+  // and we broadcast it to all renderer windows.
+  {
+    const previewPath = join(homedir(), ".zyraxon", "websites", "preview-state.json")
+    let lastContent = ""
+    const checkPreview = () => {
+      try {
+        if (!existsSync(previewPath)) return
+        const content = readFileSync(previewPath, "utf-8")
+        if (content !== lastContent) {
+          lastContent = content
+          const state = JSON.parse(content) as PreviewState
+          broadcastPreviewState(state)
+        }
+      } catch {
+        // File doesn't exist yet — that's fine
+      }
+    }
+    // Poll every 2 seconds for file changes (fs.watch is unreliable on Windows)
+    const previewTimer = setInterval(checkPreview, 2000)
+    previewTimer.unref()
+    app.once("will-quit", () => clearInterval(previewTimer))
+    // Initial check
+    checkPreview()
+  }
   const updateTimer = setInterval(() => void updater.check(), 10 * 60 * 1000)
   updateTimer.unref()
   app.once("will-quit", () => clearInterval(updateTimer))

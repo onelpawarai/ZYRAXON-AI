@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, webUtils } from "electron"
-import type { ElectronAPI, StreamState, WslServersEvent } from "./types"
+import type { ElectronAPI, PreviewState, StreamState, WslServersEvent } from "./types"
 import type { UpdaterState } from "@opencode-ai/app/updater"
 
 const updaterCallbacks = new Set<(state: UpdaterState) => void>()
@@ -143,6 +143,14 @@ const api: ElectronAPI = {
     const handler = (_: unknown, seconds: number) => cb(seconds)
     ipcRenderer.on("youtube-stream-duration", handler)
     return () => ipcRenderer.removeListener("youtube-stream-duration", handler)
+  },
+
+  getPreviewState: () => ipcRenderer.invoke("get-preview-state"),
+  setPreviewState: (state) => ipcRenderer.invoke("set-preview-state", state),
+  onSitePreviewUpdate: (cb) => {
+    const handler = (_: unknown, state: PreviewState) => cb(state)
+    ipcRenderer.on("site-preview-update", handler)
+    return () => ipcRenderer.removeListener("site-preview-update", handler)
   },
 }
 

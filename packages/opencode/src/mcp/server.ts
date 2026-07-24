@@ -9,6 +9,7 @@ import { securityTools } from "./security-tools"
 import { aiTools } from "./ai-tools"
 import { productivityTools } from "./productivity-tools"
 import { ultraTools } from "./ultra-tools"
+import { proBuilderTools } from "./pro-builder-tools"
 import { autoMemory } from "../memory/auto-injection"
 import { autoScreenVision } from "../screen/auto-vision"
 
@@ -188,6 +189,17 @@ export const TOOL_REGISTRY = {
     ultraDocGen: ultraTools.ultraDocGen,
     ultraDebug: ultraTools.ultraDebug,
   },
+
+  // PRO BUILDER TOOLS (6 tools)
+  proBuilder: {
+    siteCreate: proBuilderTools.siteCreate,
+    sitePublish: proBuilderTools.sitePublish,
+    siteList: proBuilderTools.siteList,
+    mediaFetch: proBuilderTools.mediaFetch,
+    svgGenerate: proBuilderTools.svgGenerate,
+    siteDomain: proBuilderTools.siteDomain,
+    autoStartSites: proBuilderTools.autoStartSites,
+  },
 }
 
 // Tool count
@@ -201,7 +213,8 @@ export const TOOL_COUNT = {
   memory: 4,
   vision: 4,
   ultra: 8,
-  total: 136,
+  proBuilder: 7,
+  total: 143,
 }
 
 // Get tool by category and name

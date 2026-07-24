@@ -6,7 +6,7 @@ import { app, BrowserWindow, Notification, clipboard, dialog, ipcMain, shell } f
 import type { IpcMainEvent, IpcMainInvokeEvent } from "electron"
 import type { DesktopMenuAction } from "@opencode-ai/app/desktop-menu"
 
-import type { FatalRendererError, ServerReadyData, TitlebarTheme } from "../preload/types"
+import type { FatalRendererError, PreviewState, ServerReadyData, TitlebarTheme } from "../preload/types"
 import { runDesktopMenuAction } from "./desktop-menu-actions"
 import { setForceFocus } from "./debug"
 import { assertAttachmentBudget, createPickedFileAuthorizations } from "./attachment-picker"
@@ -341,6 +341,47 @@ export function registerIpcHandlers(deps: Deps) {
   ipcMain.handle("youtube-stream-probe-devices", () => {
     return streamManager.probeDevices()
   })
+
+  // ─── Site Preview ────────────────────────────────────────────────────────────
+  ipcMain.handle("get-preview-state", async () => {
+    try {
+      const { join } = await import("node:path")
+      const { homedir } = await import("node:os")
+      const { readFile, access } = await import("node:fs/promises")
+      const previewPath = join(homedir(), ".zyraxon", "websites", "preview-state.json")
+      await access(previewPath)
+      const data = await readFile(previewPath, "utf-8")
+      return JSON.parse(data) as PreviewState
+    } catch {
+      return { url: null, siteName: null, siteId: null, timestamp: new Date().toISOString() } as PreviewState
+    }
+  })
+
+  ipcMain.handle("set-preview-state", async (_event: IpcMainInvokeEvent, state: PreviewState) => {
+    try {
+      const { join } = await import("node:path")
+      const { homedir } = await import("node:os")
+      const { writeFile, mkdir } = await import("node:fs/promises")
+      const dir = join(homedir(), ".zyraxon", "websites")
+      await mkdir(dir, { recursive: true })
+      const previewPath = join(dir, "preview-state.json")
+      await writeFile(previewPath, JSON.stringify({ ...state, timestamp: new Date().toISOString() }))
+    } catch (error) {
+      console.error("[IPC] Failed to set preview state:", error)
+    }
+  })
+}
+
+export function pushPreviewState(win: BrowserWindow, state: PreviewState) {
+  if (!win.isDestroyed()) {
+    win.webContents.send("site-preview-update", state)
+  }
+}
+
+export function broadcastPreviewState(state: PreviewState) {
+  for (const win of BrowserWindow.getAllWindows()) {
+    pushPreviewState(win, state)
+  }
 }
 
 export function sendMenuCommand(win: BrowserWindow, id: string) {
